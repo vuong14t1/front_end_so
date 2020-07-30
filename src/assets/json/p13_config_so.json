@@ -1,0 +1,264 @@
+{
+  "ObjectGroup": {
+    "channelPayment": {
+      "idOption": 0,
+      "title": "Kênh nạp",
+      "listItem": [
+        "IAP",
+        "DCB",
+        "CARD"
+      ]
+    },
+
+    "totalCost": {
+      "idOption": 1,
+      "title": "Số tiền đã nạp",
+      "listItem": {
+        "0": {
+          "from": 0,
+          "to": 1000
+        },
+        "1": {
+          "from": 1000,
+          "to": 2000
+        },
+        "2": {
+          "from": 2000,
+          "to": 5000
+        },
+        "3": {
+          "from": 5000,
+          "to": 10000
+        },
+        "4": {
+          "from": 0,
+          "to": 9999999
+        }
+      }
+    },
+
+    "numberPay": {
+      "idOption": 2,
+      "title": "Số lần nạp",
+      "listItem": {
+        "1": {
+          "from": 0,
+          "to": 10
+        },
+        "2": {
+          "from": 10,
+          "to": 20
+        },
+        "3": {
+          "from": 20,
+          "to": 100
+        },
+        "4": {
+          "from": 100,
+          "to": 200
+        },
+        "5": {
+          "from": 0,
+          "to": 1000
+        }
+      }
+    },
+
+    "totalGame": {
+      "idOption": 3,
+      "title": "Số ván chơi",
+      "listItem": {
+        "1": {
+          "from": 0,
+          "to": 100
+        },
+        "2": {
+          "from": 100,
+          "to": 200
+        },
+        "3": {
+          "from": 200,
+          "to": 1000
+        },
+        "4": {
+          "from": 1000,
+          "to": 5000
+        },
+        "5": {
+          "from": 0,
+          "to": 10000
+        }
+      }
+    },
+
+    "lastPaidPack": {
+      "idOption": 4,
+      "title": "Gói mua gần nhất",
+      "listItem": {
+        "1": {
+          "from": 0,
+          "to": 100
+        },
+        "2": {
+          "from": 100,
+          "to": 200
+        },
+        "3": {
+          "from": 200,
+          "to": 1000
+        },
+        "4": {
+          "from": 1000,
+          "to": 5000
+        },
+        "5": {
+          "from": 0,
+          "to": 10000
+        }
+      }
+    },
+
+    "age": {
+      "idOption": 5,
+      "title": "Tuổi",
+      "listItem": {
+        "1": {
+          "from": 0,
+          "to": 86400
+        },
+        "2": {
+          "from": 86400,
+          "to": 259200
+        },
+        "3": {
+          "from": 259200,
+          "to": 604800
+        },
+        "4": {
+          "from": 604800,
+          "to": 2592000
+        },
+        "5": {
+          "from": 0,
+          "to": 2592000
+        }
+      }
+    },
+
+    "timeLastOnline": {
+      "idOption": 6,
+      "title": "Thời gian online gần nhất",
+      "listItem": {
+        "1": {
+          "from": 0,
+          "to": 86400
+        },
+        "2": {
+          "from": 86400,
+          "to": 259200
+        },
+        "3": {
+          "from": 259200,
+          "to": 604800
+        },
+        "4": {
+          "from": 604800,
+          "to": 2592000
+        },
+        "5": {
+          "from": 0,
+          "to": 2592000
+        }
+      }
+	},
+	
+	"channelGame": {
+		"idOption": 7,
+		"title": "Kênh chơi",
+		"listItem": {
+		  "1": {
+			"from": 1,
+			"to": 3
+		  },
+		  "2": {
+			"from": 0,
+			"to": 7
+		  }
+		}
+	  }
+
+  },
+
+  "OfferGroup":{
+    "nameOffer": {
+      "title": "Tên offer",
+      "idOption": 0
+    },
+
+    "type": {
+      "idOption": 1,
+      "title": "Loại",
+      "listItem": {
+        "0": {
+          "id": 0,
+          "title": "GOLD"
+        },
+        "1": {
+          "id": 0,
+          "title": "VIP"
+        }
+      }
+    },
+
+    "value": {
+      "title": "Số lượng",
+      "idOption": 2
+    },
+
+    "promotionCost": {
+      "title": "Giá",
+      "idOption": 3
+    },
+
+    "originalCost": {
+      "idOption": 4,
+      "title": "Giá gốc",
+      "listItem": {
+        "0": {
+          "id": 100,
+          "title": "100"
+        },
+        "1": {
+          "id": 300,
+          "title": "300"
+        },
+        "2": {
+          "id": 500,
+          "title": "500"
+        },
+        "3": {
+          "id": 1000,
+          "title": "1000"
+        },
+        "4": {
+          "id": 3000,
+          "title": "3000"
+        },
+        "5": {
+          "id": 5000,
+          "title": "5000"
+        }
+      }
+    },
+
+    "description": {
+      "title": "Mô tả gói",
+      "idOption": 5
+    },
+
+    "durationCountDown": {
+      "title": "Thời gian đếm ngược",
+      "idOption": 6
+    }
+  }
+}

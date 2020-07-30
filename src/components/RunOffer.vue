@@ -1,0 +1,621 @@
+<template>
+  <div>
+    <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <div class="columns" v-if="!isShowDetail" style="width: 98%; float: left">
+      <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
+        <p class="has-text-centered	"><strong> Tạo lịch chạy OfferLive </strong></p>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">ID Object</p>
+          <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" class="column"
+            :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
+            {{objectChoosen.nameObject}} </Dropdown>
+        </div>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">ID Offer</p>
+          <Dropdown @clicked="onClickChooseOffer" v-if="offerChoosen" class="column" :id="offerChoosen._id"
+            :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
+        </div>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">Time Start</p>
+          <datetime class="column" type="datetime" width="500px" v-model="offerLiveChoosen.timeStart"
+            style="border:1px solid Grey;">
+          </datetime>
+        </div>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">Time Finish</p>
+          <datetime class="column" type="datetime" width="500px" height="100px" v-model="offerLiveChoosen.timeFinish"
+            style="border:1px solid Grey;">
+          </datetime>
+        </div>
+
+        <div class="has-text-centered ">
+          <button class="button is-primary" @click="createOfferLive()">Create</button>
+        </div>
+      </div>
+      <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
+        <p class="has-text-centered	"> <strong> Cập nhật OfferLive </strong></p>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">ID Object</p>
+          <Dropdown v-if="objectChoosen" class="column" :object='objectChoosen' @clicked="onClickChooseObject"
+            :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
+            {{objectChoosen.nameObject}}</Dropdown>
+        </div>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">ID Offer</p>
+          <Dropdown v-if="offerChoosen" class="column" @clicked="onClickChooseOffer" :id="offerChoosen._id"
+            :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
+        </div>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">Time Start</p>
+          <datetime class="column" type="datetime" width="200px" v-model="offerLiveChoosen.timeStart"
+            style="border:1px solid Grey;">
+            {{offerLiveChoosen.timeStart}}
+          </datetime>
+        </div>
+        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
+          <p class="column">Time Finish</p>
+          <datetime class="column" type="datetime" width="200px" v-model="offerLiveChoosen.timeFinish"
+            style="border:1px solid Grey;">
+          </datetime>
+        </div>
+        <div class="has-text-centered ">
+          <button class="button is-small is-primary" @click="sendUpdateObject()">Update</button>
+          <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Cancel</button>
+          <!-- <button class="button is-small is-danger" @click="sendDeleteObject()">Delete</button> -->
+        </div>
+      </div>
+      <div class="column ml-2 rows" :class="isCanCreate? 'is-9': 'is-12'" style="border:1px solid Grey;">
+        <div class="row is-full" v-if="!dataUsersByCreatingObject.length > 0">
+          <div class="has-text-centered">
+            <span> <strong>Danh sách các OFFERS Đang chạy </strong></span>
+            <button @click="filterObject()" class="button is-primary is-small mr-0 mb-2"
+              style="float: right">Search</button>
+            <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterObject"
+              style="float: right;width: 10%; height: 30px" />
+
+          </div>
+          <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
+            <thead style="backgroundColor: #3298dc">
+              <th>ID OfferLive</th>
+              <th>Group Offer</th>
+              <th>Group Object</th>
+              <th>Thời gian bắt đầu</th>
+              <th>Thời gian kết thúc</th>
+              <th>Thời gian tạo</th>
+              <th
+                v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1].id  ">
+                Hành động</th>
+            </thead>
+            <tbody>
+              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
+               { backgroundColor: 'azure'} 
+               : { backgroundColor : 'pink'}]">
+                <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
+                <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'deleted'}}</td>
+                <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'deleted'}}</td>
+                <td>{{ moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}}</td>
+                <td>{{ moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}}</td>
+                <td>{{ moment.unix(offerLive.createAt).format("MM/DD/YYYY H:mm:ss")}}</td>
+                <td
+                  v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1].id  ">
+                  <button class="button is-primary is-small" @click="beforUpdateObject(offerLive)">update</button>
+                  <button class="button is-danger is-small" @click="beforDeleteOfferLive(offerLive)">delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+    <Modal :isVisible.sync="modalAlert_isVisible" :title="modalAlert_title" :cbApprove="modalAlert_cbApprove"
+      :cbCancle="modalAlert_cbCancle"></Modal>
+    <div v-if="isShowDetail">
+      <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
+        <thead style="backgroundColor: #3298dc">
+          <th>ID</th>
+          <th>Group Offer</th>
+          <th>Group Object</th>
+          <th>Thời gian đếm ngược</th>
+          <th>Mô tả</th>
+          <th>Loại</th>
+          <th>Số lượng</th>
+          <th>Giá gốc</th>
+          <th>Giá bán</th>
+          <th>Thời gian bắt đầu</th>
+          <th>Thời gian kết thúc</th>
+          <th>Số lượng Users</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ofrLiveDetail._id}}</td>
+            <td>{{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'deleted'}} </td>
+            <td>{{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'deleted'}} </td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'deleted'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'deleted'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.type : 'deleted'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.value : 'deleted'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.originalCost : 'deleted'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.promotionCost : 'deleted'}}</td>
+            <td>{{moment.unix(ofrLiveDetail.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
+            <td>{{moment.unix(ofrLiveDetail.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>
+            <td>{{ofrLiveDetail.groupObject ? ofrLiveDetail.groupObject.totalUser : 'deleted'}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="button is-info" style="float: right" @click="isShowDetail = false">Quay lại</button>
+    </div>
+  </div>
+</template>
+<script>
+  import Navigation from './Navigation'
+  import Dropdown from './DropDown';
+  import Pagination from '../Utility/Pagination';
+  import TimeUtil from '../Utility/TimeUtility';
+  import APICaller from '../network/APICaller';
+  import moment from 'moment';
+  import GameData from '../Utility/GameData';
+  import ACCOUNT_ROLE from '../const/role_const'
+  import Modal from './Modal';
+  import ERROR_CODE, {
+    SUCCESS
+  } from '../const/error_code';
+
+  import {
+    Datetime
+  } from 'vue-datetime'
+  import 'vue-datetime/dist/vue-datetime.css'
+
+
+  export default {
+    name: 'RunOffer', //this is the name of the component
+    components: {
+      Navigation,
+      Dropdown,
+      datetime: Datetime,
+      Modal
+    },
+
+    mounted() {
+      this.getDataObject();
+      this.getDataOffer();
+      this.getDataOfferLive();
+      this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
+        .id
+    },
+
+    data() {
+      return {
+        isShown: false,
+        isShowUpdate: false,
+        dataListObject: Array(),
+        dataListOffers: Array(),
+        objectChoosen: Object(),
+        offerChoosen: Object(),
+        dataListOffersLive: Array(),
+        offerLiveChoosen: Object(),
+        search: '',
+        dataUsersByCreatingObject: Array(),
+        dataObjectCreating: Object(),
+        nameObject: 'default',
+        totalData: Array(),
+        idObjectUpdate: '',
+        // gameId: 'p13',
+        timeUtil: TimeUtil,
+        moment: moment,
+        GameData: GameData,
+        ACCOUNT_ROLE: ACCOUNT_ROLE,
+        isCanCreate: false,
+        modalAlert_isVisible: false,
+        modalAlert_title: "",
+        modalAlert_cbApprove: "",
+        modalAlert_cbCancle: "",
+        notiText: "",
+        notiState: "primary",
+        isVisibleNoti: false,
+        offerLiveUdate: Object(),
+        isShowDetail: false
+      }
+    },
+
+    methods: {
+      getDataObject() {
+        let header = {
+          headers: {
+            "content-type": "application/json"
+          },
+          params: {
+            gameId: GameData.getGameId()
+          }
+        };
+        APICaller.get(
+          "group_objects/get_list_group_object",
+          header,
+          function (res) {
+            this.dataListObject = res.data.data;
+            if (this.dataListObject.length > 0) {
+              this.objectChoosen = this.dataListObject[0];
+            }
+            for (let i in this.dataListObject) {
+              this.dataListObject[i].title = this.dataListObject[i].nameObject;
+            }
+          }.bind(this),
+
+          function (error) {
+            console.log("aaaa", error);
+          }
+        );
+      },
+
+      getDataOffer() {
+        let header = {
+          headers: {
+            "content-type": "application/json"
+          },
+          params: {
+            gameId: GameData.getGameId()
+          }
+        };
+        APICaller.get(
+          "group_offers/get_list_group_offer",
+          header,
+          function (res) {
+            this.dataListOffers = res.data.data;
+            if (this.dataListOffers.length > 0) {
+              this.offerChoosen = this.dataListOffers[0];
+            }
+            for (let i in this.dataListOffers) {
+              this.dataListOffers[i].title = this.dataListOffers[i].nameOffer;
+            }
+          }.bind(this),
+
+          function (error) {
+            console.log("aaaa", error);
+          }
+        );
+      },
+
+      getDataOfferLive() {
+        let header = {
+          headers: {
+            "content-type": "application/json"
+          },
+          params: {
+            gameId: GameData.getGameId()
+          }
+        };
+        APICaller.get(
+          "offer_lives/list",
+          header,
+          function (res) {
+            this.dataListOffersLive = res.data.data.sort(function (o1, o2) {
+              return o2.createAt - o1.createAt;
+            });
+          }.bind(this),
+
+          function (error) {
+            console.log("aaaa", error);
+          }
+        );
+      },
+
+      createOfferLive() {
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId()
+          }
+        };
+        let body = this.getBodyCreateOfferLive();
+        if (!body) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Vui lòng điền đây đủ thông tin!";
+          this.notiState = "danger";
+          return;
+        }
+        console.log("body ", body);
+        APICaller.post(
+          "offer_lives/create",
+          header,
+          body,
+          function (res) {
+            if (res.data.errorCode == ERROR_CODE.SUCCESS) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Đã tạo thành công!";
+              this.notiState = "success";
+              this.dataListOffersLive.unshift(res.data.data);
+              this.cancleUpdate();
+            } else {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Tạo thất bại!ErrorCode: " + res.data.errorCode;
+              this.notiState = "danger";
+            }
+          }.bind(this),
+
+          function (error) {
+            console.log("aaaa", error);
+            this.isVisibleNoti = Math.round(+new Date() / 1000);
+            this.notiText = "Tạo thất bại!errorCode: " + console.error();;
+            this.notiState = "danger";
+          }
+        );
+      },
+
+      getBodyCreateOfferLive() {
+        let body = {};
+        if (this.objectChoosen._id) {
+          body.idObject = this.objectChoosen._id;
+        } else {
+          return false;
+        }
+
+        if (this.offerChoosen._id) {
+          body.idOffer = this.offerChoosen._id;
+        } else {
+          return false;
+        }
+
+        if (this.offerLiveChoosen.timeStart) {
+          body.timeStart = parseInt(moment(moment(this.offerLiveChoosen.timeStart).format()).format("X"));
+        } else {
+          return false;
+        }
+
+        if (this.offerLiveChoosen.timeFinish) {
+          body.timeFinish = parseInt(moment(moment(this.offerLiveChoosen.timeFinish).format()).format("X"));
+        } else {
+          return false;
+        }
+
+        return body;
+      },
+
+      beforUpdateObject(offerLive) {
+        this.offerLiveUdate = offerLive;
+        this.objectChoosen = offerLive.groupObject ? offerLive.groupObject : this.dataListObject[0] ? this
+          .dataListObject[0] : Object();
+        this.offerChoosen = offerLive.groupOffer ? offerLive.groupOffer : this.dataListOffers[0] ? this.dataListOffers[
+          0] : Object();
+        this.offerLiveChoosen.timeStart = moment.unix(offerLive.timeStart).format()
+        this.offerLiveChoosen.timeFinish = moment.unix(offerLive.timeFinish).format()
+        this.offerLiveChoosen._id = offerLive._id;
+        this.isShowUpdate = true;
+      },
+
+      beforDeleteOfferLive(offerLive) {
+        this.offerLiveChoosen._id = offerLive._id;
+        this.sendDeleteObject();
+      },
+
+      checkDuplicateChangeOfferLive(old, newVal) {
+        if (old.groupObject._id != newVal.groupObject) {
+          return true
+        } else if (old.groupOffer ? old.groupOffer._id != newVal.groupOffer : newVal.groupOffer != null) {
+          return true;
+        } else if (old.timeStart != newVal.timeStart) {
+          return true;
+        } else if (old.timeFinish != newVal.timeFinish) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+
+      sendUpdateObject() {
+        let body = {
+          idOfferLive: this.offerLiveChoosen._id,
+          dataModify: {
+            groupObject: this.objectChoosen._id,
+            groupOffer: this.offerChoosen._id,
+            timeStart: parseInt(moment(moment(this.offerLiveChoosen.timeStart).format()).format("X")),
+            timeFinish: parseInt(moment(moment(this.offerLiveChoosen.timeFinish).format()).format("X"))
+          }
+        }
+        if (!this.checkDuplicateChangeOfferLive(this.offerLiveUdate, body.dataModify)) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Dữ liệu cập nhật không đổi";
+          this.notiState = "danger";
+          return;
+        }
+        this.modalAlert_isVisible = true;
+        var updateOfferLiveCB = function () {
+          this.modalAlert_isVisible = false;
+          let header = {
+            headers: {
+              "content-type": "application/json",
+              "access-control-allow-origin": "*"
+            },
+            params: {
+              gameId: GameData.getGameId()
+            }
+          };
+
+          APICaller.post(
+            "offer_lives/edit",
+            header,
+            body,
+            function (res) {
+              if (res.data.errorCode == ERROR_CODE.SUCCESS) {
+                this.isVisibleNoti = Math.round(+new Date() / 1000);
+                this.notiText = "Cập nhật thành công!";
+                this.notiState = "success";
+                this.dataListOffersLive.splice(this.dataListOffersLive.findIndex(v => v._id == this.offerLiveChoosen
+                    ._id),
+                  1, res.data.data);
+                this.cancleUpdate();
+              } else {
+                this.isVisibleNoti = Math.round(+new Date() / 1000);
+                this.notiText = "Cập nhật thất bại!errorCode: " + res.data.errorCode;
+                this.notiState = "danger";
+              }
+
+            }.bind(this),
+
+            function (error) {
+              console.log("aaaa", error);
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "update offferLive fail; errorCode: " + error;
+              this.notiState = "danger";
+            }
+          );
+        }
+        this.updateDataModalAlert("Bạn có muốn cập nhật? ", updateOfferLiveCB.bind(this))
+      },
+
+      cancleUpdate() {
+        this.isShowUpdate = false;
+        this.offerLiveChoosen.timeStart = null;
+        this.offerLiveChoosen.timeFinish = null;
+        this.objectChoosen = this.dataListObject[0] ? this.dataListObject[0] : Object();
+        this.offerChoosen = this.dataListOffers[0] ? this.dataListOffers[0] : Object();
+      },
+
+      sendDeleteObject() {
+        this.modalAlert_isVisible = true;
+        var deleteOfferLiveCB = function () {
+          this.modalAlert_isVisible = false;
+          let header = {
+            headers: {
+              "content-type": "application/json",
+              "access-control-allow-origin": "*"
+            },
+            params: {
+              gameId: GameData.getGameId()
+            }
+          };
+          let body = {
+            idOfferLive: this.offerLiveChoosen._id,
+          }
+          console.log("sendDeleteObject ", this.offerLiveChoosen);
+          APICaller.post(
+            "offer_lives/delete",
+            header,
+            body,
+            function (res) {
+              if (res.data.errorCode == SUCCESS) {
+                this.isVisibleNoti = Math.round(+new Date() / 1000);
+                this.notiText = "Xóa thành công!";
+                this.notiState = "success";
+                console.log("deleted ", res);
+                this.dataListOffersLive.splice(this.dataListOffersLive.findIndex(v => v._id == this.offerLiveChoosen
+                    ._id),
+                  1);
+                this.cancleUpdate();
+              } else {
+                this.isVisibleNoti = Math.round(+new Date() / 1000);
+                this.notiText = "Xóa thất bại!errorCode: " + res.data.errorCode;
+                this.notiState = "danger";
+              }
+
+            }.bind(this),
+
+            function (error) {
+              console.log("aaaa", error);
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Xóa thất bại! errorCode: " + error;
+              this.notiState = "danger";
+            }
+          );
+        }
+        this.updateDataModalAlert("Bạn có muốn xóa? ", deleteOfferLiveCB.bind(this))
+      },
+
+      filterObject() {
+        this.dataListOffersLive = this.dataListOffersLive.filter(item => {
+          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        })
+      },
+
+      onClickChooseOffer(item) {
+        this.offerChoosen = item;
+      },
+
+      onClickChooseObject(item) {
+        this.objectChoosen = item;
+      },
+
+      updateDataModalAlert(title, callBack) {
+        this.modalAlert_isVisible = true;
+        this.modalAlert_title = title;
+        this.modalAlert_cbApprove = callBack;
+        this.modalAlert_cbCancle = function () {
+          this.modalAlert_isVisible = false;
+        }.bind(this);
+      },
+
+      viewDetail(idOfferLive) {
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId(),
+            idOfferLive: idOfferLive
+          }
+        };
+
+        APICaller.get(
+          "offer_lives/show_detail",
+          header,
+          function (res) {
+            console.log("show Detail ", res);
+            if (res.data.errorCode == SUCCESS) {
+              this.isShowDetail = true;
+              this.ofrLiveDetail = res.data.data;
+            } else {
+
+            }
+
+          }.bind(this),
+
+          function (error) {
+            console.log("aaaa", error);
+          }
+        );
+      }
+    }
+  }
+
+</script>
+<style scoped>
+  h1,
+  h2 {
+    font-weight: normal;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+
+  a {
+    color: #42b983;
+  }
+
+  .columns {
+    margin: 20px;
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pagination .pagination-list {
+    float: right;
+  }
+
+  /* tr:nth-child(even) {
+    background-color: azure;
+  } */
+
+</style>

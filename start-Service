@@ -1,0 +1,5 @@
+#!/bin/bash
+
+npm install
+npm run build
+pm2 start prod.js --merge-logs --log-date-format="YYYY-MM-DD HH:mm Z" -o logs/output.log -e logs/error.log --name="so_front_end"

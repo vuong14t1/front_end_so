@@ -80,7 +80,7 @@
           "content-type": "application/json",
         },
         params: {
-          gameId: this.$gameId
+          gameId: GameData.getGameId()
         }
       }
       APICaller.get(

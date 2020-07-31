@@ -84,7 +84,7 @@
   }
 
   .item-input:hover {
-  background-color: pink;
+  background-color: azure;
 }
 
   nav .menu-item .sub-menu {

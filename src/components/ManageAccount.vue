@@ -52,7 +52,7 @@
                   <td><input class="has-text-centered" style="width: 200px; height: 50px;" placeholder="Password"
                       v-model="accountCreated.password" /></td>
                   <td>
-                    <DropDown :type="ObjectConst.DROP_DOWN.ROLE" :title="AccountRole[role].title" :items="AccountRole"
+                    <DropDown style="border: none" class="mt-3" :type="ObjectConst.DROP_DOWN.ROLE" :title="AccountRole[role].title" :items="AccountRole"
                       :id="accountCreated._id" @clicked="onClickChildCreated"></DropDown>
                     <!-- <DropDown style="width: 130px; height: 50px; text-align: center"  :type="ObjectConst.DROP_DOWN.ROLE" 
                       :title="AccountRole[accountUpdate.role].title" :items="AccountRole"
@@ -91,7 +91,7 @@
                   <td style="width: 100px; height: 50px;font-size: 10px">{{accountUpdate._id}}</td>
                   <td>{{accountUpdate.email}}</td>
                   <td>
-                    <DropDown style=" width: 130px;text-align: center" :type="ObjectConst.DROP_DOWN.ROLE"
+                    <DropDown class="mt-2" style=" width: 130px;text-align: center;border: none" :type="ObjectConst.DROP_DOWN.ROLE"
                       :title="AccountRole[accountUpdate.role].title" :items="AccountRole" :id="accountUpdate._id"
                       @clicked="onClickChild"> </DropDown>
                   </td>

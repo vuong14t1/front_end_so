@@ -18,11 +18,13 @@
 <script>
   import DropDown from './DropDown'
   import GAME from '../const/game_const'
+  import GameMixin from '../mixin/gameMixin'
   import GameData from '../Utility/GameData'
   import ACCOUNT_ROLE from '../const/role_const'
 
   export default {
     name: 'Navigation',
+    mixins: [GameMixin],
     components: {
       DropDown
     },

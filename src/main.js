@@ -15,7 +15,7 @@ import {
 Vue.use(VueCookies)
 
 Vue.config.productionTip = false
-// Vue.prototype.$gameId = "p13";
+Vue.prototype.$gameId = "p13";
 
 /* eslint-disable no-new */
 // new Vue({

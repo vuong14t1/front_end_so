@@ -52,8 +52,9 @@
                   <td><input class="has-text-centered" style="width: 200px; height: 50px;" placeholder="Password"
                       v-model="accountCreated.password" /></td>
                   <td>
-                    <DropDown style="border: none" class="mt-3" :type="ObjectConst.DROP_DOWN.ROLE" :title="AccountRole[role].title" :items="AccountRole"
-                      :id="accountCreated._id" @clicked="onClickChildCreated"></DropDown>
+                    <DropDown style="border: none" class="mt-3" :type="ObjectConst.DROP_DOWN.ROLE"
+                      :title="AccountRole[role].title" :items="AccountRole" :id="accountCreated._id"
+                      @clicked="onClickChildCreated"></DropDown>
                     <!-- <DropDown style="width: 130px; height: 50px; text-align: center"  :type="ObjectConst.DROP_DOWN.ROLE" 
                       :title="AccountRole[accountUpdate.role].title" :items="AccountRole"
                 :id="accountUpdate._id" @clicked="onClickChild"> </DropDown> -->
@@ -91,9 +92,9 @@
                   <td style="width: 100px; height: 50px;font-size: 10px">{{accountUpdate._id}}</td>
                   <td>{{accountUpdate.email}}</td>
                   <td>
-                    <DropDown class="mt-2" style=" width: 130px;text-align: center;border: none" :type="ObjectConst.DROP_DOWN.ROLE"
-                      :title="AccountRole[accountUpdate.role].title" :items="AccountRole" :id="accountUpdate._id"
-                      @clicked="onClickChild"> </DropDown>
+                    <DropDown class="mt-2" style=" width: 130px;text-align: center;border: none"
+                      :type="ObjectConst.DROP_DOWN.ROLE" :title="AccountRole[accountUpdate.role].title"
+                      :items="AccountRole" :id="accountUpdate._id" @clicked="onClickChild"> </DropDown>
                   </td>
                   <td><input placeholder="password" type="password" style="width: 120px; height: 40px;"
                       v-model="accountUpdate.password" /> </td>
@@ -455,6 +456,25 @@
 
   tr:nth-child(even) {
     background-color: azure;
+  }
+
+  .modal-content,
+  .modal-card {
+    margin: 0 20px;
+    max-height: calc(100vh - 160px);
+    overflow: auto;
+    position: relative;
+    width: 100%;
+  }
+
+  @media screen and (min-width: 769px) {
+
+    .modal-content,
+    .modal-card {
+      margin: 0 auto;
+      max-height: calc(100vh - 40px);
+      width: 960px;
+    }
   }
 
 </style>

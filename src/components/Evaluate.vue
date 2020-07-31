@@ -1,10 +1,17 @@
 <template>
   <div>
     <Navigation></Navigation>
-    <p class="title has-text-centered" style="width: 100%; float: left"></p>
+    <!-- <p class="title has-text-centered" style="width: 100%; float: left"></p> -->
+    <div style="width: 98%;float: left">
+      <!-- <p class="title has-text-centered mt-100" style="width: 100%;  height: 0px;float: left"></p> -->
+      <button @click="filterOfferLive()" class="button is-primary mb-2" style="float: right">Tìm kiếm</button>
+      <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterOfferLive"
+        style="float: right;width: 10%; height: 40px" />
+    </div>
     <div>
       <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
         <thead style="backgroundColor: #3298dc">
+          <th>Id</th>
           <th>Group Offer</th>
           <th>Group Object</th>
           <th>Time Start</th>
@@ -17,9 +24,10 @@
           <th>% Buy/Show</th>
         </thead>
         <tbody>
-          <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id"  :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
+          <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
                { backgroundColor: 'azure'} 
                : { backgroundColor : 'pink'}]">
+            <td>{{offerLive._id}}</td>
             <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'deleted'}} </td>
             <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'deleted'}} </td>
             <td>{{moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
@@ -29,7 +37,9 @@
             <td>{{offerLive.totalBought}} </td>
             <td>{{offerLive.groupOffer? offerLive.groupOffer.promotionCost : 'deleted'}} </td>
             <td>{{offerLive.groupOffer ? offerLive.groupOffer.promotionCost * offerLive.totalBought : 'deleted'}} </td>
-            <td>{{offerLive.totalBought == 0 || offerLive.totalShow == 0 ? 0 : Math.ceil(offerLive.totalBought / offerLive.totalShow * 100)}} </td>
+            <td>
+              {{offerLive.totalBought == 0 || offerLive.totalShow == 0 ? 0 : Math.ceil(offerLive.totalBought / offerLive.totalShow * 100)}}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -62,7 +72,8 @@
         // gameId: "p13",
         dataListOffersLive: Array(),
         totalRevenue: 0,
-        moment: moment
+        moment: moment,
+        search: ''
       }
     },
 
@@ -88,7 +99,7 @@
             console.log("dataListOffersLive ", this.dataListOffersLive);
             if (this.dataListOffersLive.length > 0) {
               for (let i in this.dataListOffersLive) {
-                if(this.dataListOffersLive[i].groupOffer == null) continue;
+                if (this.dataListOffersLive[i].groupOffer == null) continue;
                 this.totalRevenue += this.dataListOffersLive[i].groupOffer.promotionCost * this.dataListOffersLive[i]
                   .totalBought;
               }
@@ -100,6 +111,12 @@
             console.log("aaaa", error);
           }
         );
+      },
+      
+      filterOfferLive(){
+          this.dataListOffersLive = this.dataListOffersLive.filter(item => {
+            return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          })
       }
     }
   }

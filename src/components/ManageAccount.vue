@@ -92,7 +92,7 @@
                   <td style="width: 100px; height: 50px;font-size: 10px">{{accountUpdate._id}}</td>
                   <td>{{accountUpdate.email}}</td>
                   <td>
-                    <DropDown class="mt-2" style=" width: 130px;text-align: center;border: none"
+                    <DropDown class="mt-2" style="text-align: center;border: none"
                       :type="ObjectConst.DROP_DOWN.ROLE" :title="AccountRole[accountUpdate.role].title"
                       :items="AccountRole" :id="accountUpdate._id" @clicked="onClickChild"> </DropDown>
                   </td>

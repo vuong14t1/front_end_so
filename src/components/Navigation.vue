@@ -6,9 +6,10 @@
         <p>{{routes.text}} </p>
       </router-link>
       <button class="button  is-focused mt-5 ml-5" @click="refreshPage()">Làm mới trang</button>
-      <button class="button is-focused mt-5 ml-5">{{gameTitle}}</button>
+      
     </div>
     <router-link v-if="!isActive" class="button  is-focused  mt-5 mr-3" style="float: right" :to="'/login'" >Đăng xuất</router-link>
+    <p class="button mt-5 ml-5" style="float: right;border: none; border-bottom:1px solid #3298dc; " ><strong> Game: {{gameTitle}} </strong></p>
     <div v-if="isActive" class="notification " :class="'is-' + state" style="width: 20%; height: 50px;float: left;z-index: 100"
       @click="closeNotify()"><button class="delete"></button>
       {{text}}</div>

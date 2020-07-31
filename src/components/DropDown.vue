@@ -1,13 +1,15 @@
 <template>
   <div class="menu-item" style="border:1px solid Grey;" @click="isOpen = !isOpen">
-    <a class=" mt-0 " style="font-size: 15px">
+    <a class=" mt-0 " style="font-size: 15px; text-decoration: none; ">
       {{ titleName }}
       <i class="fa fa-arrow-circle-down fa-lg" style="float: right" aria-hidden="true"></i>
     </a>
-    <div style="z-index: 100; width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;" class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
+    <div style="z-index: 100; width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;"
+      class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
       <div style="z-index: 100; width: 100%;  float: left;" v-for="(item, i) in items" :key="i"
         class="menu-item  has-text-centered mr-6" :class="type == OBJECT_CONST.DROP_DOWN.LOGIN? '' : ' mt-1 pt-1'">
-        <a style="z-index: 100;height:40px; text-decoration: none; " class="input item-input ml-0 mt-0" @click="onClickButton(item)">{{ item.title}}</a>
+        <a style="z-index: 100;height:40px; text-decoration: none; " class="input item-input ml-0 mt-0"
+          @click="onClickButton(item)">{{ item.title}}</a>
       </div>
     </div>
   </div>
@@ -84,8 +86,8 @@
   }
 
   .item-input:hover {
-  background-color: azure;
-}
+    background-color: azure;
+  }
 
   nav .menu-item .sub-menu {
     position: absolute;

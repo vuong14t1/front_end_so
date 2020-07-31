@@ -218,7 +218,8 @@
         notiText: "",
         notiState: "primary",
         isVisibleNoti: false,
-        objectUpdate: Object()
+        objectUpdate: Object(),
+        objectDetail: Object()
       }
     },
 
@@ -730,9 +731,51 @@
       },
 
       filterUserByUId() {
-        this.dataUsersByCreatingObject = this.dataUsersByCreatingObject.filter(item => {
-          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-        })
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId(),
+            userId: this.search.toLowerCase()
+          }
+        };
+        console.log('=== ', this.dataObjectCreating)
+        APICaller.get(
+          "tracking_user/search_info_user",
+          header,
+          function (res) {
+            if (res.data.errorCode == ERROR_CODE.EMPTY) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Không tìn thấy user nào.";
+              this.notiState = "danger";
+              return;
+            }
+            let dataUserByCreatingObject = res.data.data;
+            var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
+              dataUserByCreatingObject.channel = dataUserByCreatingObject.channelPayment[
+                channel].channel;
+              dataUserByCreatingObject.numberPay = dataUserByCreatingObject.channelPayment[
+                channel].number;
+              dataUserByCreatingObject.totalCost = dataUserByCreatingObject.channelPayment[
+                channel].cost;
+            this.dataUsersByCreatingObject = [];
+            this.dataUsersByCreatingObject.push(dataUserByCreatingObject);
+            this.isShowUser = true;
+          }.bind(this),
+          function (error) {
+            console.log('group_objects/list_user ==== error', error);
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
+        )
+        // this.dataUsersByCreatingObject = this.dataUsersByCreatingObject.filter(item => {
+        //   return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        // })
       },
 
       updateDataModalAlert(title, callBack) {

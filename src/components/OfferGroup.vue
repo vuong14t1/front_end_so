@@ -92,28 +92,28 @@
         <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="isCanCreate"
           style="border:1px solid Grey;">
           <div class="row is-full" style="height=10%">
-            <div>Tên Offer: {{options.nameOffer.value}}</div>
+            <div class="mt-4">Tên Offer: <br> <strong> {{options.nameOffer.value}}</strong> </div>
             <div class="rotated">Giá trị Khuyến mãi
-              {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title)
+              <strong> {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title)
                    - options.promotionCost.value)/parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title) * 100)}}
-              %</div>
+              % </strong> </div>
           </div>
-          <div class="row columns is-full has-text-centered">
-            <div class="column is-4">
-              <p style="border:1px solid Grey;height: 100px;
-               background-color: powderblue;">Loại: {{jsonConfig.OfferGroup.type.listItem[options.type.value].title}}
+          <div class="row columns is-full has-text-centered" style="text-align: center">
+            <div class="column is-4" style="text-align: center">
+              <p class="mt-2" style="border:1px solid Grey;height: 100px;
+               background-color: powderblue; text-align: center" >Loại: <br> <br> <strong>{{jsonConfig.OfferGroup.type.listItem[options.type.value].title}} </strong>
               </p>
-              <div>Số lượng: {{options.value.value}}</div>
+              <p class="mt-4" style="word-break: break-all;">Số lượng: <strong>{{options.value.value}}</strong></p>
             </div>
             <div class="column is-5">
-              <div style="height: 180px; width: 200px">Mô tả: {{options.description.value}}</div>
-              <div>Giá bán: {{options.promotionCost.value}}</div>
-              <p>Giá gốc:<del> {{jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title}} </del>
+              <p style="height: 180px; text-align: center"> Mô tả: <br> <strong> {{options.description.value}} </strong></p>
+              <div>Giá bán: <strong> {{options.promotionCost.value}} </strong> </div>
+              <p>Giá gốc: <strong><del>  {{jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title}} </del> </strong>
               </p>
             </div>
             <div class="column is-3">
               <p style="height: 180px"></p>
-              <p>Thời gian đếm ngược: {{options.durationCountDown.value}}</p>
+              <p>Thời gian đếm ngược: <br><strong> {{options.durationCountDown.value}} </strong></p>
             </div>
           </div>
         </div>
@@ -585,6 +585,10 @@
 
   .offfer {
     height: 100%;
+  }
+
+  p{
+    word-break: break-all;
   }
 
 </style>

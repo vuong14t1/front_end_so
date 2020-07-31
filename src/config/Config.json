@@ -4,15 +4,10 @@
     "DEV": "http://localhost:8080",
     "RELEASE": "http://49.213.81.43:10021"
   },
-  "OAUTH_MODE": "RELEASE",
-  "OAUTH_HOST": {
-    "RELEASE": " https://asia-east2-gsn-admintool.cloudfunctions.net/app"
-  }
-  ,
 
   "CLIENT_MODE": "DEV",
   "CLIENT_HOST": {
-    "DEV": "http://localhost:8080/",
+    "DEV": "http://localhost:8081/",
     "RELEASE": "http://49.213.81.43:10020"
   },
   "LIVE_PORT": "10020"

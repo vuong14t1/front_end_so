@@ -144,7 +144,6 @@
   import TimeUtil from '../Utility/TimeUtility';
   import ERROR_CODE from '../const/error_code';
   import CHANNEL_PAYMENT from '../const/channel_const';
-  import GameMixin from '../mixin/gameMixin';
   import moment from 'moment';
   import router from '../router';
   import GameData from '../Utility/GameData';
@@ -156,7 +155,6 @@
 
   export default {
     name: 'ObjectGroup',
-    mixins: [GameMixin],
     components: {
       Dropdown,
       Navigation,

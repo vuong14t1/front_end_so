@@ -84,19 +84,21 @@
                 <th>Email</th>
                 <th>ROLE</th>
                 <th>Password</th>
+                <th>Confirm Password</th>
               </thead>
               <tbody style="width: 1000px">
                 <tr>
                   <td style="width: 100px; height: 50px;font-size: 10px">{{accountUpdate._id}}</td>
-                  <td> <input class="has-text-centered" style="width: 100px; height: 50px;"
-                      v-model="accountUpdate.email" /></td>
+                  <td>{{accountUpdate.email}}</td>
                   <td>
-                    <DropDown style="width: 130px; height: 50px; text-align: center" :type="ObjectConst.DROP_DOWN.ROLE"
+                    <DropDown style=" width: 130px;text-align: center" :type="ObjectConst.DROP_DOWN.ROLE"
                       :title="AccountRole[accountUpdate.role].title" :items="AccountRole" :id="accountUpdate._id"
                       @clicked="onClickChild"> </DropDown>
                   </td>
-                  <td><input placeholder="password" type="password" style="width: 100px; height: 50px;"
+                  <td><input placeholder="password" type="password" style="width: 120px; height: 40px;"
                       v-model="accountUpdate.password" /> </td>
+                  <td><input placeholder="confirm password" type="password" style="width: 130px; height: 40px;"
+                      v-model="accountUpdate.confirmPassword" /> </td>
                 </tr>
               </tbody>
             </table>
@@ -126,6 +128,7 @@
   import Modal from './Modal';
   import Notification from './Notification';
   import ERROR_CODE from '../const/error_code';
+  var md5 = require('md5');
 
   export default {
     name: 'ManageAccount',
@@ -202,15 +205,23 @@
       },
 
       updateAccount(account) {
+        if (account.confirmPassword == null || account.confirmPassword.length <= 0 ||
+          account.confirmPassword != account.password) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Confirm Password không hợp lệ!";
+          this.notiState = "danger";
+          return;
+        }
+
         let body = {
           id: account._id,
           dataModify: {
-            email: account.email,
+            // email: account.email,
             role: account.role,
             password: account.password
           }
         }
-        console.log("updateAccount ", body);
+        console.log("updateAccount ", body, account);
 
         for (let i in account) {
           if (account[i] == null || account[i].length == 0) {
@@ -221,7 +232,8 @@
           }
         }
 
-        if (!Utils.checkDuplicateData(this.staticListAccount.find(v => v._id == account._id), account)) {
+        let oldAcc = this.staticListAccount.find(v => v._id == account._id);
+        if (!Utils.checkDuplicateData(oldAcc, account) || oldAcc.password == md5(account.password)) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Dữ liệu cập nhật không đổi";
           this.notiState = "danger";

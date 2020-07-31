@@ -39,12 +39,14 @@
         <div class="row is-full" v-if="!isShowUser">
           <div class="has-text-centered">
             <span><strong> Danh sách các OBJECTS </strong> </span>
-            <button @click="filterObject()" class="button is-primary is-small mr-0 mb-2" style="float: right">Tìm kiếm</button>
+            <button @click="filterObject()" class="button is-primary is-small mr-0 mb-2" style="float: right">Tìm
+              kiếm</button>
             <!-- <input v-model="search" @keydown.enter="filterObject" style="float: right" /> -->
-            <input class="input is-primary is-medium"  v-model="search" @keydown.enter="filterObject" style="float: right;width: 10%; height: 30px" />
+            <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterObject"
+              style="float: right;width: 10%; height: 30px" />
           </div>
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 13px">
-        <thead style="backgroundColor: #3298dc">
+            <thead style="backgroundColor: #3298dc">
               <th>ID Object</th>
               <th>Tên</th>
               <th>Số lượng user</th>
@@ -94,7 +96,7 @@
             <input v-model="search" @keydown.enter="filterUserByUId" style="float: right" />
           </div>
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
-        <thead style="backgroundColor: #3298dc">
+            <thead style="backgroundColor: #3298dc">
               <th>Danh sách USERS</th>
               <th v-for="option in options" :key="option.title">{{option.title}} </th>
             </thead>
@@ -167,8 +169,12 @@
     mounted() {
       this.gameId = GameData.getGameId();
       if (GameData.getRoleAccount() == null) {
-        alert('MustLogin');
-        router.push('Login');
+        this.isVisibleNoti = Math.round(+new Date() / 1000);
+        this.notiText = "Yêu cầu đăng nhạp!";
+        this.notiState = "danger";
+        setTimeout(function () {
+          router.push('Login');
+        }.bind(this), 100)
       }
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id
@@ -214,7 +220,8 @@
         notiText: "",
         notiState: "primary",
         isVisibleNoti: false,
-        objectUpdate: Object()
+        objectUpdate: Object(),
+        objectDetail: Object()
       }
     },
 
@@ -297,10 +304,14 @@
             this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
             this.dataListObject = this.paginationObject.getDataByPage(1);
           }.bind(this),
-
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -350,7 +361,7 @@
               "group_objects/list_user",
               header,
               function (res) {
-                console.log('==== lisst user ', res); 
+                console.log('==== lisst user ', res);
                 if (res.data.errorCode == ERROR_CODE.EMPTY) {
                   this.isVisibleNoti = Math.round(+new Date() / 1000);
                   this.notiText = "Không có user nào!";
@@ -389,7 +400,12 @@
           }.bind(this),
           function (error) {
             console.log(error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -423,7 +439,12 @@
           }.bind(this),
           function (error) {
             console.log(error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         )
       },
 
@@ -516,6 +537,11 @@
               this.notiText = "update object fail; err0rC0de: " + error;
               this.notiState = "danger";
               this.cancleUpdate();
+            }.bind(this),
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
             }.bind(this)
           )
         }
@@ -551,7 +577,7 @@
                 console.log("success delete", res);
                 this.totalData.splice(this.totalData.findIndex(v => v._id == this.objectUpdate._id), 1);
                 this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
-                  this.dataListObject = this.paginationObject.getDataByPage(1);
+                this.dataListObject = this.paginationObject.getDataByPage(1);
                 this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -565,6 +591,11 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "delete object fail; ERRORCODE: " + error;
               this.notiState = "danger";
+            }.bind(this),
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
             }.bind(this)
           )
         }
@@ -685,7 +716,12 @@
           }.bind(this),
           function (error) {
             console.log('group_objects/list_user ==== error', error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         )
       },
 
@@ -697,9 +733,51 @@
       },
 
       filterUserByUId() {
-        this.dataUsersByCreatingObject = this.dataUsersByCreatingObject.filter(item => {
-          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-        })
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId(),
+            userId: this.search.toLowerCase()
+          }
+        };
+        console.log('=== ', this.dataObjectCreating)
+        APICaller.get(
+          "tracking_user/search_info_user",
+          header,
+          function (res) {
+            if (res.data.errorCode == ERROR_CODE.EMPTY) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Không tìn thấy user nào.";
+              this.notiState = "danger";
+              return;
+            }
+            let dataUserByCreatingObject = res.data.data;
+            var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
+              dataUserByCreatingObject.channel = dataUserByCreatingObject.channelPayment[
+                channel].channel;
+              dataUserByCreatingObject.numberPay = dataUserByCreatingObject.channelPayment[
+                channel].number;
+              dataUserByCreatingObject.totalCost = dataUserByCreatingObject.channelPayment[
+                channel].cost;
+            this.dataUsersByCreatingObject = [];
+            this.dataUsersByCreatingObject.push(dataUserByCreatingObject);
+            this.isShowUser = true;
+          }.bind(this),
+          function (error) {
+            console.log('group_objects/list_user ==== error', error);
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
+        )
+        // this.dataUsersByCreatingObject = this.dataUsersByCreatingObject.filter(item => {
+        //   return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        // })
       },
 
       updateDataModalAlert(title, callBack) {

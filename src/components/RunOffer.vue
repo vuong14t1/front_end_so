@@ -243,7 +243,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -271,7 +276,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -295,7 +305,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -340,7 +355,12 @@
             this.isVisibleNoti = Math.round(+new Date() / 1000);
             this.notiText = "Tạo thất bại!errorCode: " + console.error();;
             this.notiState = "danger";
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -374,11 +394,25 @@
       },
 
       beforUpdateObject(offerLive) {
+        this.cancleUpdate();
+        if (this.dataListObject[0] == null && offerLive.groupObject == null) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Không có sẵn Object";
+          this.notiState = "danger";
+          this.objectChoosen = Object();
+          return;
+        }
+        if (this.dataListOffers[0] == null && offerLive.groupOffer == null) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Không có sẵn Offer! ";
+          this.notiState = "danger";
+          this.offerChoosen = Object();
+          return;
+        }
         this.offerLiveUdate = offerLive;
-        this.objectChoosen = offerLive.groupObject ? offerLive.groupObject : this.dataListObject[0] ? this
-          .dataListObject[0] : Object();
-        this.offerChoosen = offerLive.groupOffer ? offerLive.groupOffer : this.dataListOffers[0] ? this.dataListOffers[
-          0] : Object();
+        this.objectChoosen = offerLive.groupObject ? offerLive.groupObject : this.dataListObject[0];
+        this.offerChoosen = offerLive.groupOffer ? offerLive.groupOffer : this.dataListOffers[0];
+
         this.offerLiveChoosen.timeStart = moment.unix(offerLive.timeStart).format()
         this.offerLiveChoosen.timeFinish = moment.unix(offerLive.timeFinish).format()
         this.offerLiveChoosen._id = offerLive._id;
@@ -391,7 +425,7 @@
       },
 
       checkDuplicateChangeOfferLive(old, newVal) {
-        if (old.groupObject._id != newVal.groupObject) {
+        if (old.groupObject ? old.groupObject._id != newVal.groupObject : newVal.groupObject != null) {
           return true
         } else if (old.groupOffer ? old.groupOffer._id != newVal.groupOffer : newVal.groupOffer != null) {
           return true;
@@ -459,7 +493,12 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "update offferLive fail; errorCode: " + error;
               this.notiState = "danger";
-            }
+            }.bind(this),
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
+            }.bind(this)
           );
         }
         this.updateDataModalAlert("Bạn có muốn cập nhật? ", updateOfferLiveCB.bind(this))
@@ -517,7 +556,12 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Xóa thất bại! errorCode: " + error;
               this.notiState = "danger";
-            }
+            },
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
+            }.bind(this)
           );
         }
         this.updateDataModalAlert("Bạn có muốn xóa? ", deleteOfferLiveCB.bind(this))
@@ -574,7 +618,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       }
     }

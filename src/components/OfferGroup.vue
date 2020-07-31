@@ -18,7 +18,8 @@
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> Cập nhật Offer </strong></p>
-        <form class="columns ml-1" style="border:1px solid Grey;font-size: 15px" v-for="option in optionsUpdate" :key="option.title">
+        <form class="columns ml-1" style="border:1px solid Grey;font-size: 15px" v-for="option in optionsUpdate"
+          :key="option.title">
           <div v-if="!option.listItems" class="column">{{option.title}}</div>
           <input v-if="!option.listItems" v-model="option.value" class="column mr-0">
           <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
@@ -38,11 +39,13 @@
         <div class="row list-offers is-full">
           <div class="has-text-centered">
             <span><strong> Danh sách các OFFERS </strong></span>
-            <button class="button is-small is-primary mr-0 mb-2" @click="filterOffer()" style="float: right">Search</button>
-            <input class="input is-primary is-medium"  v-model="search" @keydown.enter="filterOffer" style="float: right;width: 10%; height: 30px" />
+            <button class="button is-small is-primary mr-0 mb-2" @click="filterOffer()"
+              style="float: right">Search</button>
+            <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterOffer"
+              style="float: right;width: 10%; height: 30px" />
           </div>
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
-        <thead style="backgroundColor: #3298dc">
+            <thead style="backgroundColor: #3298dc">
               <th>ID Offer</th>
               <th v-for="option in options" :key="option.title">{{option.title}} </th>
               <th>Giá trị khuyến mãi</th>
@@ -89,28 +92,28 @@
         <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="isCanCreate"
           style="border:1px solid Grey;">
           <div class="row is-full" style="height=10%">
-            <div>Tên Offer: {{options.nameOffer.value}}</div>
+            <div class="mt-4">Tên Offer: <br> <strong> {{options.nameOffer.value}}</strong> </div>
             <div class="rotated">Giá trị Khuyến mãi
-              {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title)
+              <strong> {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title)
                    - options.promotionCost.value)/parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title) * 100)}}
-              %</div>
+              % </strong> </div>
           </div>
-          <div class="row columns is-full has-text-centered">
-            <div class="column is-4">
-              <p style="border:1px solid Grey;height: 100px;
-               background-color: powderblue;">Loại: {{jsonConfig.OfferGroup.type.listItem[options.type.value].title}}
+          <div class="row columns is-full has-text-centered" style="text-align: center">
+            <div class="column is-4" style="text-align: center">
+              <p class="mt-2" style="border:1px solid Grey;height: 100px;
+               background-color: powderblue; text-align: center" >Loại: <br> <br> <strong>{{jsonConfig.OfferGroup.type.listItem[options.type.value].title}} </strong>
               </p>
-              <div>Số lượng: {{options.value.value}}</div>
+              <p class="mt-4" style="word-break: break-all;">Số lượng: <strong>{{options.value.value}}</strong></p>
             </div>
             <div class="column is-5">
-              <div style="height: 180px; width: 200px">Mô tả: {{options.description.value}}</div>
-              <div>Giá bán: {{options.promotionCost.value}}</div>
-              <p>Giá gốc:<del> {{jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title}} </del>
+              <p style="height: 180px; text-align: center"> Mô tả: <br> <strong> {{options.description.value}} </strong></p>
+              <div>Giá bán: <strong> {{options.promotionCost.value}} </strong> </div>
+              <p>Giá gốc: <strong><del>  {{jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title}} </del> </strong>
               </p>
             </div>
             <div class="column is-3">
               <p style="height: 180px"></p>
-              <p>Thời gian đếm ngược: {{options.durationCountDown.value}}</p>
+              <p>Thời gian đếm ngược: <br><strong> {{options.durationCountDown.value}} </strong></p>
             </div>
           </div>
         </div>
@@ -225,13 +228,18 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
       getDataListOfferByPage(page) {
         this.dataListOffer = this.paginationOffer.getDataByPage(page).sort(function (o1, o2) {
-              return o2.createAt - o1.createAt;
+          return o2.createAt - o1.createAt;
         });
       },
 
@@ -281,7 +289,12 @@
             this.isVisibleNoti = Math.round(+new Date() / 1000);
             this.notiText = "create offfer fail; errorCode: " + error;
             this.notiState = "danger";
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -388,7 +401,12 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "update offfer fail; errorCode: " + error;
               this.notiState = "danger";
-            }
+            },
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
+            }.bind(this)
           )
         }
 
@@ -424,7 +442,7 @@
                 console.log("success delete", res);
                 this.totalData.splice(this.totalData.findIndex(v => v._id == this.offerUpdate._id), 1);
                 this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
-            this.dataListOffer = this.paginationOffer.getDataByPage(1)
+                this.dataListOffer = this.paginationOffer.getDataByPage(1)
                 this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -439,6 +457,11 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "delete offfer fail; errorCode: " + error;
               this.notiState = "danger";
+            }.bind(this),
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
             }.bind(this)
           )
         }
@@ -562,6 +585,10 @@
 
   .offfer {
     height: 100%;
+  }
+
+  p{
+    word-break: break-all;
   }
 
 </style>

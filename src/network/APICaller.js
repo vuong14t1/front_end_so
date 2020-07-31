@@ -25,18 +25,20 @@ class APICaller {
       .then(successCallback)
       .catch(errorCallback);
   }
-  get(endpoint, header, successCallback, errorCallback) {
+  get(endpoint, header, successCallback, errorCallback, updateUI) {
     axios.defaults.withCredentials = true
     let url = BASE_URL + endpoint;
     header.timeout = 15000;
     header.headers = Object.assign(header.headers, {
-      "access-control-allow-origin": "*"  
+      "access-control-allow-origin": "*"
     });
     axios.get(url, header)
       .then(function (response) {
         if (response.data.errorCode == ERROR_CODE.NOT_LOGIN) {
-          alert('MustLogin');
-          router.push('Login');
+          updateUI(Math.round(+new Date() / 1000), "Yêu cầu đăng nh!", "danger");
+          setTimeout(function () {
+            router.push('Login').catch(e => {})
+          }.bind(this), 1000)
         } else {
           successCallback(response);
         }
@@ -46,7 +48,7 @@ class APICaller {
       })
   }
 
-  post(endpoint, header, bodyData, successCallback, errorCallback) {
+  post(endpoint, header, bodyData, successCallback, errorCallback, updateUI) {
     axios.defaults.withCredentials = true
     let url = BASE_URL + endpoint;
     console.log("API CALL: " + url);
@@ -55,19 +57,19 @@ class APICaller {
     //   "access-control-allow-origin": "*"              
     // })
     header.headers = Object.assign(header.headers, {
-      "access-control-allow-origin": "*"  
+      "access-control-allow-origin": "*"
     });
     axios.post(url, bodyData, header)
       .then(function (response) {
-        console.log("===== response ", response);
         if (response.data.errorCode == ERROR_CODE.NOT_LOGIN) {
-          alert('MustLogin');
-          router.push('Login');
-        } else if(response.data.errorCode == ERROR_CODE.NOT_PERMISSION){
+          updateUI(Math.round(+new Date() / 1000), "Yêu cầu đăng nh!", "danger");
+          setTimeout(function () {
+            router.push('Login').catch(e => {})
+          }.bind(this), 1000)
+        } else if (response.data.errorCode == ERROR_CODE.NOT_PERMISSION) {
           alert('Not permision');
           return;
-        }
-        else {
+        } else {
           successCallback(response);
         }
       })

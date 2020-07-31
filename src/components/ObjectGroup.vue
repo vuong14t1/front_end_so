@@ -50,6 +50,7 @@
               <th>ID Object</th>
               <th>Tên</th>
               <th>Số lượng user</th>
+              <th>Số lượng user hiện tại</th>
               <th v-for="option in options" :key="option.title">{{option.title}} </th>
               <th>Thời gian tạo</th>
               <th
@@ -61,6 +62,7 @@
                 <td @click="showDetailObject(object)"><a>{{object._id}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
+                <td>{{object.totalCurrentUser}}</td>
                 <td>{{object.channelPayment}}</td>
                 <td>{{object.totalCost.from}} - {{object.totalCost.to}}</td>
                 <td>{{object.numberPay.from}} - {{object.numberPay.to}}</td>

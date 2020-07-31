@@ -1,20 +1,20 @@
-<template class="component-login">
+<template class="component">
   <div class="hero component-login">
     <Notification :isVisible="isVisibleNoti" :text="notiText" :state="notiState" style="width: 30%; float: left">
     </Notification>
-    <div class="hero-body">
-      <div class="columns is-centered "> 
+    <div class="hero-body" style="width: 100%;">
+      <div class="columns is-centered ">
         <div class="column is-half">
-          <div class="notification is-light" style="width: 70%">
+          <div class="notification is-light" style="width: 50%;left: 20%">
             <figure class="image container is-64x64">
               <img src="../assets/logo.png">
             </figure>
-            <div class="field is-centered" style="height: 50px;">
+            <div class="field is-centered" style="width:100%; height: 50px;">
               <label class="label">Chọn game</label>
               <DropDown class="gameName input column" style="float: left" :type="OBJECT_CONST.DROP_DOWN.LOGIN"
                 :title="gameTitle" :items="listGame" @clicked="onClickChild">{{gameTitle}}</DropDown>
             </div>
-            <div class="field is-centered ">
+            <div class="field is-centered " style="width:100%;">
               <label class="label">Email</label>
               <p class="control has-icons-left has-icons-right">
                 <input v-model="email" name="email" class="input" type="text" placeholder="Email">
@@ -23,7 +23,7 @@
                 </span>
               </p>
             </div>
-            <div class="field">
+            <div class="field" style="width:100%;">
               <label class="label">Password:</label>
               <p class="control has-icons-left">
                 <input v-model="password" name="password" class="input" type="password" placeholder="Password">
@@ -35,7 +35,7 @@
             <!-- <div class="field columns">
               <label class="label column is-2 ">Game:</label>
             </div> -->
-            <div class="field" style="z-index: -1 !important; text-align: center">
+            <div class="field" style="z-index: -1 !important; text-align: center; width: 100%">
               <a class="button is-info  is-outlined " @click="doLogin()">Login</a>
             </div>
           </div>
@@ -91,7 +91,7 @@
             // this.isVisibleNoti = Math.round(+new Date() / 1000);
             // this.notiText = "logout successfullt";
             // this.notiState = "success";
-           localStorage.removeItem('accRole');
+            localStorage.removeItem('accRole');
             // localStorage.removeItem('gameId');
           } else {
             this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -142,8 +142,8 @@
               console.log("vao day");
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               var msg = "Đăng nhập thất bại! " + Object.keys(ERROR_CODE)[res.data.errorCode];
-              if(res.data.errorCode == ERROR_CODE.NOT_FOUND_GAME_ID) {
-                  msg = "Game chưa được đăng kí!Liên hệ vuongpq2."
+              if (res.data.errorCode == ERROR_CODE.NOT_FOUND_GAME_ID) {
+                msg = "Game chưa được đăng kí!Liên hệ vuongpq2."
               }
               this.notiText = msg;
               this.notiState = "danger";

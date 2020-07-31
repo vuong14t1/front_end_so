@@ -5,9 +5,9 @@ class GameData {
   gameId = localStorage.gameId;
   accountRole = localStorage.accRole;
   getGameId() {
-    if(this.gameId == null){
-      this.gameId = "p13";
-    }
+    // if(this.gameId == null){
+    //   this.gameId = "p13";
+    // }
     return this.gameId;
   };
 

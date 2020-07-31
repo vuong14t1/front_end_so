@@ -53,9 +53,6 @@ class APICaller {
     let url = BASE_URL + endpoint;
     console.log("API CALL: " + url);
     header.timeout = 15000;
-    // header.headers.push({
-    //   "access-control-allow-origin": "*"              
-    // })
     header.headers = Object.assign(header.headers, {
       "access-control-allow-origin": "*"
     });
@@ -78,17 +75,6 @@ class APICaller {
         errorCallback(error);
       })
   }
-
-  // handleResponse(res){
-  //   if (res == ERROR_CODE.NOT_LOGIN) {
-  //     alert('MustLogin');
-  //     router.push('Login');
-  //     return
-  //   } else if(response.data.errorCode == ERROR_CODE.NOT_PERMISSION){
-  //     alert('Not permision');
-  //     return;
-  //   }
-  // }
 }
 
 const instance = new APICaller();

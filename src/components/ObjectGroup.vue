@@ -123,7 +123,7 @@
               </li>
             </ul>
           </nav>
-          <div class="button is-primary" @click="isShowUser= false"> OK </div>
+          <div class="button is-primary" @click="clearDataObjectCreating()"> OK </div>
           <!-- <div class="column is-full has-text-centered">
             <form>
               Đặt tên ID Object: <input v-model="nameObject" />
@@ -452,7 +452,7 @@
       clearDataObjectCreating() {
         console.log("clearDataObjectCreating ");
         this.dataUsersByCreatingObject = [],
-          this.dataObjectCreating = null;
+        this.dataObjectCreating = null;
         this.nameObject = 'default';
         this.totalPageUser = 0;
         this.isShowUser = false;

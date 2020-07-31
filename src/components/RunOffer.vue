@@ -243,7 +243,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -271,7 +276,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -295,7 +305,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -340,7 +355,12 @@
             this.isVisibleNoti = Math.round(+new Date() / 1000);
             this.notiText = "Tạo thất bại!errorCode: " + console.error();;
             this.notiState = "danger";
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       },
 
@@ -459,7 +479,12 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "update offferLive fail; errorCode: " + error;
               this.notiState = "danger";
-            }
+            },
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
+            }.bind(this)
           );
         }
         this.updateDataModalAlert("Bạn có muốn cập nhật? ", updateOfferLiveCB.bind(this))
@@ -517,7 +542,12 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Xóa thất bại! errorCode: " + error;
               this.notiState = "danger";
-            }
+            },
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
+            }.bind(this)
           );
         }
         this.updateDataModalAlert("Bạn có muốn xóa? ", deleteOfferLiveCB.bind(this))
@@ -574,7 +604,12 @@
 
           function (error) {
             console.log("aaaa", error);
-          }
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
         );
       }
     }

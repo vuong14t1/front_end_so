@@ -29,7 +29,7 @@
             <td>{{offerLive.totalBought}} </td>
             <td>{{offerLive.groupOffer? offerLive.groupOffer.promotionCost : 'deleted'}} </td>
             <td>{{offerLive.groupOffer ? offerLive.groupOffer.promotionCost * offerLive.totalBought : 'deleted'}} </td>
-            <td>{{offerLive.totalBought == 0 ? 0 : Math.ceil(offerLive.totalBought / offerLive.totalShow * 100)}} </td>
+            <td>{{offerLive.totalBought == 0 || offerLive.totalShow == 0 ? 0 : Math.ceil(offerLive.totalBought / offerLive.totalShow * 100)}} </td>
           </tr>
         </tbody>
       </table>

@@ -21,18 +21,18 @@
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
-            <p class="modal-card-title">deleteAll</p>
+            <p class="modal-card-title">Xóa toàn bộ</p>
             <button class="delete" aria-label="close" @click="cancel()"></button>
           </header>
           <section class="modal-card-body">
-            <div class="createAccount ">
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+            <div class="createAccount" style="text-align: center">
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
                 @click="deleteAll('delete_all_users')">Xóa toàn bộ Users</button>
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
                 @click="deleteAll('delete_all_group_object')">Xóa toàn bộ Objects</button>
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
                 @click="deleteAll('delete_all_group_offer')">Xóa toàn bộ Offers</button>
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
                 @click="deleteAll('delete_all_offer_live')">Xóa toàn bộ Offers đang chạy</button>
 
             </div>
@@ -54,17 +54,19 @@
   import GAME from '../const/game_const'
   import GameData from '../Utility/GameData'
   import ACCOUNT_ROLE from '../const/role_const'
-  import APICaller from '../network/APICaller';
+  import APICaller from '../network/APICaller'
+  import Modal from './Modal'
 
   export default {
     name: 'Navigation',
     components: {
-      DropDown
+      DropDown,
+      Modal
     },
-    props: ['text', 'state', 'isVisibleNotify'],
+    props: ['text', 'state', 'isVisible'],
 
     watch: {
-      isVisibleNotify: function () {
+      isVisible: function () {
         this.isActive = true;
         setTimeout(function () {
           this.isActive = false
@@ -119,7 +121,8 @@
         ],
         gameTitle: GameData.getGameId(),
         listGame: GAME.LIST_GAME,
-        GameData: GameData
+        GameData: GameData,
+        ACCOUNT_ROLE: ACCOUNT_ROLE
       }
     },
 
@@ -167,7 +170,7 @@
       },
 
       deleteAll(route) {
-        var deleteAllUsers = function () {
+        var deleteAllUsersCB = function () {
           let header = {
             headers: {
               "content-type": "application/json",
@@ -179,38 +182,40 @@
           };
 
           APICaller.get(
-          "danger_route/" + route,
-          header,
-          function (res) {
-            this.showNotifyDeleteSuccess();
-          }.bind(this),
-          function (error) {
-            this.showNotifyDeleteFail();
-          },
-          function (a, b, c) {
-            this.isVisibleNoti = a;
-            this.notiText = b;
-            this.notiState = c;
-          }.bind(this)
-        );
+            "danger_route/" + route,
+            header,
+            function (res) {
+              this.showNotifyDeleteSuccess();
+            }.bind(this),
+            function (error) {
+              this.showNotifyDeleteFail();
+            },
+            function (a, b, c) {
+              this.isVisibleNoti = a;
+              this.notiText = b;
+              this.notiState = c;
+            }.bind(this)
+          );
         }
+
+        this.updateDataModalAlert("Bạn có chắc xóa không?", deleteAllUsersCB.bind(this))
       },
 
-      showNotifyDeleteSuccess(){
+      showNotifyDeleteSuccess() {
         this.isActive = true;
         this.state = 'success';
         this.text = 'Xóa thành công';
-         setTimeout(function () {
+        setTimeout(function () {
           this.isActive = false
         }.bind(this), 2000);
         this.refreshPage();
       },
 
-       showNotifyDeleteFail(){
+      showNotifyDeleteFail() {
         this.isActive = true;
         this.state = 'danger';
         this.text = 'Xóa không thành công';
-         setTimeout(function () {
+        setTimeout(function () {
           this.isActive = false
         }.bind(this), 2000);
         this.refreshPage();

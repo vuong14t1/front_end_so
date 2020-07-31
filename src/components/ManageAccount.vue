@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navigation :isVisibleNotify="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div style="width: 98%;float: left">
       <!-- <p class="title has-text-centered mt-100" style="width: 100%;  height: 0px;float: left"></p> -->
       <button @click="filterAccount()" class="button is-primary mb-2" style="float: right">Tìm kiếm</button>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navigation :isVisibleNotify="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Tạo Object </strong> </p>

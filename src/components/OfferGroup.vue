@@ -1,6 +1,6 @@
 <template>
   <div class="offfer">
-    <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <Navigation :isVisibleNotify="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered"><strong> Tạo Offer </strong></p>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <Navigation :isVisibleNotify="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Tạo Object </strong> </p>
@@ -123,6 +123,7 @@
               </li>
             </ul>
           </nav>
+          <div class="button is-primary" @click="isShowUser= false"> OK </div>
           <!-- <div class="column is-full has-text-centered">
             <form>
               Đặt tên ID Object: <input v-model="nameObject" />

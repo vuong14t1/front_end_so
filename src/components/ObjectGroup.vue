@@ -23,7 +23,7 @@
           v-for="option in optionsUpdate" :key="option.title">
           <p class="column ">{{option.title}}</p>
           <Dropdown class="column" @clicked="onClickChild" :object="option" :id="option.idOption" :title="option.value"
-            :items="option.listItems">{{option.value}}</Dropdown>
+            :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE" :items="option.listItems">{{option.value}}</Dropdown>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -263,14 +263,24 @@
             if (options[i].listItem[j].from == null) {
               object.title = options[i].listItem[j];
             } else {
-              object.title = options[i].listItem[j].from +
-                '-' + options[i].listItem[j].to;
+                              console.log("==== vao day ", i)
+
+              if (i == 'age' || i == 'timeLastOnline') {
+                console.log("==== vao day")
+                object.title = TimeUtil.convertDuration(parseInt(options[i].listItem[j].from)) + '-' + TimeUtil
+                  .convertDuration(
+                    parseInt(options[i].listItem[j].to));
+              } else {
+                object.title = options[i].listItem[j].from +
+                  '-' + options[i].listItem[j].to;
+              }
             }
             options[i].listItems.push(object);
           }
           options[i].value = options[i].listItems[0].title;
           options[i].isModify = false;
         }
+
         return options;
       },
 
@@ -452,7 +462,7 @@
       clearDataObjectCreating() {
         console.log("clearDataObjectCreating ");
         this.dataUsersByCreatingObject = [],
-        this.dataObjectCreating = null;
+          this.dataObjectCreating = null;
         this.nameObject = 'default';
         this.totalPageUser = 0;
         this.isShowUser = false;
@@ -757,12 +767,12 @@
             }
             let dataUserByCreatingObject = res.data.data;
             var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
-              dataUserByCreatingObject.channel = dataUserByCreatingObject.channelPayment[
-                channel].channel;
-              dataUserByCreatingObject.numberPay = dataUserByCreatingObject.channelPayment[
-                channel].number;
-              dataUserByCreatingObject.totalCost = dataUserByCreatingObject.channelPayment[
-                channel].cost;
+            dataUserByCreatingObject.channel = dataUserByCreatingObject.channelPayment[
+              channel].channel;
+            dataUserByCreatingObject.numberPay = dataUserByCreatingObject.channelPayment[
+              channel].number;
+            dataUserByCreatingObject.totalCost = dataUserByCreatingObject.channelPayment[
+              channel].cost;
             this.dataUsersByCreatingObject = [];
             this.dataUsersByCreatingObject.push(dataUserByCreatingObject);
             this.isShowUser = true;

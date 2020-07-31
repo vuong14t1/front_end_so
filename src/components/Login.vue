@@ -9,11 +9,7 @@
             <figure class="image container is-64x64">
               <img src="../assets/logo.png">
             </figure>
-            <div class="field is-centered" style="width:100%; height: 50px;">
-              <label class="label">Chọn game</label>
-              <DropDown class="gameName input column" style="float: left" :type="OBJECT_CONST.DROP_DOWN.LOGIN"
-                :title="gameTitle" :items="listGame" @clicked="onClickChild">{{gameTitle}}</DropDown>
-            </div>
+       
             <div class="field is-centered " style="width:100%;">
               <label class="label">Email</label>
               <p class="control has-icons-left has-icons-right">
@@ -32,10 +28,15 @@
                 </span>
               </p>
             </div>
+                 <div class="field is-centered" style="width:100%; height: 50px;">
+              <label class="label">Chọn game</label>
+              <DropDown class="gameName input column" style="float: left; " :type="OBJECT_CONST.DROP_DOWN.LOGIN"
+                :title="gameTitle" :items="listGame" @clicked="onClickChild">{{gameTitle}}</DropDown>
+            </div>
             <!-- <div class="field columns">
               <label class="label column is-2 ">Game:</label>
             </div> -->
-            <div class="field" style="z-index: -1 !important; text-align: center; width: 100%">
+            <div class="field mt-6" style="z-index: -1 !important; text-align: center; width: 100%">
               <a class="button is-info  is-outlined " @click="doLogin()">Login</a>
             </div>
           </div>

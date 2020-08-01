@@ -99,7 +99,7 @@
           </div>
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
             <thead style="backgroundColor: #3298dc">
-              <th>Danh sách USERS</th>
+              <th>UID</th>
               <th v-for="option in options" :key="option.title">{{option.title}} </th>
             </thead>
 
@@ -125,7 +125,7 @@
               </li>
             </ul>
           </nav>
-          <div class="button is-primary" @click="clearDataObjectCreating()"> OK </div>
+          <div class="button is-primary" style="float: right" @click="clearDataObjectCreating()"> OK </div>
           <!-- <div class="column is-full has-text-centered">
             <form>
               Đặt tên ID Object: <input v-model="nameObject" />
@@ -263,10 +263,7 @@
             if (options[i].listItem[j].from == null) {
               object.title = options[i].listItem[j];
             } else {
-                              console.log("==== vao day ", i)
-
               if (i == 'age' || i == 'timeLastOnline') {
-                console.log("==== vao day")
                 object.title = TimeUtil.convertDuration(parseInt(options[i].listItem[j].from)) + '-' + TimeUtil
                   .convertDuration(
                     parseInt(options[i].listItem[j].to));
@@ -372,14 +369,15 @@
               "group_objects/list_user",
               header,
               function (res) {
-                console.log('==== lisst user ', res);
+                console.log('==== lisst user ', this.dataObjectCreating);
+                // this.dataObjectCreating.totalCurrentUser = this.dataObjectCreating.totalUser;
+                this.totalData.unshift(this.dataObjectCreating);
+                  this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
+                  this.dataListObject = this.paginationObject.getDataByPage(1);
                 if (res.data.errorCode == ERROR_CODE.EMPTY) {
                   this.isVisibleNoti = Math.round(+new Date() / 1000);
                   this.notiText = "Không có user nào!";
                   this.notiState = "danger";
-                  this.totalData.unshift(this.dataObjectCreating);
-                  this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
-                  this.dataListObject = this.paginationObject.getDataByPage(1);
                   this.clearDataObjectCreating();
                   return;
                 }

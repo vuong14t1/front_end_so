@@ -56,9 +56,6 @@
             if (this.isModify === true) {
               return;
             }
-            // this.titleName = this.title;
-
-            console.log('convertTimeData ', this.id, '===', this.titleName);
             this.titleName = TimeUtil.convertDuration(parseInt(this.title.split('-')[0])) + '-' + TimeUtil
               .convertDuration(
                 parseInt(this.title.split('-')[1]));
@@ -69,8 +66,6 @@
                   parseInt(this.items[i].title.split('-')[1]))
             }
             this.isModify = true;
-            console.log('convertTimeData ', this.id, '===', this.titleName);
-
           }
         }
       },

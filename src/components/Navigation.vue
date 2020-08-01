@@ -112,12 +112,12 @@
             page: '/ManageAccount',
             isVisible: true
           },
-          // {
-          //   id: 5,
-          //   text: 'Det',
-          //   page: '/login',
-          //   isVisible: true
-          // }
+          {
+            id: 5,
+            text: 'Quản lý Users',
+            page: '/ManageUser',
+            isVisible: true
+          }
         ],
         gameTitle: GameData.getGameId(),
         listGame: GAME.LIST_GAME,

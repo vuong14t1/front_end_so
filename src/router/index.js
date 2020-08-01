@@ -7,6 +7,8 @@ import RunOffer from '@/components/RunOffer'
 import Evaluate from '@/components/Evaluate'
 import Login from '@/components/Login'
 import ManageAccount from '@/components/ManageAccount'
+import ManageUser from '@/components/ManageUser'
+
 
 Vue.use(Router)
 
@@ -45,6 +47,11 @@ export default new Router({
       path: '/ManageAccount',
       name: 'ManageAccount',
       component: ManageAccount
+    },
+    {
+      path: '/ManageUser',
+      name: 'ManageUser',
+      component: ManageUser
     }
   ]
 })

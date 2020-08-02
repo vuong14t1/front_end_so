@@ -14,14 +14,14 @@
           <th>Id</th>
           <th>Group Offer</th>
           <th>Group Object</th>
-          <th>Time Start</th>
-          <th>Time Finish</th>
+          <th>Thời gian bắt đầu</th>
+          <th>Thời gian kết thúc</th>
           <th>Số người nhận</th>
           <th>Số hiển thị</th>
           <th>Số mua</th>
           <th>Giá bán</th>
           <th>Rev</th>
-          <th>% Buy/Show</th>
+          <th>% Mua/Hiển thị</th>
         </thead>
         <tbody>
           <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?

@@ -13,10 +13,10 @@
         <thead style="backgroundColor: #3298dc">
           <th>ID</th>
           <th>Email</th>
-          <th>ROLE</th>
-          <th>Update</th>
-          <th>DELETE</th>
-          <th><button class="button is-primary" @click="createAccount()">Create </button></th>
+          <th>Quyền</th>
+          <th>Cập nhật</th>
+          <th>Xóa</th>
+          <th><button class="button is-primary" @click="createAccount()">Tạo tài khoản </button></th>
         </thead>
         <tbody>
           <tr v-for="account in listAccount" :key="account._id">

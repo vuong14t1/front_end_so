@@ -16,20 +16,20 @@
             :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Time Start</p>
+          <p class="column">Thời gian bắt đầu</p>
           <datetime class="column" type="datetime" width="500px" v-model="offerLiveChoosen.timeStart"
             style="border:1px solid Grey;">
           </datetime>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Time Finish</p>
+          <p class="column">Thời gian kết thúc</p>
           <datetime class="column" type="datetime" width="500px" height="100px" v-model="offerLiveChoosen.timeFinish"
             style="border:1px solid Grey;">
           </datetime>
         </div>
 
         <div class="has-text-centered ">
-          <button class="button is-primary" @click="createOfferLive()">Create</button>
+          <button class="button is-primary" @click="createOfferLive()">Tạo</button>
         </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
@@ -46,14 +46,14 @@
             :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Time Start</p>
+          <p class="column">Thời gian tạo</p>
           <datetime class="column" type="datetime" width="200px" v-model="offerLiveChoosen.timeStart"
             style="border:1px solid Grey;">
             {{offerLiveChoosen.timeStart}}
           </datetime>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Time Finish</p>
+          <p class="column">Thời gian kết thúc</p>
           <datetime class="column" type="datetime" width="200px" v-model="offerLiveChoosen.timeFinish"
             style="border:1px solid Grey;">
           </datetime>

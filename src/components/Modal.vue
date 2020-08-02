@@ -8,8 +8,8 @@
           <button class="delete" aria-label="close" @click="cancel()"></button>
         </header>
         <footer class="modal-card-foot has-text-centured">
-          <button class="button is-success" @click="aprove()"> OK</button>
-          <button class="button" @click="cancel()">Cancel</button>
+          <button class="button is-success" @click="aprove()"> Đồng ý</button>
+          <button class="button" @click="cancel()">Hủy</button>
         </footer>
       </div>
     </div>

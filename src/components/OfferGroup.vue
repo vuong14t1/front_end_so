@@ -13,7 +13,7 @@
             :title="option.listItem[option.value].title" :items="option.listItems">{{option.value}}</Dropdown>
         </form>
         <div class="has-text-centered ">
-          <button class="button is-primary" @click="createOffer()">Create</button>
+          <button class="button is-primary" @click="createOffer()">Tạo</button>
         </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">

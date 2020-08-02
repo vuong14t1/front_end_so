@@ -22,10 +22,10 @@
           :key="option.title">
           <div v-if="!option.listItems" class="column">{{option.title}}</div>
           <input v-if="!option.listItems" v-model="option.value" class="column mr-0">
-          <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
-            :title="option.title" :items="option.listItems"></Dropdown>
           <p class="column " style="border-left:1px solid Grey;" v-if="option.isShow && option.listItems">
-            {{option.listItem[option.value].title}}</p>
+            {{ option.title}}</p>
+          <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
+            :title="option.listItem[option.value].title" :items="option.listItems">{{option.listItem[option.value].title}}</Dropdown> 
         </form>
         <div class="has-text-centered ">
           <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
@@ -188,7 +188,8 @@
         notiState: "primary",
         isVisibleNoti: false,
         offerUpdate: Object(),
-        moment: moment
+        moment: moment,
+        OBJECT_CONST: OBJECT_CONST
       }
     },
     methods: {
@@ -344,7 +345,11 @@
         this.offerUpdate = offer;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
+          if(i == 'originalCost'){
+            this.optionsUpdate[i].value = this.jsonConfig.OfferGroup.originalCost.listItems.findIndex(v => parseInt(v.title) == parseInt(offer[i]));
+          }else{
           this.optionsUpdate[i].value = offer[i];
+          }
           this.optionsUpdate[i].isShow = true;
         }
       },

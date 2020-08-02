@@ -132,10 +132,10 @@
             <td>{{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </td>
             <td>{{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'Không có'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'Không có'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.type : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'Không có'}}</td>            
+            <td>{{ofrLiveDetail.groupOffer ? jsonConfig.OfferGroup.type.listItem[ofrLiveDetail.groupOffer.type].title  : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.value : 'Không có'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.originalCost : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? jsonConfig.OfferGroup.originalCost.listItem[ofrLiveDetail.groupOffer.originalCost ].title : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.promotionCost : 'Không có'}}</td>
             <td>{{moment.unix(ofrLiveDetail.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{moment.unix(ofrLiveDetail.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>
@@ -185,6 +185,12 @@
     },
 
     data() {
+      var gameID = GameData.getGameId();
+      this.jsonConfig = require('../assets/json/' + gameID + '_config_so.json');
+      if (this.jsonConfig == null) {
+        alert(gameID + " hasnt registerd!");
+        router.push('Login');
+      }
       return {
         isShown: false,
         isShowUpdate: false,

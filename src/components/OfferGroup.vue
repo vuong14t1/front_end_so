@@ -62,12 +62,12 @@
                 <td>{{jsonConfig.OfferGroup.type.listItem[offer.type].title}}
                 <td>{{offer.value}}</td>
                 <td>{{offer.promotionCost}}</td>
-                <td>{{jsonConfig.OfferGroup.originalCost.listItem[offer.originalCost].title}}</td>
+                <td>{{offer.originalCost}}</td>
                 <td>{{offer.description}}</td>
                 <td>{{offer.durationCountDown}} </td>
                 <td>
-                  {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[offer.originalCost].title)
-                   - offer.promotionCost)/parseInt(jsonConfig.OfferGroup.originalCost.listItem[offer.originalCost].title) * 100)}}
+                  {{Math.round((parseInt(offer.originalCost)
+                   - offer.promotionCost)/parseInt(offer.originalCost) * 100)}}
                   %</td>
                 <td>{{ moment.unix(offer.createAt).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td
@@ -314,8 +314,12 @@
         let body = new Object();
         console.log("data raw ", data);
         for (var i in data) {
-          // console.log("========", data[i]);
+          if(i == 'originalCost'){
+          body[i] = data[i].listItem[data[i].value].title;
+          }else{
           body[i] = data[i].value;
+          }
+          // console.log("========", data[i]);
         }
         console.log("data ", body);
         return body;

@@ -135,7 +135,7 @@
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'Không có'}}</td>            
             <td>{{ofrLiveDetail.groupOffer ? jsonConfig.OfferGroup.type.listItem[ofrLiveDetail.groupOffer.type].title  : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.value : 'Không có'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? jsonConfig.OfferGroup.originalCost.listItem[ofrLiveDetail.groupOffer.originalCost ].title : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.originalCost : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.promotionCost : 'Không có'}}</td>
             <td>{{moment.unix(ofrLiveDetail.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{moment.unix(ofrLiveDetail.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>

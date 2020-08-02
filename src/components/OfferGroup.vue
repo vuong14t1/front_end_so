@@ -28,8 +28,8 @@
             {{option.listItem[option.value].title}}</p>
         </form>
         <div class="has-text-centered ">
-          <button class="button is-small is-primary" @click="sendUpdateOffer()">Update</button>
-          <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Cancel</button>
+          <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
+          <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Hủy</button>
           <!-- <button class="button is-small is-danger" @click="sendDeleteOffer()">Delete</button> -->
 
         </div>
@@ -40,7 +40,7 @@
           <div class="has-text-centered">
             <span><strong> Danh sách các OFFERS </strong></span>
             <button class="button is-small is-primary mr-0 mb-2" @click="filterOffer()"
-              style="float: right">Search</button>
+              style="float: right">Tìm kiếm</button>
             <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterOffer"
               style="float: right;width: 10%; height: 30px" />
           </div>
@@ -72,8 +72,8 @@
                 <td>{{ moment.unix(offer.createAt).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td
                   v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1].id  ">
-                  <button class="button is-small is-primary" @click="beforeUpdateOffer(offer)">update</button>
-                  <button class="button is-danger is-small" @click="beforDeleteOffer(offer)">delete</button>
+                  <button class="button is-small is-primary" @click="beforeUpdateOffer(offer)">Cập nhật</button>
+                  <button class="button is-danger is-small" @click="beforDeleteOffer(offer)">Xóa</button>
 
                 </td>
               </tr>

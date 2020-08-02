@@ -19,17 +19,19 @@
               <th>Số ván chơi</th>
               <th>Thời gian online gần nhất</th>
               <th>Thời gian tạo</th>
+              <th>Modify Offer</th>
             </thead>
             <tbody>
               <tr v-for="object in listUser" :key="object._id">
                 <td>{{object.userId}}</td>
                 <td>{{object.channelGame}}</td>
                 <td><p v-for="line in object.channelPaymentDetail.split('\n')" :key="line">{{line}}</p> </td>
-                <td>{{object.groupObject ? object.groupObject.nameObject : 'deleted'}}</td>
+                <td>{{object.groupObject ? object.groupObject.nameObject : 'Không có'}}</td>
                 <td>{{object.lastPaidPack}}</td>
                 <td>{{object.totalGame}}</td>
                 <td>{{moment.unix(object.lastTimeOnline).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td>{{moment.unix(object.timeCreateAccount).format("MM/DD/YYYY H:mm:ss")}}</td>
+                <td>{{object.isModifiedOffer}}</td>
               </tr>
             </tbody>
           </table>

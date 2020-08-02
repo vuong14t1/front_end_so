@@ -59,8 +59,8 @@
           </datetime>
         </div>
         <div class="has-text-centered ">
-          <button class="button is-small is-primary" @click="sendUpdateObject()">Update</button>
-          <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Cancel</button>
+          <button class="button is-small is-primary" @click="sendUpdateObject()">Cập nhật</button>
+          <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Hủy</button>
           <!-- <button class="button is-small is-danger" @click="sendDeleteObject()">Delete</button> -->
         </div>
       </div>
@@ -69,7 +69,7 @@
           <div class="has-text-centered">
             <span> <strong>Danh sách các OFFERS Đang chạy </strong></span>
             <button @click="filterObject()" class="button is-primary is-small mr-0 mb-2"
-              style="float: right">Search</button>
+              style="float: right">Tìm kiếm</button>
             <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterObject"
               style="float: right;width: 10%; height: 30px" />
 
@@ -91,15 +91,15 @@
                { backgroundColor: 'azure'} 
                : { backgroundColor : 'pink'}]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
-                <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'deleted'}}</td>
-                <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'deleted'}}</td>
+                <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
+                <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}}</td>
                 <td>{{ moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td>{{ moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td>{{ moment.unix(offerLive.createAt).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td
                   v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1].id  ">
-                  <button class="button is-primary is-small" @click="beforUpdateObject(offerLive)">update</button>
-                  <button class="button is-danger is-small" @click="beforDeleteOfferLive(offerLive)">delete</button>
+                  <button class="button is-primary is-small" @click="beforUpdateObject(offerLive)">Cập nhật</button>
+                  <button class="button is-danger is-small" @click="beforDeleteOfferLive(offerLive)">Xóa</button>
                 </td>
               </tr>
             </tbody>
@@ -129,17 +129,17 @@
         <tbody>
           <tr>
             <td>{{ofrLiveDetail._id}}</td>
-            <td>{{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'deleted'}} </td>
-            <td>{{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'deleted'}} </td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'deleted'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'deleted'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.type : 'deleted'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.value : 'deleted'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.originalCost : 'deleted'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.promotionCost : 'deleted'}}</td>
+            <td>{{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </td>
+            <td>{{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.type : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.value : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.originalCost : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.promotionCost : 'Không có'}}</td>
             <td>{{moment.unix(ofrLiveDetail.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{moment.unix(ofrLiveDetail.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>
-            <td>{{ofrLiveDetail.groupObject ? ofrLiveDetail.groupObject.totalUser : 'deleted'}}</td>
+            <td>{{ofrLiveDetail.groupObject ? ofrLiveDetail.groupObject.totalUser : 'Không có'}}</td>
           </tr>
         </tbody>
       </table>

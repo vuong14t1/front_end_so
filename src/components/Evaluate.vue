@@ -28,15 +28,15 @@
                { backgroundColor: 'azure'} 
                : { backgroundColor : 'pink'}]">
             <td>{{offerLive._id}}</td>
-            <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'deleted'}} </td>
-            <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'deleted'}} </td>
+            <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}} </td>
+            <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}} </td>
             <td>{{moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{offerLive.totalReceived}} </td>
             <td>{{offerLive.totalShow}} </td>
             <td>{{offerLive.totalBought}} </td>
-            <td>{{offerLive.groupOffer? offerLive.groupOffer.promotionCost : 'deleted'}} </td>
-            <td>{{offerLive.groupOffer ? offerLive.groupOffer.promotionCost * offerLive.totalBought : 'deleted'}} </td>
+            <td>{{offerLive.groupOffer? offerLive.groupOffer.promotionCost : 'Không có'}} </td>
+            <td>{{offerLive.groupOffer ? offerLive.groupOffer.promotionCost * offerLive.totalBought : 'Không có'}} </td>
             <td>
               {{offerLive.totalBought == 0 || offerLive.totalShow == 0 ? 0 : Math.ceil(offerLive.totalBought / offerLive.totalShow * 100)}}
             </td>

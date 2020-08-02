@@ -749,15 +749,15 @@
           },
           params: {
             gameId: GameData.getGameId(),
-            userId: this.search.toLowerCase()
+            userId: this.search.toLowerCase(),
+            groupObject: this.dataObjectCreating._id
           }
         };
-        console.log('=== ', this.dataObjectCreating)
         APICaller.get(
-          "tracking_user/search_info_user",
+          "tracking_user/search_user_by_group",
           header,
           function (res) {
-            if (res.data.errorCode == ERROR_CODE.EMPTY) {
+            if (res.data.data == null) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Không tìn thấy user nào.";
               this.notiState = "danger";

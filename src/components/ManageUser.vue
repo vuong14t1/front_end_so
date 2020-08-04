@@ -26,7 +26,7 @@
                 <td>{{object.userId}}</td>
                 <td>{{object.channelGame}}</td>
                 <td><p v-for="line in object.channelPaymentDetail.split('\n')" :key="line">{{line}}</p> </td>
-                <td>{{object.groupObject ? object.groupObject.nameObject : 'Không có'}}</td>
+                <td>{{object.groupObject.length > 0 ? object.groupObject : 'Không có'}}</td>
                 <td>{{object.lastPaidPack}}</td>
                 <td>{{object.totalGame}}</td>
                 <td>{{moment.unix(object.lastTimeOnline).format("MM/DD/YYYY H:mm:ss")}}</td>

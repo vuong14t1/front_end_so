@@ -9,7 +9,12 @@
             <figure class="image container is-64x64">
               <img src="../assets/logo.png">
             </figure>
-       
+            </div>
+                 <div class="field is-centered" style="width:100%; height: 50px;">
+              <label class="label">Chọn game</label>
+              <DropDown class="gameName input column" style="float: left; " :type="OBJECT_CONST.DROP_DOWN.LOGIN"
+                :title="gameTitle" :items="listGame" @clicked="onClickChild">{{gameTitle}}</DropDown>
+            </div>
             <div class="field is-centered " style="width:100%;">
               <label class="label">Email</label>
               <p class="control has-icons-left has-icons-right">
@@ -27,12 +32,6 @@
                   <i class="fas fa-lock"></i>
                 </span>
               </p>
-            </div>
-                 <div class="field is-centered" style="width:100%; height: 50px;">
-              <label class="label">Chọn game</label>
-              <DropDown class="gameName input column" style="float: left; " :type="OBJECT_CONST.DROP_DOWN.LOGIN"
-                :title="gameTitle" :items="listGame" @clicked="onClickChild">{{gameTitle}}</DropDown>
-            </div>
             <!-- <div class="field columns">
               <label class="label column is-2 ">Game:</label>
             </div> -->
@@ -153,7 +152,7 @@
           }.bind(this),
           function (error) {
             this.isVisibleNoti = Math.round(+new Date() / 1000);
-            this.notiText = "login fail; errorCode: " + error;
+            this.notiText = "Vui lòng đăng nhập lại!" + error;
             this.notiState = "danger";
             console.log(error);
           }.bind(this)

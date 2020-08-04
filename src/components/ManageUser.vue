@@ -32,7 +32,9 @@
             <td>
               <p v-for="line in object.channelPaymentDetail.split('\n')" :key="line">{{line}}</p>
             </td>
-            <td>{{object.groupObject ? object.groupObject.nameObject : 'Không có'}}</td>
+            <td>
+              <p v-for="line in object.listGroupObject.split('|')" :key="line">{{line}}</p>
+            </td>
             <td>{{object.lastPaidPack}}</td>
             <td>{{object.totalGame}}</td>
             <td>{{moment.unix(object.lastTimeOnline).format("MM/DD/YYYY H:mm:ss")}}</td>
@@ -170,6 +172,13 @@
               userFilted.channelPaymentDetail += "Kênh chơi: " + userFilted.channelPayment[c].channel +
                 " | Số lần mua: " + userFilted.channelPayment[c].number +
                 " | Số tiền: " + userFilted.channelPayment[c].cost + "\n";
+            }
+            userFilted.listGroupObject = "";
+            for(let o in userFilted.groupObject){
+              userFilted.listGroupObject += userFilted.groupObject[0].nameObject + "|";
+            }
+            if(userFilted.listGroupObject.length == 0){
+              userFilted.listGroupObject = "không có";
             }
             this.listUser.push(userFilted);
             this.userUpdated = this.listUser[0];

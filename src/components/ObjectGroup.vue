@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+  <div class="is-fullwidth">
+    <Navigation class="is-fullwidth" :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Tạo Object </strong> </p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
-          v-for="option in options" :key="option.title">
+          v-for="option in options" :key="option.title" >
           <p class="column ">{{option.title}}</p>
-          <Dropdown class="column" @clicked="onClickChild" :id="option.idOption" :title="option.value"
+          <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :id="option.idOption" :title="option.value"
             :items="option.listItems" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}</Dropdown>
+            <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0" v-model="option.from">
+            <input  style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -22,8 +24,10 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <p class="column ">{{option.title}}</p>
-          <Dropdown class="column" @clicked="onClickChild" :object="option" :id="option.idOption" :title="option.value"
+          <Dropdown  v-if="option.idOption == 0"  class="column" @clicked="onClickChild" :object="option" :id="option.idOption" :title="option.value"
             :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE" :items="option.listItems">{{option.value}}</Dropdown>
+            <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0" v-model="option.from">
+            <input  style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -45,7 +49,7 @@
             <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterObject"
               style="float: right;width: 10%; height: 30px" />
           </div>
-          <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 13px">
+          <table class="table is-bordered is-fullwidth  has-text-centered mt-3" style="font-size: 13px">
             <thead style="backgroundColor: #3298dc">
               <th>ID Object</th>
               <th>Tên</th>
@@ -58,7 +62,7 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="object in dataListObject" :key="object._id">
+              <tr v-for="object in dataListObject" :key="object._id" :style="[object._id == idObjectUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]" >
                 <td @click="showDetailObject(object)"><a>{{object._id}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
@@ -66,7 +70,7 @@
                 <td>{{object.channelPayment}}</td>
                 <td>{{object.totalCost.from}} - {{object.totalCost.to}}</td>
                 <td>{{object.numberPay.from}} - {{object.numberPay.to}}</td>
-                <td>{{object.totalGame.from}} - {{object.numberPay.to}}</td>
+                <td>{{object.totalGame.from}} - {{object.totalGame.to}}</td>
                 <td>{{object.lastPaidPack.from}} - {{object.lastPaidPack.to}}</td>
                 <td>{{timeUtil.convertDuration(object.age.from)}} - {{timeUtil.convertDuration(object.age.to)}}</td>
                 <td>{{timeUtil.convertDuration(object.timeLastOnline.from)}} -
@@ -284,7 +288,13 @@
             }
             options[i].listItems.push(object);
           }
-          options[i].value = options[i].listItems[0].title;
+          if(i == 'channelPayment'){
+            options[i].value =  options[i].listItems[0].title
+          }else{
+            options[i].from = options[i].listItems[0].title.split('-')[0];
+          options[i].to = options[i].listItems[0].title.split('-')[1];
+          }
+          
           options[i].isModify = false;
         }
 
@@ -346,7 +356,7 @@
       },
 
       createObject() {
-        console.log("createObject ", GameData.getGameId());
+        console.log("createObject ", this.options);
         let header = {
           headers: {
             "content-type": "application/json",
@@ -477,19 +487,23 @@
       },
 
       beforUpdateObject(object) {
+        console.log("beforUpdateObject ", object)
         this.cancleUpdate();
         this.objectUpdate = object;
+        // this.idObjectUpdate = object._id;
         this.nameObject = object.nameObject;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
           this.optionsUpdate[i].isShow = true;
           if (object[i].from != null) {
             if (this.optionsUpdate[i].idOption == 6 || this.optionsUpdate[i].idOption == 5) {
-              this.optionsUpdate[i].value = this.timeUtil.convertDuration(object[i].from) + "-" + this.timeUtil
+              this.optionsUpdate[i].from = this.timeUtil.convertDuration(object[i].from);
+                 this.optionsUpdate[i].to = this.timeUtil
                 .convertDuration(object[i].to);
             } else {
 
-              this.optionsUpdate[i].value = object[i].from + "-" + object[i].to;
+              this.optionsUpdate[i].from = object[i].from;
+              this.optionsUpdate[i].to = object[i].to;
             }
           } else {
             this.optionsUpdate[i].value = object[i];
@@ -508,6 +522,10 @@
           idGroupObject: this.objectUpdate._id,
           dataModify: this.getDataBodyObject(false)
         }
+        
+        if(body.dataModify == null) return;
+
+        console.log("sendUpdateObject ", body.dataModify)
         if (!Utils.checkDuplicateData(body.dataModify, this.objectUpdate)) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Dữ liệu cập nhật không đổi";
@@ -543,6 +561,7 @@
                 this.dataListObject.splice(this.dataListObject.findIndex(v => v._id == this.objectUpdate._id), 1,
                   res
                   .data.data);
+                  this.idObjectUpdate = res.data.data._id;
                 this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -629,40 +648,42 @@
         }
         if (!this.validateParamObject(data)) {
           // alert("not enough");
+          console.log("====  getDataBodyObject");
           this.isVisibleNoti = Math.round(+new Date() / 1000);
-          this.notiText = "Bạn phải điền hết thông tin!";
+          this.notiText = "Thông tin còn thiếu hoặc không hợp lệ!";
           this.notiState = "danger";
           return null;
         }
+
         let body = {
           totalGame: {
-            from: parseInt(data.totalGame.value.split('-')[0]),
-            to: parseInt(data.totalGame.value.split('-')[1])
+            from: parseInt(data.totalGame.from),
+            to: parseInt(data.totalGame.to)
           },
           channelPayment: data.channelPayment.value,
           totalCost: {
-            from: parseInt(data.totalCost.value.split('-')[0]),
-            to: parseInt(data.totalCost.value.split('-')[1])
+            from: parseInt(data.totalCost.from),
+            to: parseInt(data.totalCost.to)
           },
           numberPay: {
-            from: parseInt(data.numberPay.value.split('-')[0]),
-            to: parseInt(data.numberPay.value.split('-')[1])
+            from: parseInt(data.numberPay.from),
+            to: parseInt(data.numberPay.to)
           },
           lastPaidPack: {
-            from: parseInt(data.lastPaidPack.value.split('-')[0]),
-            to: parseInt(data.lastPaidPack.value.split('-')[1])
+            from: parseInt(data.lastPaidPack.from),
+            to: parseInt(data.lastPaidPack.to)
           },
           age: {
-            from: parseInt(data.age.value.split('-')[0]) * OBJECT_CONST.TIME.DAY,
-            to: parseInt(data.age.value.split('-')[1]) * OBJECT_CONST.TIME.DAY,
+            from: parseInt(data.age.from) * OBJECT_CONST.TIME.DAY,
+            to: parseInt(data.age.to) * OBJECT_CONST.TIME.DAY,
           },
           timeLastOnline: {
-            from: parseInt(data.timeLastOnline.value.split('-')[0]) * OBJECT_CONST.TIME.DAY,
-            to: parseInt(data.timeLastOnline.value.split('-')[1]) * OBJECT_CONST.TIME.DAY,
+            from: parseInt(data.timeLastOnline.from) * OBJECT_CONST.TIME.DAY,
+            to: parseInt(data.timeLastOnline.to) * OBJECT_CONST.TIME.DAY,
           },
           channelGame: {
-            from: parseInt(data.channelGame.value.split('-')[0]),
-            to: parseInt(data.channelGame.value.split('-')[1])
+            from: parseInt(data.channelGame.from),
+            to: parseInt(data.channelGame.to)
           },
 
           nameObject: this.nameObject
@@ -674,8 +695,7 @@
         this.isShowUpdate = false;
         this.dataUsersByCreatingObject = [];
         this.dataObjectCreating = [];
-        this.idObjectUpdate = '';
-        this.objectUpdate = null;
+        // this.idObjectUpdate = '';
         for (var i in this.options) {
           this.options[i].isShow = false;
         }
@@ -687,7 +707,19 @@
 
       validateParamObject(data) {
         for (var i in data) {
-          if (data[i].value == "" || data[i].value == null || data[i] == null || data[i] == "") {
+          if(data[i].value){
+            if (data[i].value == ""){
+              console.log("validateParamObject ", data[i]);
+            return false;
+            }
+          }
+          else if (data[i].from.length == 0 || data[i].from == null || data[i] == null || data[i] == "" ||data[i].to.length == 0 || data[i].to == null) {
+              console.log("validateParamObject ", data[i]);
+
+            return false;
+          }else if(parseInt(data[i].from) >= parseInt(data[i].to)){
+              console.log("validateParamObject ", data[i]);
+
             return false;
           }
         }

@@ -8,8 +8,8 @@
       <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterUserByUId"
         style="float: right;width: 10%; height: 40px" />
     </div>
+    <button class="button  is-focused mb-5 mr-5"  @click="handleSubmit" style="float: right">Import Data User</button>
     <button class="button  is-focused mb-5 mr-5" style="float: right">
-      Import Data User:
       <input ref="excel-upload-input" class="excel-upload-input" type="file" accept=".xlsx, .xls" @change="handleClick">
     </button>
     <div class="row is-full mt-3">
@@ -137,6 +137,7 @@
         moment: moment,
         isUpdate: false,
         userUpdated: Object(),
+        rawFile: ''
       }
     },
 
@@ -272,12 +273,15 @@
 
       handleClick(e) {
         const files = e.target.files
-        const rawFile = files[0] // only use files[0]
-        if (!rawFile) return
-        console.log(rawFile.name);
+        this.rawFile = files[0] // only use files[0]
+      },
+
+      handleSubmit(){
+        if (!this.rawFile) return
+        console.log(this.rawFile.name);
         let formData = new FormData();
-        formData.append('name', rawFile.name);
-        formData.append('file', rawFile);
+        formData.append('name', this.rawFile.name);
+        formData.append('file', this.rawFile);
         console.log("formData ", formData);
         let header = {
           headers: {

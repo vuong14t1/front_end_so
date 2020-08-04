@@ -87,9 +87,12 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
+              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ 
+              offerLive._id == idOfferLiveUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'},
+              offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
                { backgroundColor: 'azure'} 
-               : { backgroundColor : 'pink'}]">
+               : { backgroundColor : 'pink'}
+               ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
                 <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
                 <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}}</td>
@@ -220,7 +223,8 @@
         notiState: "primary",
         isVisibleNoti: false,
         offerLiveUdate: Object(),
-        isShowDetail: false
+        isShowDetail: false,
+        idOfferLiveUpdate: ''
       }
     },
 
@@ -485,6 +489,7 @@
                 this.dataListOffersLive.splice(this.dataListOffersLive.findIndex(v => v._id == this.offerLiveChoosen
                     ._id),
                   1, res.data.data);
+                  this.idOfferLiveUpdate = res.data.data._id;
                 this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);

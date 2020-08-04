@@ -28,8 +28,10 @@
                { backgroundColor: 'azure'} 
                : { backgroundColor : 'pink'}]">
             <td>{{offerLive._id}}</td>
-            <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}} </td>
-            <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}} </td>
+            <td @click="viewDetailGroupOffer(offerLive.groupOffer)">
+              <a> {{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}} </a> </td>
+            <td  @click="viewDetailGroupObject(offerLive.groupObject)" >
+              <a> {{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}} </a> </td>
             <td>{{moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{offerLive.totalReceived}} </td>
@@ -60,6 +62,7 @@
   import Pagination from '../Utility/Pagination';
   import moment from 'moment';
   import GameData from '../Utility/GameData';
+  import router from '../router';
 
   export default {
     name: 'Evaluate',
@@ -112,11 +115,27 @@
           }
         );
       },
-      
-      filterOfferLive(){
-          this.dataListOffersLive = this.dataListOffersLive.filter(item => {
-            return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-          })
+
+      filterOfferLive() {
+        this.dataListOffersLive = this.dataListOffersLive.filter(item => {
+          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        })
+      },
+
+      viewDetailGroupOffer(groupOffer) {
+        if (groupOffer == null) {
+          return;
+        }
+        let propOfferDetail = groupOffer;
+        this.$router.replace({name:'OfferGroup', params:{propOfferDetail}});
+      },
+
+      viewDetailGroupObject(groupObject){
+        if(groupObject == null){
+          return;
+        }
+        let propObjectDetail = groupObject;
+        this.$router.replace({name:'ObjectGroup', params:{propObjectDetail}});
       }
     }
   }

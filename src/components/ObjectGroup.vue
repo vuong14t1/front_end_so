@@ -167,6 +167,16 @@
 
     },
 
+
+    created() {
+      if (this.propObjectDetail) {
+        this.isShowUpdate = true;
+        this.beforUpdateObject(this.propObjectDetail);
+      }
+    },
+    props: ['propObjectDetail'],
+
+
     mounted() {
       this.gameId = GameData.getGameId();
       if (GameData.getRoleAccount() == null) {
@@ -372,8 +382,8 @@
                 console.log('==== lisst user ', this.dataObjectCreating);
                 // this.dataObjectCreating.totalCurrentUser = this.dataObjectCreating.totalUser;
                 this.totalData.unshift(this.dataObjectCreating);
-                  this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
-                  this.dataListObject = this.paginationObject.getDataByPage(1);
+                this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
+                this.dataListObject = this.paginationObject.getDataByPage(1);
                 if (res.data.errorCode == ERROR_CODE.EMPTY) {
                   this.isVisibleNoti = Math.round(+new Date() / 1000);
                   this.notiText = "Không có user nào!";

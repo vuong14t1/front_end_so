@@ -498,7 +498,7 @@
                   1);
                   this.dataListOffersLive.unshift(res.data.data);
                 this.idOfferLiveUpdate = res.data.data._id;
-                // this.cancleUpdate();
+                this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Cập nhật thất bại!errorCode: " + res.data.errorCode;

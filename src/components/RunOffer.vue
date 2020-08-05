@@ -5,7 +5,7 @@
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> Tạo lịch chạy OfferLive </strong></p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Tên Object</p>
+          <p class="column">Tên Object</p> 
           <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" class="column"
             :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
             {{objectChoosen.nameObject}} </Dropdown>
@@ -249,6 +249,7 @@
             this.dataListObject = res.data.data;
             if (this.dataListObject.length > 0) {
               this.objectChoosen = this.dataListObject[0];
+              console.log("=== objectChoosen ", this.objectChoosen);
             }
             for (let i in this.dataListObject) {
               this.dataListObject[i].title = this.dataListObject[i].nameObject;
@@ -524,7 +525,7 @@
       },
 
       sortOffer(offer) {
-        console.log("sortOffer ", offer);
+        console.log("sortOfferbefore ", offer);
         offer.sort(function (o1, o2) {
           if (o2.groupObject == null || o2.groupOffer == null) {
             if (o1.groupObject != null || o1.groupOffer != null) {
@@ -540,6 +541,7 @@
           }
           return o2.createAt - o1.createAt;
         });
+        console.log("sortOffer ", offer);
         return offer;
       },
 

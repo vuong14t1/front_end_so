@@ -25,9 +25,9 @@
     props: ['id', 'title', 'items', 'type', 'object', 'notiText', 'isVisibleNoti'],
     updated() {
       if (this.type == OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE) {
-        this.titleName = this.title;
         this.convertTimeData();
       }
+      this.titleName = this.title;
     },
 
     mounted() {

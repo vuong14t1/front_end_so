@@ -120,9 +120,7 @@
           <th>Group Offer</th>
           <th>Group Object</th>
           <th>Thời gian đếm ngược</th>
-          <th>Mô tả</th>
-          <th>Loại</th>
-          <th>Số lượng</th>
+          <th>Loại - Số lượng</th>
           <th>Giá gốc</th>
           <th>Giá bán</th>
           <th>Thời gian bắt đầu</th>
@@ -135,11 +133,14 @@
             <td>{{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </td>
             <td>{{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'Không có'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'Không có'}}</td>
             <td>
-              {{ofrLiveDetail.groupOffer ? jsonConfig.OfferGroup.type.listItem[ofrLiveDetail.groupOffer.type].title  : 'Không có'}}
+              <p v-if="!ofrLiveDetail.groupOffer"> {{'Không có'}} </p>
+              <span v-if="ofrLiveDetail.groupOffer">
+                <p v-for="item in ofrLiveDetail.groupOffer.items" :key="item.type">
+                  {{ listItemTypeToChoose[parseInt(item.type)] + '-' + item.value}}
+                </p>
+              </span>
             </td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.value : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.originalCost : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.promotionCost : 'Không có'}}</td>
             <td>{{moment.unix(ofrLiveDetail.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
@@ -226,7 +227,8 @@
         isVisibleNoti: false,
         offerLiveUdate: Object(),
         isShowDetail: false,
-        idOfferLiveUpdate: ''
+        idOfferLiveUpdate: '',
+        listItemTypeToChoose: this.getListItemTypeToChoose(),
       }
     },
 
@@ -310,7 +312,7 @@
           "offer_lives/list",
           header,
           function (res) {
-            this.dataListOffersLive = this.sortOffer(res.data.data); 
+            this.dataListOffersLive = this.sortOffer(res.data.data);
           }.bind(this),
 
           function (error) {
@@ -429,6 +431,9 @@
         this.offerLiveChoosen.timeFinish = moment.unix(offerLive.timeFinish).format()
         this.offerLiveChoosen._id = offerLive._id;
         this.isShowUpdate = true;
+        console.log("beforUpdateObject1 ", this.offerChoosen);
+        console.log("beforUpdateObject2 ", this.objectChoosen);
+
       },
 
       beforDeleteOfferLive(offerLive) {
@@ -529,7 +534,7 @@
           if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
             if (o1.timeFinish < Math.round(+new Date() / 1000)) {
               return 1;
-            }else{
+            } else {
               return -1;
             }
           }
@@ -659,7 +664,19 @@
             this.notiState = c;
           }.bind(this)
         );
-      }
+      },
+
+      getListItemTypeToChoose() {
+        var listItemTypeToChoose = [];
+        var options = this.jsonConfig.OfferGroup;
+        for (let i in options) {
+          if (options[i].type && options[i].type == "items") {
+            listItemTypeToChoose.push(options[i].title);
+          }
+        }
+        console.log("getListItemTypeToChoose ", listItemTypeToChoose);
+        return listItemTypeToChoose;
+      },
     }
   }
 

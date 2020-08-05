@@ -906,10 +906,17 @@
           header,
           function (res) {
             console.log("======== add_user_to_group", res);
-            if (res.data.data.ok) {
+            if (res.data.errorCode == 1) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Thêm User lỗi!.";
+              this.notiState = "danger";
+            }
+            else if (res.data.data.ok) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Thêm user thành công.";
               this.notiState = "success";
+              this.isShowUser = false;
+              this.getDataListObject();
             }
 
           }.bind(this),

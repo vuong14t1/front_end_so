@@ -10,9 +10,12 @@
           <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :id="option.idOption"
             :title="option.value" :items="option.listItems" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}
           </Dropdown>
-          <input type="number" style="width: 100px; height: 50px; text-align: center; border: none;border-left:1px solid Grey;" v-if="option.idOption != 0"
-            v-model="option.from">
-          <input type="number" style="width: 100px; height: 50px;text-align: center; border: none;border-left:1px solid Grey;" v-if="option.idOption != 0" v-model="option.to">
+          <input type="number"
+            style="width: 100px; height: 50px; text-align: center; border: none;border-left:1px solid Grey;"
+            v-if="option.idOption != 0" v-model="option.from">
+          <input type="number"
+            style="width: 100px; height: 50px;text-align: center; border: none;border-left:1px solid Grey;"
+            v-if="option.idOption != 0" v-model="option.to">
           <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
@@ -31,9 +34,12 @@
           <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :object="option"
             :id="option.idOption" :title="option.value" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
             :items="option.listItems">{{option.value}}</Dropdown>
-          <input type="number" style="width: 100px; height: 70px; text-align: center;border: none;border-left:1px solid Grey;" v-if="option.idOption != 0"
-            v-model="option.from">
-          <input type="number" style="width: 100px; height: 70px;text-align: center;border: none;border-left:1px solid Grey;" v-if="option.idOption != 0" v-model="option.to">
+          <input type="number"
+            style="width: 100px; height: 70px; text-align: center;border: none;border-left:1px solid Grey;"
+            v-if="option.idOption != 0" v-model="option.from">
+          <input type="number"
+            style="width: 100px; height: 70px;text-align: center;border: none;border-left:1px solid Grey;"
+            v-if="option.idOption != 0" v-model="option.to">
           <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
@@ -106,9 +112,16 @@
         </div>
         <div class="row is-full mt-3" v-if="isShowUser">
           <div class="has-text-centered pt-3" style="border-top:1px solid Grey;">
-           <strong> Danh sách UID: (số lương {{dataUsersByCreatingObject.length}}) </strong>
-            <button @click="filterUserByUId()" class="mr-0" style="float: right">Tìm kiếm</button>
-            <input v-model="search" @keydown.enter="filterUserByUId" style="float: right" />
+            <strong> Danh sách UID: (số lương {{dataUsersByCreatingObject.length}}) </strong>
+            <button @click="filterUserByUId()" class="button   is-primary is-small  mr-0" style="float: right">Tìm
+              kiếm</button>
+            <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterUserByUId"
+              style="float: right;width: 10%; height: 30px" />
+            <button @click="addUserToGroup()" class="button  is-primary is-small mr-5" style="float: right">Add
+              User</button>
+            <input class="input is-primary is-medium" v-model="idUserAdded" @keydown.enter="addUserToGroup"
+              style="float: right;width: 10%; height: 30px" />
+
           </div>
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
             <thead style="backgroundColor: #3298dc">
@@ -255,7 +268,8 @@
         isVisibleNoti: false,
         objectUpdate: Object(),
         objectDetail: Object(),
-        isShowDetail: false
+        isShowDetail: false,
+        idUserAdded: ''
       }
     },
 
@@ -498,7 +512,7 @@
 
       clearDataObjectCreating() {
         this.dataUsersByCreatingObject = [],
-        this.dataObjectCreating = null;
+          this.dataObjectCreating = null;
         this.nameObject = '';
         this.totalPageUser = 0;
         this.isShowUser = false;
@@ -867,6 +881,48 @@
           this.modalAlert_isVisible = false;
         }.bind(this);
       },
+
+      addUserToGroup() {
+        if (this.dataObjectCreating == null) return;
+        if (this.idUserAdded == '' || this.idUserAdded.length == 0) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "UID không hợp lệ.";
+          this.notiState = "danger";
+          return;
+        }
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId(),
+            uId: this.idUserAdded.toLowerCase(),
+            groupId: this.dataObjectCreating._id
+          }
+        };
+        APICaller.get(
+          "group_objects/add_user_to_group",
+          header,
+          function (res) {
+            console.log("======== add_user_to_group", res);
+            if (res.data.data.ok) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Thêm user thành công.";
+              this.notiState = "success";
+            }
+
+          }.bind(this),
+          function (error) {
+            console.log('group_objects/list_user ==== error', error);
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
+        )
+      }
 
     }
   }

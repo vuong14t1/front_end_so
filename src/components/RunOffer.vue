@@ -87,12 +87,10 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ 
-              offerLive._id == idOfferLiveUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'},
-              offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
-               { backgroundColor: 'azure'} 
-               : { backgroundColor : '#D3D3D3'}
-               ]">
+              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id"
+                :style="[offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000) ? 
+                 offerLive._id == idOfferLiveUpdate ?
+                   {backgroundColor: '#497059'}:  { backgroundColor : '#azure'} :  { backgroundColor: '#D3D3D3'} ]" >
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
                 <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
                 <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}}</td>
@@ -490,16 +488,17 @@
             header,
             body,
             function (res) {
+              console.log("res", res);
               if (res.data.errorCode == ERROR_CODE.SUCCESS) {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Cập nhật thành công!";
                 this.notiState = "success";
                 this.dataListOffersLive.splice(this.dataListOffersLive.findIndex(v => v._id == this.offerLiveChoosen
                     ._id),
-                  1, res.data.data);
-                this.dataListOffersLive = this.sortOffer(this.dataListOffersLive);
+                  1);
+                  this.dataListOffersLive.unshift(res.data.data);
                 this.idOfferLiveUpdate = res.data.data._id;
-                this.cancleUpdate();
+                // this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Cập nhật thất bại!errorCode: " + res.data.errorCode;
@@ -528,15 +527,30 @@
         console.log("sortOfferbefore ", offer);
         offer.sort(function (o1, o2) {
           if (o2.groupObject == null || o2.groupOffer == null) {
-            if (o1.groupObject != null || o1.groupOffer != null) {
+            if (o1.groupObject != null && o1.groupOffer != null) {
               return -1;
             }
           }
+
+          if (o1.groupObject == null || o2.groupOffer == null) {
+            if (o2.groupObject != null && o1.groupOffer != null) {
+              return 1;
+            }
+          }
+
+          if (o1.timeFinish >= Math.round(+new Date() / 1000)) {
+            if (o2.timeFinish < Math.round(+new Date() / 1000)) {
+              return -1;
+            } else {
+              // return 1;
+            }
+          }
+
           if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
             if (o1.timeFinish < Math.round(+new Date() / 1000)) {
               return 1;
             } else {
-              return -1;
+              // return -1;
             }
           }
           return o2.createAt - o1.createAt;

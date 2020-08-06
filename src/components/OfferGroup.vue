@@ -56,7 +56,7 @@
         style="border:1px solid Grey;  border-bottom-style: none;">
         <div class="row list-offers is-full">
           <div class="has-text-centered">
-            <span><strong> Danh sách các OFFERS </strong></span>
+            <span><strong> Danh sách các OFFERS đã tạo </strong></span>
             <button class="button is-small is-primary mr-0 mb-2" @click="filterOffer()" style="float: right">Tìm
               kiếm</button>
             <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterOffer"
@@ -108,7 +108,7 @@
         </div>
         <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="isCanCreate"
           style="border:1px solid Grey;">
-          <div class="row is-full" style="height=10%">
+          <div class="row is-full" style="height=10%"><strong> Demo UI Offer </strong>
             <div class="mt-4">Tên Offer: <br> <strong> {{options.nameOffer.value}}</strong> </div>
             <div class="rotated">Giá trị Khuyến mãi
               <strong>

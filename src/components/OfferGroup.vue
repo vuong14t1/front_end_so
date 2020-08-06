@@ -361,7 +361,7 @@
         for (let i in this.listItemTypeToChoose) {
           if (target.items.findIndex(v => v.type == i) == -1) {
             let obj = {
-              type: i,
+              type: parseInt(i),
               value: 0
             }
             target.items.push(obj);
@@ -390,7 +390,7 @@
           let number = data[this.listItemTypeToChoose[i] + ''].value;
           if (number === 0 || number === "" || isNaN(number)) continue;
           let item = {
-            type: i,// this.listItemTypeToChoose[i],
+            type: parseInt(i),// this.listItemTypeToChoose[i],
             value: parseInt(number)
           }
           items.push(item);

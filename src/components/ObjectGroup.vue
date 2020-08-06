@@ -31,12 +31,14 @@
           <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :object="option"
             :id="option.idOption" :title="option.value" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
             :items="option.listItems">{{option.value}}</Dropdown>
-          <input type="number" style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
+          <input type="number" style="width: 100px; height: 70px; text-align: center;border: none;border-left:1px solid Grey;" v-if="option.idOption != 0"
             v-model="option.from">
-          <input type="number" style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
+          <input type="number" style="width: 100px; height: 70px;text-align: center;border: none;border-left:1px solid Grey;" v-if="option.idOption != 0" v-model="option.to">
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
+          <p style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </div>
         <div class="has-text-centered " v-if="!isShowDetail">
           <button class="button is-small is-primary" @click="sendUpdateObject()">Cập nhật</button>
@@ -495,9 +497,8 @@
       },
 
       clearDataObjectCreating() {
-        console.log("clearDataObjectCreating ");
         this.dataUsersByCreatingObject = [],
-          this.dataObjectCreating = null;
+        this.dataObjectCreating = null;
         this.nameObject = '';
         this.totalPageUser = 0;
         this.isShowUser = false;
@@ -505,9 +506,9 @@
       },
 
       beforUpdateObject(object) {
-        this.idObjectUpdate = ''
+        this.idObjectUpdate = -9999;
         this.isShowDetail = false;
-        console.log("beforUpdateObject ", object)
+        console.log("beforUpdateObject ", this.idObjectUpdate)
         this.cancleUpdate();
         this.objectUpdate = object;
         // this.idObjectUpdate = object._id;
@@ -545,13 +546,13 @@
 
         if (body.dataModify == null) return;
 
-        console.log("sendUpdateObject ", body.dataModify)
         if (!Utils.checkDuplicateData(body.dataModify, this.objectUpdate)) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Dữ liệu cập nhật không đổi";
           this.notiState = "danger";
           return;
         }
+        this.idObjectUpdate = -9999;
 
         this.modalAlert_isVisible = true;
         var updateObjectCB = function () {
@@ -566,7 +567,6 @@
             }
           };
 
-          console.log("sendUpdateObject1 ", JSON.stringify(body));
           if (body.dataModify == null) return;
           APICaller.post(
             "group_objects/edit",

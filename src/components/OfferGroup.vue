@@ -12,8 +12,8 @@
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
-          <input v-if="option.type == 'items'" type="number" placeholder="number" v-model="option.value"
-            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center">
+          <input type="number" v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
           <div v-if="option.listItems" class="column">{{option.title}}</div>
           <p class="column" v-if="option.listItems">
             <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
@@ -36,8 +36,8 @@
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
-          <input v-if="option.type == 'items'" type="number" placeholder="number" v-model="option.value"
-            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center">
+          <input v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
           <div v-if="option.listItems" class="column">{{option.title}}</div>
           <p class="column" v-if="option.listItems">
             <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
@@ -359,10 +359,10 @@
 
       insertEmptyDataForOffer(target) {
         for (let i in this.listItemTypeToChoose) {
-          if (target.items.findIndex(v => v.type == this.listItemTypeToChoose[i]) == -1) {
+          if (target.items.findIndex(v => v.type == i) == -1) {
             let obj = {
-              type: this.listItemTypeToChoose[i],
-              value: ''
+              type: i,
+              value: 0
             }
             target.items.push(obj);
           }
@@ -390,8 +390,8 @@
           let number = data[this.listItemTypeToChoose[i] + ''].value;
           if (number === 0 || number === "" || isNaN(number)) continue;
           let item = {
-            type: this.listItemTypeToChoose[i],
-            value: number
+            type: i,// this.listItemTypeToChoose[i],
+            value: parseInt(number)
           }
           items.push(item);
         }
@@ -427,6 +427,7 @@
       },
 
       beforeUpdateOffer(offer) {
+        console.log("beforeUpdateOffer ", offer)
         this.isViewDetail = false;
         this.offerUpdate = offer;
         this.isShowUpdate = true;
@@ -440,7 +441,7 @@
           this.optionsUpdate[i].isShow = true;
         }
         for (let i in offer.items) {
-          this.optionsUpdate[offer.items[i].type].value = offer.items[i].value;
+          this.optionsUpdate[this.listItemTypeToChoose[offer.items[i].type]].value = offer.items[i].value;
         }
       },
 

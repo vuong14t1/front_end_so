@@ -8,7 +8,7 @@
           :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0">
+          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0" style=" border: none;border-left:1px solid Grey;">
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
@@ -20,6 +20,7 @@
               :title="option.listItems[option.value].title" :items="option.listItems">
               {{option.value}}</Dropdown>
           </p>
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </form>
         <div class="has-text-centered ">
           <button class="button is-primary" @click="createOffer()">Tạo</button>
@@ -31,7 +32,7 @@
           v-for="option in optionsUpdate" :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0">
+          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0" style=" border: none;border-left:1px solid Grey;">
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
@@ -43,6 +44,8 @@
               :title="option.listItems[option.value].title" :items="option.listItems">
               {{option.value}}</Dropdown>
           </p>
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
+
         </form>
         <div class="has-text-centered " v-if="!isViewDetail">
           <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
@@ -172,16 +175,13 @@
       if (this.propOfferDetail) {
         this.isShowUpdate = true;
         this.beforeUpdateOffer(this.propOfferDetail);
+        this.isViewDetail = true;
       }
-      // this.getListItemTypeToChoose();
-
     },
 
     props: ['propOfferDetail'],
 
     mounted() {
-      // this.getListItemTypeToChoose();
-
       this.getDataListOffer();
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id
@@ -302,7 +302,7 @@
 
       filterOffer() {
         this.dataListOffer = this.totalData.filter(item => {
-          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          return item.nameOffer.toLowerCase().indexOf(this.search.toLowerCase()) > -1
         })
       },
 

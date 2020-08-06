@@ -1,6 +1,7 @@
 {
   "ObjectGroup": {
     "channelPayment": {
+      "isRequired": true,
       "idOption": 0,
       "title": "Kênh nạp",
       "listItem": [
@@ -11,6 +12,7 @@
     },
 
     "totalCost": {
+      "isRequired": true,
       "idOption": 1,
       "title": "Số tiền đã nạp",
       "listItem": {
@@ -38,6 +40,7 @@
     },
 
     "numberPay": {
+      "isRequired": true,
       "idOption": 2,
       "title": "Số lần nạp",
       "listItem": {
@@ -65,6 +68,7 @@
     },
 
     "totalGame": {
+      "isRequired": true,
       "idOption": 3,
       "title": "Số ván chơi",
       "listItem": {
@@ -92,6 +96,7 @@
     },
 
     "lastPaidPack": {
+      "isRequired": true,
       "idOption": 4,
       "title": "Gói mua gần nhất(MMK)",
       "listItem": {
@@ -119,6 +124,7 @@
     },
 
     "age": {
+      "isRequired": true,
       "idOption": 5,
       "title": "Tuổi(ngày)",
       "listItem": {
@@ -146,6 +152,7 @@
     },
 
     "timeLastOnline": {
+      "isRequired": true,
       "idOption": 6,
       "title": "Thời gian online gần nhất(ngày)",
       "listItem": {
@@ -173,6 +180,7 @@
 	},
 	
 	"channelGame": {
+    "isRequired": true,
 		"idOption": 7,
 		"title": "Kênh chơi",
 		"listItem": {

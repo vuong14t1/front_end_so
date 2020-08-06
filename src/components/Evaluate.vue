@@ -27,7 +27,7 @@
         <tbody>
           <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
                { backgroundColor: 'azure'} 
-               : { backgroundColor : 'pink'}]">
+               : { backgroundColor : '#D3D3D3'}]">
             <td>{{offerLive._id}}</td>
             <td @click="viewDetailGroupOffer(offerLive.groupOffer)">
               <a> {{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}} </a> </td>

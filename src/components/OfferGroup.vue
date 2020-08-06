@@ -302,7 +302,7 @@
 
       filterOffer() {
         this.dataListOffer = this.totalData.filter(item => {
-          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          return item.nameOffer.toLowerCase().indexOf(this.search.toLowerCase()) > -1
         })
       },
 

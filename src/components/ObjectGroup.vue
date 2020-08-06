@@ -10,12 +10,14 @@
           <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :id="option.idOption"
             :title="option.value" :items="option.listItems" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}
           </Dropdown>
-          <input type="number" style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
+          <input type="number" style="width: 100px; height: 50px; text-align: center; border: none;border-left:1px solid Grey;" v-if="option.idOption != 0"
             v-model="option.from">
-          <input type="number" style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
+          <input type="number" style="width: 100px; height: 50px;text-align: center; border: none;border-left:1px solid Grey;" v-if="option.idOption != 0" v-model="option.to">
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
-          <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
+          <input style="text-align: center; width: 70%; height: 40px;" placeholder="name object" v-model="nameObject" />
+          <p style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </div>
         <div class="has-text-centered mt-5 ">
           <button class="button is-primary mt-100" @click="createObject()">Tạo</button>
@@ -366,7 +368,7 @@
 
       filterObject() {
         this.dataListObject = this.totalData.filter(item => {
-          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          return item.nameObject.toLowerCase().indexOf(this.search.toLowerCase()) > -1
         })
       },
 
@@ -503,6 +505,7 @@
       },
 
       beforUpdateObject(object) {
+        this.idObjectUpdate = ''
         this.isShowDetail = false;
         console.log("beforUpdateObject ", object)
         this.cancleUpdate();

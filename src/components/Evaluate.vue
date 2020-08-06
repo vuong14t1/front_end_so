@@ -22,6 +22,7 @@
           <th>Giá bán</th>
           <th>Rev</th>
           <th>% Mua/Hiển thị</th>
+          <th>Thời gian tạo</th>
         </thead>
         <tbody>
           <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
@@ -30,7 +31,7 @@
             <td>{{offerLive._id}}</td>
             <td @click="viewDetailGroupOffer(offerLive.groupOffer)">
               <a> {{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}} </a> </td>
-            <td  @click="viewDetailGroupObject(offerLive.groupObject)" >
+            <td @click="viewDetailGroupObject(offerLive.groupObject)">
               <a> {{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}} </a> </td>
             <td>{{moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>
@@ -42,6 +43,8 @@
             <td>
               {{offerLive.totalBought == 0 || offerLive.totalShow == 0 ? 0 : Math.ceil(offerLive.totalBought / offerLive.totalShow * 100)}}
             </td>
+            <td>{{ moment.unix(offerLive.createAt).format("MM/DD/YYYY H:mm:ss")}}</td>
+
           </tr>
         </tbody>
       </table>
@@ -98,7 +101,9 @@
           "offer_lives/list",
           header,
           function (res) {
-            this.dataListOffersLive = res.data.data;
+            this.dataListOffersLive = res.data.data.sort(function(o1, o2){
+              return o2.createAt - o1.createAt;
+            });
             console.log("dataListOffersLive ", this.dataListOffersLive);
             if (this.dataListOffersLive.length > 0) {
               for (let i in this.dataListOffersLive) {
@@ -127,15 +132,25 @@
           return;
         }
         let propOfferDetail = groupOffer;
-        this.$router.replace({name:'OfferGroup', params:{propOfferDetail}});
+        this.$router.replace({
+          name: 'OfferGroup',
+          params: {
+            propOfferDetail
+          }
+        });
       },
 
-      viewDetailGroupObject(groupObject){
-        if(groupObject == null){
+      viewDetailGroupObject(groupObject) {
+        if (groupObject == null) {
           return;
         }
         let propObjectDetail = groupObject;
-        this.$router.replace({name:'ObjectGroup', params:{propObjectDetail}});
+        this.$router.replace({
+          name: 'ObjectGroup',
+          params: {
+            propObjectDetail
+          }
+        });
       }
     }
   }

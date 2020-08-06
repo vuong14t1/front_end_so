@@ -221,8 +221,8 @@
           let listDetailPaymentUpdate = listPaymentUpdated[i].split("|");
           let channel = user.channelPayment.find(v => v.channel == listDetailPaymentUpdate[0]);
           if (channel) {
-            channel.cost = listDetailPaymentUpdate[2];
-            channel.number = listDetailPaymentUpdate[1];
+            channel.cost = parseInt(listDetailPaymentUpdate[2]);
+            channel.number = parseInt(listDetailPaymentUpdate[1]);
           }
         }
 

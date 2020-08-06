@@ -1,8 +1,8 @@
 <template>
-  <div class="menu-item" style="border:1px solid Grey;" @click="isOpen = !isOpen">
+  <div class="menu-item" style="border:1px solid Grey;" @click="clickDropDown">
     <a class=" mt-0 " style="font-size: 15px; text-decoration: none; ">
       {{ titleName }}
-      <i class="fa fa-arrow-circle-down fa-lg" style="float: right" aria-hidden="true"></i>
+      <i class="fa fa-arrow-circle-down fa-lg" style="float: right" aria-hidden="true" ></i>
     </a>
     <div style="z-index: 100; width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;"
       class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
@@ -22,7 +22,7 @@
 
   export default {
     name: 'dropdown',
-    props: ['id', 'title', 'items', 'type', 'object'],
+    props: ['id', 'title', 'items', 'type', 'object', 'notiText', 'isVisibleNoti'],
     updated() {
       if (this.type == OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE) {
         this.titleName = this.title;
@@ -47,6 +47,15 @@
         item.idOption = this.id;
         this.titleName = item.title;
         this.$emit('clicked', item)
+      
+      },
+
+      clickDropDown() {
+        this.isOpen = !this.isOpen;
+        if(this.items == null || this.items.length <= 0) {
+          console.log("khong co lua chon");
+          alert("Không có lựa chọn nào!");
+        }
       },
 
       convertTimeData() {

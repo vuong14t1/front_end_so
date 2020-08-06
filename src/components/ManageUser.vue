@@ -170,13 +170,13 @@
             let userFilted = res.data.data;
             userFilted.channelPaymentDetail = "";
             for (let c in userFilted.channelPayment) {
-              userFilted.channelPaymentDetail += "Kênh chơi: " + userFilted.channelPayment[c].channel +
+              userFilted.channelPaymentDetail += "Kênh nạp: " + userFilted.channelPayment[c].channel +
                 " | Số lần mua: " + userFilted.channelPayment[c].number +
                 " | Số tiền: " + userFilted.channelPayment[c].cost + "\n";
             }
             userFilted.listGroupObject = "";
             for(let o in userFilted.groupObject){
-              userFilted.listGroupObject += userFilted.groupObject[0].nameObject + "|";
+              userFilted.listGroupObject += userFilted.groupObject[o] + "|";
             }
             if(userFilted.listGroupObject.length == 0){
               userFilted.listGroupObject = "không có";

@@ -10,9 +10,9 @@
           <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :id="option.idOption"
             :title="option.value" :items="option.listItems" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}
           </Dropdown>
-          <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
+          <input type="number" style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
             v-model="option.from">
-          <input style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
+          <input type="number" style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -29,9 +29,9 @@
           <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :object="option"
             :id="option.idOption" :title="option.value" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
             :items="option.listItems">{{option.value}}</Dropdown>
-          <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
+          <input type="number" style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
             v-model="option.from">
-          <input style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
+          <input type="number" style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -67,7 +67,7 @@
             </thead>
             <tbody>
               <tr v-for="object in dataListObject" :key="object._id"
-                :style="[object._id == idObjectUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
+                :style="[object._id == idObjectUpdate ? {backgroundColor: '#48c774'} : {backgroundColor: 'none'}]">
                 <td @click="showDetailObject(object)"><a>{{object._id}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
@@ -109,7 +109,15 @@
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
             <thead style="backgroundColor: #3298dc">
               <th>UID</th>
-              <th v-for="option in options" :key="option.title">{{option.title}} </th>
+              <th>Kênh nạp</th>
+              <th>Số tiền đã nạp</th>
+              <th>Số lần nạp</th>
+              <th>Số ván chơi</th>
+              <th>Gói mua gần nhất(MMK)</th>
+              <th>Thời gian tạo</th>
+              <th>Thời gian online gần nhất</th>
+              <th>Kênh chơi</th>
+
             </thead>
 
             <tbody>
@@ -273,7 +281,6 @@
         // console.log("loadJsonOptions ", GameData.getGameId());
         // let jsonConfig = require('../assets/json/' + gameId + '_config_so.json');
         var options = this.jsonConfig.ObjectGroup;
-        this.getChannelPaymentFromConfig();
         for (let i in options) {
           options[i].isShow = false;
           options[i].listItems = [];
@@ -409,7 +416,7 @@
                 }
                 this.dataUsersByCreatingObject = res.data.data;
                 console.log('dataUsersByCreatingObject ', this.dataObjectCreating.totalUser);
-                var channel = this.getChannelPaymentFromConfig(body.channelPayment + '');
+                var channel = CHANNEL_PAYMENT[GameData.getGameId()][body.channelPayment + ''];
                 for (let u in this.dataUsersByCreatingObject) {
                   this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
                     channel].channel;
@@ -657,14 +664,14 @@
         } else {
           var data = this.optionsUpdate;
         }
-        if (!this.validateParamObject(data)) {
-          // alert("not enough");
-          console.log("====  getDataBodyObject");
-          this.isVisibleNoti = Math.round(+new Date() / 1000);
-          this.notiText = "Thông tin còn thiếu hoặc không hợp lệ!";
-          this.notiState = "danger";
-          return null;
-        }
+        // if (!this.validateParamObject(data)) {
+        //   // alert("not enough");
+        //   console.log("====  getDataBodyObject");
+        //   this.isVisibleNoti = Math.round(+new Date() / 1000);
+        //   this.notiText = "Thông tin còn thiếu hoặc không hợp lệ!";
+        //   this.notiState = "danger";
+        //   return null;
+        // }
 
         let body = {
           totalGame: {
@@ -765,7 +772,7 @@
             }
             this.dataUsersByCreatingObject = res.data.data;
             console.log('dataUsersByCreatingObject ', this.dataUsersByCreatingObject);
-                var channel = this.getChannelPaymentFromConfig(this.dataObjectCreating.channelPayment + '');
+            var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
             for (let u in this.dataUsersByCreatingObject) {
               this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
                 channel].channel;
@@ -817,7 +824,7 @@
               return;
             }
             let dataUserByCreatingObject = res.data.data;
-            var channel = this.getChannelPaymentFromConfig(this.dataObjectCreating.channelPayment + '');            
+            var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
             dataUserByCreatingObject.channel = dataUserByCreatingObject.channelPayment[
               channel].channel;
             dataUserByCreatingObject.numberPay = dataUserByCreatingObject.channelPayment[
@@ -850,11 +857,6 @@
           this.modalAlert_isVisible = false;
         }.bind(this);
       },
-
-      getChannelPaymentFromConfig(channel){
-        if(this.jsonConfig == null) return;
-        return this.jsonConfig.ObjectGroup.channelPayment.listItem.findIndex(v => v == channel);
-      }
 
     }
   }

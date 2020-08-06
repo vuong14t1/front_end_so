@@ -93,7 +93,7 @@
 
     "lastPaidPack": {
       "idOption": 4,
-      "title": "Gói mua gần nhất",
+      "title": "Gói mua gần nhất(MMK)",
       "listItem": {
         "1": {
           "from": 0,
@@ -120,7 +120,7 @@
 
     "age": {
       "idOption": 5,
-      "title": "Tuổi",
+      "title": "Tuổi(ngày)",
       "listItem": {
         "1": {
           "from": 0,
@@ -147,7 +147,7 @@
 
     "timeLastOnline": {
       "idOption": 6,
-      "title": "Thời gian online gần nhất",
+      "title": "Thời gian online gần nhất(ngày)",
       "listItem": {
         "1": {
           "from": 0,
@@ -251,14 +251,9 @@
       }
     },
 
-    "description": {
-      "title": "Mô tả gói",
-      "idOption": 5
-    },
-
     "durationCountDown": {
-      "title": "Thời gian đếm ngược",
-      "idOption": 6
+      "title": "Thời gian đếm ngược(giây)",
+      "idOption": 5
     }
   }
 }

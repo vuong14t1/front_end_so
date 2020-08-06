@@ -5,13 +5,13 @@
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> Tạo lịch chạy OfferLive </strong></p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">ID Object</p>
+          <p class="column">Tên Object</p>
           <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" class="column"
             :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
             {{objectChoosen.nameObject}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">ID Offer</p>
+          <p class="column">Tên Offer</p>
           <Dropdown @clicked="onClickChooseOffer" v-if="offerChoosen" class="column" :id="offerChoosen._id"
             :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
         </div>
@@ -35,13 +35,13 @@
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Cập nhật OfferLive </strong></p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">ID Object</p>
+          <p class="column">Tên Object</p>
           <Dropdown v-if="objectChoosen" class="column" :object='objectChoosen' @clicked="onClickChooseObject"
             :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
             {{objectChoosen.nameObject}}</Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">ID Offer</p>
+          <p class="column">Tên Offer</p>
           <Dropdown v-if="offerChoosen" class="column" @clicked="onClickChooseOffer" :id="offerChoosen._id"
             :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
         </div>

@@ -189,6 +189,7 @@
       if (this.propObjectDetail) {
         this.isShowUpdate = true;
         this.beforUpdateObject(this.propObjectDetail);
+        this.isShowDetail = true;
       }
     },
     props: ['propObjectDetail'],
@@ -229,7 +230,7 @@
         search: '',
         dataUsersByCreatingObject: Array(),
         dataObjectCreating: Object(),
-        nameObject: 'default',
+        nameObject: '',
         totalData: Array(),
         idObjectUpdate: '',
         timeUtil: TimeUtil,
@@ -495,7 +496,7 @@
         console.log("clearDataObjectCreating ");
         this.dataUsersByCreatingObject = [],
           this.dataObjectCreating = null;
-        this.nameObject = 'default';
+        this.nameObject = '';
         this.totalPageUser = 0;
         this.isShowUser = false;
         this.isShowDetail = false;

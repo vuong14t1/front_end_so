@@ -172,16 +172,13 @@
       if (this.propOfferDetail) {
         this.isShowUpdate = true;
         this.beforeUpdateOffer(this.propOfferDetail);
+        this.isViewDetail = true;
       }
-      // this.getListItemTypeToChoose();
-
     },
 
     props: ['propOfferDetail'],
 
     mounted() {
-      // this.getListItemTypeToChoose();
-
       this.getDataListOffer();
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id

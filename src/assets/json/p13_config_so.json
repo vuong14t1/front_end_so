@@ -191,36 +191,40 @@
 
   "OfferGroup":{
     "nameOffer": {
+      "isRequired": true,
       "title": "Tên offer",
       "idOption": 0
     },
 
-    "type": {
-      "idOption": 1,
-      "title": "Loại",
-      "listItem": {
-        "0": {
-          "id": 0,
-          "title": "GOLD"
-        },
-        "1": {
-          "id": 0,
-          "title": "VIP"
-        }
-      }
+    "GOLD": {
+      "isRequired": true,
+      "type": "items",
+      "title": "GOLD",
+      "idOption": 3
     },
 
-    "value": {
-      "title": "Số lượng",
-      "idOption": 2
+    "VIP": {
+      "isRequired": false,
+      "type": "items",
+      "title": "VIP",
+      "idOption": 4
+    },
+
+    "TICKET": {
+      "isRequired": false,
+      "type": "items",
+      "title": "TICKET",
+      "idOption": 5
     },
 
     "originalCost": {
+      "isRequired": true,
       "title": "Giá gốc",
       "idOption": 3
     },
 
     "promotionCost": {
+      "isRequired": true,
       "idOption": 4,
       "title": "Giá",
       "listItem": {
@@ -252,11 +256,13 @@
     },
 
     "description": {
+      "isRequired": true,
       "title": "Mô tả gói",
       "idOption": 5
     },
 
     "durationCountDown": {
+      "isRequired": true,
       "title": "Thời gian đếm ngược",
       "idOption": 6
     }

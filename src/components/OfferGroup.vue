@@ -4,13 +4,22 @@
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered"><strong> Tạo Offer </strong></p>
-        <form class="columns ml-1" style="border:1px solid Grey;font-size: 15px" v-for="option in options"
+        <form class="columns list-item ml-1" style="border:1px solid Grey;font-size: 15px" v-for="option in options"
           :key="option.title">
-          <div v-if="!option.listItems" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems" v-model="option.value" class="column mr-0">
-          <p class="column " v-if="option.listItems">{{option.title}}</p>
-          <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
-            :title="option.listItem[option.value].title" :items="option.listItems">{{option.value}}</Dropdown>
+          <!-- //normal -->
+          <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
+          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0">
+
+          <div v-if="!option.listItems && option.type" class="column">Loại</div>
+          <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
+          <input v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center">
+          <div v-if="option.listItems" class="column">{{option.title}}</div>
+          <p class="column" v-if="option.listItems">
+            <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
+              :title="option.listItems[option.value].title" :items="option.listItems">
+              {{option.value}}</Dropdown>
+          </p>
         </form>
         <div class="has-text-centered ">
           <button class="button is-primary" @click="createOffer()">Tạo</button>
@@ -18,21 +27,26 @@
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> Cập nhật Offer </strong></p>
-        <form class="columns ml-1" style="border:1px solid Grey;font-size: 15px" v-for="option in optionsUpdate"
-          :key="option.title">
-          <div v-if="!option.listItems" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems" v-model="option.value" class="column mr-0">
-          <p class="column " style="border-left:1px solid Grey;" v-if="option.isShow && option.listItems">
-            {{ option.title}}</p>
-          <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
-            :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE" :title="option.listItem[option.value].title"
-            :items="option.listItems">{{option.listItem[option.value].title}}</Dropdown>
+        <form class="columns list-item ml-1" style="border:1px solid Grey;font-size: 15px"
+          v-for="option in optionsUpdate" :key="option.title">
+          <!-- //normal -->
+          <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
+          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0">
+
+          <div v-if="!option.listItems && option.type" class="column">Loại</div>
+          <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
+          <input v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center">
+          <div v-if="option.listItems" class="column">{{option.title}}</div>
+          <p class="column" v-if="option.listItems">
+            <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
+              :title="option.listItems[option.value].title" :items="option.listItems">
+              {{option.value}}</Dropdown>
+          </p>
         </form>
         <div class="has-text-centered ">
           <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
           <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Hủy</button>
-          <!-- <button class="button is-small is-danger" @click="sendDeleteOffer()">Delete</button> -->
-
         </div>
       </div>
       <div class="column mt-0 ml-2 rows columns is-centered is-vcentered" :class="isCanCreate ? 'is-9' : 'is-12'"
@@ -57,11 +71,11 @@
             </thead>
 
             <tbody>
-              <tr v-for="offer in dataListOffer" :key="offer._id" :style="[offer._id == idOfferUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
+              <tr v-for="offer in dataListOffer" :key="offer._id"
+                :style="[offer._id == idOfferUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
                 <td>{{offer._id}}</td>
                 <td>{{offer.nameOffer}}</td>
-                <td>{{jsonConfig.OfferGroup.type.listItem[offer.type].title}}
-                <td>{{offer.value}}</td>
+                <td v-for="type in offer.items" :key="type.type">{{type.value}} </td>
                 <td>{{offer.promotionCost}}</td>
                 <td>{{offer.originalCost}}</td>
                 <td>{{offer.description}}</td>
@@ -102,16 +116,16 @@
           </div>
           <div class="row columns is-full has-text-centered" style="text-align: center">
             <div class="column is-4" style="text-align: center">
-              <p class="mt-2" style="border:1px solid Grey;height: 100px;
-               background-color: powderblue; text-align: center">Loại: <br> <br>
-                <strong>{{jsonConfig.OfferGroup.type.listItem[options.type.value].title}} </strong>
-              </p>
-              <p class="mt-4" style="word-break: break-all;">Số lượng: <strong>{{options.value.value}}</strong></p>
+              <p class="mt-2" style="height: 0px;
+               background-color: powderblue; text-align: center">
+                <p v-for="type in listItemTypeToChoose" :key="type">{{type}} - {{options[type].value}} </p>
+                <br> <br>
             </div>
             <div class="column is-5">
               <p style="height: 180px; text-align: center"> Mô tả: <br> <strong> {{options.description.value}} </strong>
               </p>
-              <div>Giá bán: <strong> {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} </strong> </div>
+              <div>Giá bán: <strong>
+                  {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} </strong> </div>
               <p>Giá gốc: <strong><del>
                     {{options.originalCost.value }} </del> </strong>
               </p>
@@ -156,17 +170,21 @@
 
     },
 
-    created(){
+    created() {
       console.log("created ", this.propOfferDetail)
-      if(this.propOfferDetail){
+      if (this.propOfferDetail) {
         this.isShowUpdate = true;
         this.beforeUpdateOffer(this.propOfferDetail);
       }
+      // this.getListItemTypeToChoose();
+
     },
 
     props: ['propOfferDetail'],
 
     mounted() {
+      // this.getListItemTypeToChoose();
+
       this.getDataListOffer();
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id
@@ -204,7 +222,8 @@
         isVisibleNoti: false,
         offerUpdate: Object(),
         moment: moment,
-        OBJECT_CONST: OBJECT_CONST
+        OBJECT_CONST: OBJECT_CONST,
+        listItemTypeToChoose: this.getListItemTypeToChoose(),
       }
     },
     methods: {
@@ -220,6 +239,24 @@
             return;
           }
         }
+      },
+
+      onClickChildChooseItem(item) {
+        console.log("onClickChildChooseItem ", item, this.options);
+        let data = this.isShowUpdate ? this.optionsUpdate : this.options;
+        data.items.isShow = true;
+        data.items.value = item.id;
+        data.items.choosenItem = item.title;
+      },
+
+      handleAddNewItem() {
+        //  var content = $('.sub-item').html();
+        // $('.list-item').html(content);
+        $('.sub-item').clone().appendTo('.list-item');
+      },
+
+      onChangeValueChooseItem(number) {
+        console.log('onChangeValueChooseItem ', number, this.options);
       },
 
       getDataListOffer() {
@@ -239,6 +276,9 @@
             this.totalData = res.data.data.sort(function (o1, o2) {
               return o2.createAt - o1.createAt;
             });
+            for (let i in this.totalData) {
+              this.insertEmptyDataForOffer(this.totalData[i]);
+            }
             this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
             this.dataListOffer = this.paginationOffer.getDataByPage(1)
             console.log('ré1 ', this.dataListOffer, this.paginationOffer)
@@ -264,7 +304,7 @@
 
       filterOffer() {
         this.dataListOffer = this.totalData.filter(item => {
-          return item.nameOffer.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
         })
       },
 
@@ -291,6 +331,8 @@
               this.notiText = "Tạo offer thành công!";
               this.notiState = "success";
               console.log("createOffer ", res)
+              let dataObject = res.data.data;
+              this.insertEmptyDataForOffer(dataObject);
               this.dataOfferCreating = res.data.data;
               this.totalData.unshift(this.dataOfferCreating);
               this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
@@ -317,6 +359,18 @@
         );
       },
 
+      insertEmptyDataForOffer(target) {
+        for (let i in this.listItemTypeToChoose) {
+          if (target.items.findIndex(v => v.type == this.listItemTypeToChoose[i]) == -1) {
+            let obj = {
+              type: this.listItemTypeToChoose[i],
+              value: ''
+            }
+            target.items.push(obj);
+          }
+        }
+      },
+
       getDataBodyOffer(isCreate) {
         if (isCreate) {
           var data = this.options;
@@ -332,6 +386,19 @@
         }
         let body = new Object();
         console.log("data raw ", data);
+        let items = [];
+
+        for (let i in this.listItemTypeToChoose) {
+          let number = data[this.listItemTypeToChoose[i] + ''].value;
+          if (number === 0 || number === "" || isNaN(number)) continue;
+          let item = {
+            type: this.listItemTypeToChoose[i],
+            value: number
+          }
+          items.push(item);
+        }
+
+
         for (var i in data) {
           if (i == 'promotionCost') {
             body[i] = data[i].listItem[data[i].value].title;
@@ -340,6 +407,9 @@
           }
           // console.log("========", data[i]);
         }
+
+        body.items = items;
+
         console.log("data ", body);
         return body;
       },
@@ -359,8 +429,6 @@
       },
 
       beforeUpdateOffer(offer) {
-        console.log("")
-        // this.idOfferUpdate = offer._id;
         this.offerUpdate = offer;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
@@ -371,6 +439,9 @@
             this.optionsUpdate[i].value = offer[i];
           }
           this.optionsUpdate[i].isShow = true;
+        }
+        for (let i in offer.items) {
+          this.optionsUpdate[offer.items[i].type].value = offer.items[i].value;
         }
       },
 
@@ -385,6 +456,9 @@
           idOffer: this.offerUpdate._id,
           dataModify: this.getDataBodyOffer(false)
         }
+        console.log("dataModify ", body.dataModify);
+        console.log("offerUpdate ", this.offerUpdate);
+
         if (!Utils.checkDuplicateData(body.dataModify, this.offerUpdate)) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Dữ liệu cập nhật không đổi";
@@ -410,6 +484,7 @@
             body,
             function (res) {
               if (res.data.errorCode == ERROR_CODE.SUCCESS) {
+                this.insertEmptyDataForOffer(res.data.data);
                 this.totalData.splice(this.totalData.findIndex(v => v._id == this.offerUpdate._id), 1);
                 this.totalData.unshift(res.data.data);
                 this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
@@ -511,6 +586,7 @@
 
       validateParamObject(data) {
         for (var i in data) {
+          if (!data[i].isRequired) continue;
           if (data[i].value === "" || data[i].value == null) {
             return false;
           }
@@ -537,11 +613,25 @@
               }
               options[i].listItems.push(object);
             }
-            options[i].value = options[i].listItems[0].id;
-            console.log("===== ", options[i].value);
+            options[i].value = options[i].listItems[1].id;
           }
         }
+
+        console.log("==== ", options)
+
         return options;
+      },
+
+      getListItemTypeToChoose() {
+        var listItemTypeToChoose = [];
+        var options = this.jsonConfig.OfferGroup;
+        for (let i in options) {
+          if (options[i].type && options[i].type == "items") {
+            listItemTypeToChoose.push(options[i].title);
+          }
+        }
+        console.log("getListItemTypeToChoose ", listItemTypeToChoose);
+        return listItemTypeToChoose;
       },
 
       updateDataModalAlert(title, callBack) {

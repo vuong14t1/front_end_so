@@ -66,9 +66,9 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="object in dataListObject" :key="object._id"
+              <tr v-for="object in dataListObject" :key="object._id" @click="showDetailObject(object)"
                 :style="[object._id == idObjectUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
-                <td @click="showDetailObject(object)"><a>{{object._id}}</a></td>
+                <td ><a>{{object._id}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
                 <td>{{object.totalCurrentUser}}</td>
@@ -357,7 +357,7 @@
 
       filterObject() {
         this.dataListObject = this.totalData.filter(item => {
-          return item.nameObject.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          return item._id.toLowerCase().indexOf(this.search.toLowerCase()) > -1
         })
       },
 

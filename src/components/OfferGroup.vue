@@ -78,7 +78,6 @@
                 <td v-for="type in offer.items" :key="type.type">{{type.value}} </td>
                 <td>{{offer.promotionCost}}</td>
                 <td>{{offer.originalCost}}</td>
-                <td>{{offer.description}}</td>
                 <td>{{offer.durationCountDown}} </td>
                 <td>
                   {{Math.round((parseInt(offer.originalCost)
@@ -122,8 +121,6 @@
                 <br> <br>
             </div>
             <div class="column is-5">
-              <p style="height: 180px; text-align: center"> Mô tả: <br> <strong> {{options.description.value}} </strong>
-              </p>
               <div>Giá bán: <strong>
                   {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} </strong> </div>
               <p>Giá gốc: <strong><del>

@@ -248,12 +248,6 @@
       }
     },
 
-    "description": {
-      "isRequired": true,
-      "title": "Mô tả gói",
-      "idOption": 5
-    },
-
     "durationCountDown": {
       "isRequired": true,
       "title": "Thời gian đếm ngược",

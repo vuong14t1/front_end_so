@@ -106,7 +106,7 @@
         </div>
         <div class="row is-full mt-3" v-if="isShowUser">
           <div class="has-text-centered pt-3" style="border-top:1px solid Grey;">
-            Tổng số users được chọn: {{dataUsersByCreatingObject.length}}
+           <strong> Danh sách UID: (số lương {{dataUsersByCreatingObject.length}}) </strong>
             <button @click="filterUserByUId()" class="mr-0" style="float: right">Tìm kiếm</button>
             <input v-model="search" @keydown.enter="filterUserByUId" style="float: right" />
           </div>

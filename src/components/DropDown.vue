@@ -2,7 +2,7 @@
   <div class="menu-item" style="border:1px solid Grey;" @click="clickDropDown">
     <a class=" mt-0 " style="font-size: 15px; text-decoration: none; ">
       {{ titleName }}
-      <i class="fa fa-arrow-circle-down fa-lg" style="float: right" aria-hidden="true" ></i>
+      <i class="fa icon-arrow fa-arrow-circle-down fa-lg" style="float: right" aria-hidden="true"></i>
     </a>
     <div style="z-index: 100; width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;"
       class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
@@ -47,12 +47,30 @@
         item.idOption = this.id;
         this.titleName = item.title;
         this.$emit('clicked', item)
-      
+
       },
 
       clickDropDown() {
+        console.log("clickDropDown ");
+        if (this.isOpen) {
+          $('.fa-arrow-circle-down').css({
+            '-webkit-transform': 'rotate(0deg)',
+            '-moz-transform': 'rotate(0deg)',
+            '-ms-transform': 'rotate(0deg)',
+            '-o-transform': 'rotate(0deg)',
+            'transform': 'rotate(0deg)',
+          });
+        } else {
+          $('.fa-arrow-circle-down').css({
+            '-webkit-transform': 'rotate(180deg)',
+            '-moz-transform': 'rotate(180deg)',
+            '-ms-transform': 'rotate(180deg)',
+            '-o-transform': 'rotate(180deg)',
+            'transform': 'rotate(180deg)',
+          });
+        }
         this.isOpen = !this.isOpen;
-        if(this.items == null || this.items.length <= 0) {
+        if (this.items == null || this.items.length <= 0) {
           console.log("khong co lua chon");
           alert("Không có lựa chọn nào!");
         }
@@ -112,5 +130,13 @@
   .fade-leave-to {
     opacity: 0;
   }
+
+  /* .fa-arrow-circle-down {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+  } */
 
 </style>

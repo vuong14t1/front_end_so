@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered	"><strong> Cập nhật Offer </strong></p>
+        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong></p>
         <form class="columns list-item ml-1" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <!-- //normal -->
@@ -44,7 +44,7 @@
               {{option.value}}</Dropdown>
           </p>
         </form>
-        <div class="has-text-centered ">
+        <div class="has-text-centered " v-if="!isViewDetail">
           <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
           <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Hủy</button>
         </div>
@@ -73,7 +73,7 @@
             <tbody>
               <tr v-for="offer in dataListOffer" :key="offer._id"
                 :style="[offer._id == idOfferUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
-                <td>{{offer._id}}</td>
+                <td @click="viewDetailOffer(offer)" > <a> {{offer._id}} </a></td>
                 <td>{{offer.nameOffer}}</td>
                 <td v-for="type in offer.items" :key="type.type">{{type.value}} </td>
                 <td>{{offer.promotionCost}}</td>
@@ -224,6 +224,7 @@
         moment: moment,
         OBJECT_CONST: OBJECT_CONST,
         listItemTypeToChoose: this.getListItemTypeToChoose(),
+        isViewDetail: false
       }
     },
     methods: {
@@ -429,6 +430,7 @@
       },
 
       beforeUpdateOffer(offer) {
+        this.isViewDetail = false;
         this.offerUpdate = offer;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
@@ -642,6 +644,12 @@
           this.modalAlert_isVisible = false;
         }.bind(this);
       },
+
+      viewDetailOffer(offer){
+        this.isShowUpdate = true;
+        this.beforeUpdateOffer(offer);
+        this.isViewDetail = true;
+      }
     }
 
 

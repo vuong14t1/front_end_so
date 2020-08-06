@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered	"><strong> Cập nhật Object </strong> </p>
+        <p class="has-text-centered	"><strong> {{isShowDetail ? 'Xem Object ': 'Cập nhật Object'}} </strong> </p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <p class="column ">{{option.title}}</p>
@@ -36,7 +36,7 @@
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
         </div>
-        <div class="has-text-centered ">
+        <div class="has-text-centered " v-if="!isShowDetail">
           <button class="button is-small is-primary" @click="sendUpdateObject()">Cập nhật</button>
           <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Hủy</button>
           <!-- <button class="button is-small is-danger" @click="sendDeleteObject()">Delete</button> -->
@@ -66,9 +66,9 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="object in dataListObject" :key="object._id" @click="showDetailObject(object)"
+              <tr v-for="object in dataListObject" :key="object._id"
                 :style="[object._id == idObjectUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
-                <td ><a>{{object._id}}</a></td>
+                <td  @click="showDetailObject(object)"><a>{{object._id}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
                 <td>{{object.totalCurrentUser}}</td>
@@ -241,7 +241,8 @@
         notiState: "primary",
         isVisibleNoti: false,
         objectUpdate: Object(),
-        objectDetail: Object()
+        objectDetail: Object(),
+        isShowDetail: false
       }
     },
 
@@ -490,9 +491,11 @@
         this.nameObject = 'default';
         this.totalPageUser = 0;
         this.isShowUser = false;
+        this.isShowDetail = false;
       },
 
       beforUpdateObject(object) {
+        this.isShowDetail = false;
         console.log("beforUpdateObject ", object)
         this.cancleUpdate();
         this.objectUpdate = object;
@@ -788,7 +791,10 @@
       },
 
       showDetailObject(obj) {
-        console.log(obj)
+        console.log(obj);
+        this.beforUpdateObject(obj);
+        this.isShowUpdate = true;
+        this.isShowDetail = true;
         this.dataObjectCreating = obj;
         this.totalPageUser = Math.ceil(obj.totalUser / OBJECT_CONST.PAGE.NUM_PER_PAGE);
         this.getDataUserByPage(1);

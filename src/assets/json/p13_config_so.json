@@ -210,13 +210,6 @@
       "idOption": 4
     },
 
-    "TICKET": {
-      "isRequired": false,
-      "type": "items",
-      "title": "TICKET",
-      "idOption": 5
-    },
-
     "originalCost": {
       "isRequired": true,
       "title": "Giá gốc",

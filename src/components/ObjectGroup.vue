@@ -273,6 +273,7 @@
         // console.log("loadJsonOptions ", GameData.getGameId());
         // let jsonConfig = require('../assets/json/' + gameId + '_config_so.json');
         var options = this.jsonConfig.ObjectGroup;
+        this.getChannelPaymentFromConfig();
         for (let i in options) {
           options[i].isShow = false;
           options[i].listItems = [];
@@ -408,7 +409,7 @@
                 }
                 this.dataUsersByCreatingObject = res.data.data;
                 console.log('dataUsersByCreatingObject ', this.dataObjectCreating.totalUser);
-                var channel = CHANNEL_PAYMENT[GameData.getGameId()][body.channelPayment + ''];
+                var channel = this.getChannelPaymentFromConfig(body.channelPayment + '');
                 for (let u in this.dataUsersByCreatingObject) {
                   this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
                     channel].channel;
@@ -764,7 +765,7 @@
             }
             this.dataUsersByCreatingObject = res.data.data;
             console.log('dataUsersByCreatingObject ', this.dataUsersByCreatingObject);
-            var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
+                var channel = this.getChannelPaymentFromConfig(this.dataObjectCreating.channelPayment + '');
             for (let u in this.dataUsersByCreatingObject) {
               this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
                 channel].channel;
@@ -816,7 +817,7 @@
               return;
             }
             let dataUserByCreatingObject = res.data.data;
-            var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
+            var channel = this.getChannelPaymentFromConfig(this.dataObjectCreating.channelPayment + '');            
             dataUserByCreatingObject.channel = dataUserByCreatingObject.channelPayment[
               channel].channel;
             dataUserByCreatingObject.numberPay = dataUserByCreatingObject.channelPayment[
@@ -849,6 +850,11 @@
           this.modalAlert_isVisible = false;
         }.bind(this);
       },
+
+      getChannelPaymentFromConfig(channel){
+        if(this.jsonConfig == null) return;
+        return this.jsonConfig.ObjectGroup.channelPayment.listItem.findIndex(v => v == channel);
+      }
 
     }
   }

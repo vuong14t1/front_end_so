@@ -12,7 +12,7 @@
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
-          <input v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+          <input v-if="option.type == 'items'" type="number" placeholder="number" v-model="option.value"
             @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center">
           <div v-if="option.listItems" class="column">{{option.title}}</div>
           <p class="column" v-if="option.listItems">
@@ -35,7 +35,7 @@
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
-          <input v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+          <input v-if="option.type == 'items'" type="number" placeholder="number" v-model="option.value"
             @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center">
           <div v-if="option.listItems" class="column">{{option.title}}</div>
           <p class="column" v-if="option.listItems">

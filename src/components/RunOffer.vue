@@ -91,7 +91,7 @@
               offerLive._id == idOfferLiveUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'},
               offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
                { backgroundColor: 'azure'} 
-               : { backgroundColor : '#7d7a72'}
+               : { backgroundColor : '#D3D3D3'}
                ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
                 <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
@@ -310,15 +310,7 @@
           "offer_lives/list",
           header,
           function (res) {
-            this.dataListOffersLive = res.data.data.sort(function (o1, o2) {
-              if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
-                if (o1.timeFinish >= Math.round(+new Date() / 1000)) {
-                  return o2.timeFinish - o1.timeFinish;
-                }
-                return true;
-              }
-              return o2.createAt - o1.createAt;
-            });
+            this.dataListOffersLive = this.sortOffer(res.data.data); 
           }.bind(this),
 
           function (error) {
@@ -499,15 +491,7 @@
                 this.dataListOffersLive.splice(this.dataListOffersLive.findIndex(v => v._id == this.offerLiveChoosen
                     ._id),
                   1, res.data.data);
-                this.dataListOffersLive.sort(function (o1, o2) {
-                  if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
-                    if (o1.timeFinish >= Math.round(+new Date() / 1000)) {
-                      return o2.timeFinish - o1.timeFinish;
-                    }
-                    return true;
-                  }
-                  return o2.createAt - o1.createAt;
-                });
+                this.dataListOffersLive = this.sortOffer(this.dataListOffersLive);
                 this.idOfferLiveUpdate = res.data.data._id;
                 this.cancleUpdate();
               } else {
@@ -532,6 +516,26 @@
           );
         }
         this.updateDataModalAlert("Bạn có muốn cập nhật? ", updateOfferLiveCB.bind(this))
+      },
+
+      sortOffer(offer) {
+        console.log("sortOffer ", offer);
+        offer.sort(function (o1, o2) {
+          if (o2.groupObject == null || o2.groupOffer == null) {
+            if (o1.groupObject != null || o1.groupOffer != null) {
+              return -1;
+            }
+          }
+          if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
+            if (o1.timeFinish < Math.round(+new Date() / 1000)) {
+              return 1;
+            }else{
+              return -1;
+            }
+          }
+          return o2.createAt - o1.createAt;
+        });
+        return offer;
       },
 
       cancleUpdate() {

@@ -14,7 +14,7 @@
     "totalCost": {
       "isRequired": true,
       "idOption": 1,
-      "title": "Số tiền đã nạp",
+      "title": "Số tiền đã nạp(MMK)",
       "listItem": {
         "0": {
           "from": 0,
@@ -220,14 +220,14 @@
 
     "originalCost": {
       "isRequired": true,
-      "title": "Giá gốc",
+      "title": "Giá gốc(MMK)",
       "idOption": 3
     },
 
     "promotionCost": {
       "isRequired": true,
       "idOption": 4,
-      "title": "Giá",
+      "title": "Giá(MMK)",
       "listItem": {
         "0": {
           "id": 100,
@@ -258,7 +258,7 @@
 
     "durationCountDown": {
       "isRequired": true,
-      "title": "Thời gian đếm ngược",
+      "title": "Thời gian đếm ngược(giây)",
       "idOption": 6
     }
   }

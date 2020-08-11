@@ -87,10 +87,12 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
+              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ 
+              offerLive._id == idOfferLiveUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'},
+              offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
                { backgroundColor: 'azure'} 
-               : { backgroundColor : 'pink'}, 
-               offerLive._id == idOfferLiveUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
+               : { backgroundColor : 'pink'}
+               ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
                 <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
                 <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}}</td>

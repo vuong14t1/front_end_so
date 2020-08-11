@@ -289,7 +289,8 @@
           },
           params: {
             gameId: GameData.getGameId(),
-          }
+          },
+          timeout: 150000
         };
         APICaller.post('tracking_user/import_data_user',
           header,

@@ -437,7 +437,7 @@
       },
 
       filterAccount() {
-        this.listAccount = this.listAccount.filter(item => {
+        this.listAccount = this.staticListAccount.filter(item => {
           if (item._id.indexOf(this.search.toLowerCase()) > -1) {
             return item._id.indexOf(this.search.toLowerCase()) > -1
           } else {

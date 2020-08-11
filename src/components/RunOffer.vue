@@ -5,7 +5,7 @@
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> Tạo lịch chạy OfferLive </strong></p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Tên Object</p> 
+          <p class="column">Tên Object</p>
           <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" class="column"
             :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
             {{objectChoosen.nameObject}} </Dropdown>
@@ -87,10 +87,9 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id"
-                :style="[offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000) ? 
+              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000) ? 
                  offerLive._id == idOfferLiveUpdate ?
-                   {backgroundColor: '#497059'}:  { backgroundColor : '#azure'} :  { backgroundColor: '#D3D3D3'} ]" >
+                   {backgroundColor: '#497059'}:  { backgroundColor : '#azure'} :  { backgroundColor: '#D3D3D3'} ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
                 <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
                 <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}}</td>
@@ -128,8 +127,10 @@
         <tbody>
           <tr>
             <td>{{ofrLiveDetail._id}}</td>
-            <td>{{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </td>
-            <td>{{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </td>
+            <td @click="viewDetailLinkedGroupOffer(ofrLiveDetail.groupOffer)"><a>
+                {{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </a></td>
+            <td @click="viewDetailLinkedGroupObject(ofrLiveDetail.groupObject)"><a>
+              {{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </a> </td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'Không có'}}</td>
             <td>
               <p v-if="!ofrLiveDetail.groupOffer"> {{'Không có'}} </p>
@@ -496,7 +497,7 @@
                 this.dataListOffersLive.splice(this.dataListOffersLive.findIndex(v => v._id == this.offerLiveChoosen
                     ._id),
                   1);
-                  this.dataListOffersLive.unshift(res.data.data);
+                this.dataListOffersLive.unshift(res.data.data);
                 this.idOfferLiveUpdate = res.data.data._id;
                 this.cancleUpdate();
               } else {
@@ -693,6 +694,32 @@
         console.log("getListItemTypeToChoose ", listItemTypeToChoose);
         return listItemTypeToChoose;
       },
+
+      viewDetailLinkedGroupOffer(groupOffer) {
+        if (groupOffer == null) {
+          return;
+        }
+        let propOfferDetail = groupOffer;
+        this.$router.replace({
+          name: 'OfferGroup',
+          params: {
+            propOfferDetail
+          }
+        });
+      },
+
+      viewDetailLinkedGroupObject(groupObject) {
+        if (groupObject == null) {
+          return;
+        }
+        let propObjectDetail = groupObject;
+        this.$router.replace({
+          name: 'ObjectGroup',
+          params: {
+            propObjectDetail
+          }
+        });
+      }
     }
   }
 

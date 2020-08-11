@@ -52,7 +52,7 @@ class APICaller {
     axios.defaults.withCredentials = true
     let url = BASE_URL + endpoint;
     console.log("API CALL: " + url);
-    header.timeout = 15000;
+    header.timeout = header.timeout == undefined ? 15000 : header.timeout;
     header.headers = Object.assign(header.headers, {
       "access-control-allow-origin": "*"
     });

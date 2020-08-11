@@ -26,14 +26,14 @@
           </header>
           <section class="modal-card-body">
             <div class="createAccount" style="text-align: center">
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
-                @click="deleteAll('delete_all_users')">Xóa toàn bộ Users</button>
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
-                @click="deleteAll('delete_all_group_object')">Xóa toàn bộ Objects</button>
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
-                @click="deleteAll('delete_all_group_offer')">Xóa toàn bộ Offers</button>
-              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5" style="width: 50%"
-                @click="deleteAll('delete_all_offer_live')">Xóa toàn bộ Offers đang chạy</button>
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+                style="width: 50%" @click="deleteAll('delete_all_users')">Xóa toàn bộ Users</button>
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+                style="width: 50%" @click="deleteAll('delete_all_group_object')">Xóa toàn bộ Objects</button>
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+                style="width: 50%" @click="deleteAll('delete_all_group_offer')">Xóa toàn bộ Offers</button>
+              <button v-if="GameData.getRoleAccount() == ACCOUNT_ROLE[0].id" class="button  is-danger mt-5 ml-5"
+                style="width: 50%" @click="deleteAll('delete_all_offer_live')">Xóa toàn bộ Offers đang chạy</button>
 
             </div>
           </section>

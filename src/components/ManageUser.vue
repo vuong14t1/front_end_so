@@ -8,6 +8,10 @@
       <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterUserByUId"
         style="float: right;width: 10%; height: 40px" />
     </div>
+    <button class="button  is-focused mb-5 mr-5" style="float: right">
+      Import Data User:
+      <input ref="excel-upload-input" class="excel-upload-input" type="file" accept=".xlsx, .xls" @change="handleClick">
+    </button>
     <div class="row is-full mt-3">
       <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
         <thead style="backgroundColor: #3298dc">
@@ -194,25 +198,25 @@
         for (let c in user.channelPayment) {
           this.userUpdated.channelPaymentDetail += user.channelPayment[c].channel +
             "|" + user.channelPayment[c].number +
-            "|" + user.channelPayment[c].cost + "|||";
+            "|" + user.channelPayment[c].cost + "-";
         }
       },
 
-      updateAccount(user){
+      updateAccount(user) {
         //update data user to update
-        user.timeCreateAccount = parseInt(moment(moment(user.timeCreateAccount ).format()).format("X"));
-        user.lastTimeOnline = parseInt(moment(moment(user.lastTimeOnline ).format()).format("X"));
-        let listPaymentUpdated = user.channelPaymentDetail.split('|||');
-        for(let i in listPaymentUpdated){
+        user.timeCreateAccount = parseInt(moment(moment(user.timeCreateAccount).format()).format("X"));
+        user.lastTimeOnline = parseInt(moment(moment(user.lastTimeOnline).format()).format("X"));
+        let listPaymentUpdated = user.channelPaymentDetail.split('-');
+        for (let i in listPaymentUpdated) {
           let listDetailPaymentUpdate = listPaymentUpdated[i].split("|");
-          let channel =  user.channelPayment.find(v => v.channel == listDetailPaymentUpdate[0]);
-          if(channel){
+          let channel = user.channelPayment.find(v => v.channel == listDetailPaymentUpdate[0]);
+          if (channel) {
             channel.cost = listDetailPaymentUpdate[2];
             channel.number = listDetailPaymentUpdate[1];
           }
         }
 
-         let header = {
+        let header = {
           headers: {
             "content-type": "application/json",
             "access-control-allow-origin": "*"
@@ -237,10 +241,10 @@
               this.notiText = "Không tìn thấy user.";
               this.notiState = "danger";
               return;
-            }else if (res.data.errorCode == ERROR_CODE.SUCCESS) {
+            } else if (res.data.errorCode == ERROR_CODE.SUCCESS) {
               this.isUpdate = false;
               this.userUpdated = null;
-               this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Cập nhật thành công";
               this.notiState = "success";
             }
@@ -254,7 +258,42 @@
             this.notiState = c;
           }.bind(this)
         )
-      }
+      },
+
+
+      handleClick(e) {
+        const files = e.target.files
+        const rawFile = files[0] // only use files[0]
+        if (!rawFile) return
+        console.log(rawFile.name);
+        let formData = new FormData();
+        formData.append('name', rawFile.name);
+        formData.append('file', rawFile);
+        console.log("formData ", formData);
+        let header = {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          params: {
+            gameId: GameData.getGameId(),
+          }
+        };
+        APICaller.post('tracking_user/import_data_user',
+          header,
+          formData,
+          function (res) {
+            console.log('SUCCESS!!', res);
+            this.isVisibleNoti = Math.round(+new Date() / 1000);
+            this.notiText = "Tạo thành công: " + res.data.data.checkSuccess + " | Thất  bại: " + res.data.data.checkFail;
+            this.notiState = "success";
+          }.bind(this),
+          function (error) {
+            console.log('FAILURE!!', error);
+            this.isVisibleNoti = Math.round(+new Date() / 1000);
+            this.notiText = "Tạo thất bại";
+            this.notiState = "danger";
+          }.bind(this))
+      },
     }
   }
 

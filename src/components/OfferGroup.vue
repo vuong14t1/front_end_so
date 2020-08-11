@@ -8,12 +8,14 @@
           :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0" style=" border: none;border-left:1px solid Grey;">
+          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
+            style=" border: none;border-left:1px solid Grey;">
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
           <input type="number" v-if="option.type == 'items'" placeholder="number" v-model="option.value"
-            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
+            @change="onChangeValueChooseItem(option.value)"
+            style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
           <div v-if="option.listItems" class="column">{{option.title}}</div>
           <p class="column" v-if="option.listItems">
             <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
@@ -32,12 +34,14 @@
           v-for="option in optionsUpdate" :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0" style=" border: none;border-left:1px solid Grey;">
+          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
+            style=" border: none;border-left:1px solid Grey;">
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
           <input type="number" v-if="option.type == 'items'" placeholder="number" v-model="option.value"
-            @change="onChangeValueChooseItem(option.value)" style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
+            @change="onChangeValueChooseItem(option.value)"
+            style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
           <div v-if="option.listItems" class="column">{{option.title}}</div>
           <p class="column" v-if="option.listItems">
             <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
@@ -76,7 +80,7 @@
             <tbody>
               <tr v-for="offer in dataListOffer" :key="offer._id"
                 :style="[offer._id == idOfferUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
-                <td @click="viewDetailOffer(offer)" > <a> {{offer._id}} </a></td>
+                <td @click="viewDetailOffer(offer)"> <a> {{offer._id}} </a></td>
                 <td>{{offer.nameOffer}}</td>
                 <td v-for="type in offer.items" :key="type.type">{{type.value}} </td>
                 <td>{{offer.originalCost}}</td>
@@ -129,6 +133,7 @@
                     {{options.originalCost.value }} </del> </strong>
               </p>
             </div>
+
           </div>
         </div>
       </div>
@@ -153,6 +158,7 @@
   import ERROR_CODE from '../const/error_code';
   import Utils from '../Utility/Utils';
   import moment from 'moment';
+  import GAME from '../const/game_const';
 
 
 
@@ -216,7 +222,7 @@
         moment: moment,
         OBJECT_CONST: OBJECT_CONST,
         listItemTypeToChoose: this.getListItemTypeToChoose(),
-        isViewDetail: false
+        isViewDetail: false,
       }
     },
     methods: {
@@ -265,7 +271,6 @@
           "group_offers/list",
           header,
           function (res) {
-            console.log('ré ', res)
             this.totalData = res.data.data.sort(function (o1, o2) {
               return o2.createAt - o1.createAt;
             });
@@ -274,8 +279,6 @@
             }
             this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
             this.dataListOffer = this.paginationOffer.getDataByPage(1)
-            console.log('ré1 ', this.dataListOffer, this.paginationOffer)
-
           }.bind(this),
 
           function (error) {
@@ -385,7 +388,7 @@
           let number = data[this.listItemTypeToChoose[i] + ''].value;
           if (number === 0 || number === "" || isNaN(number)) continue;
           let item = {
-            type: parseInt(i),// this.listItemTypeToChoose[i],
+            type: parseInt(i), // this.listItemTypeToChoose[i],
             value: parseInt(number)
           }
           items.push(item);
@@ -638,7 +641,7 @@
         }.bind(this);
       },
 
-      viewDetailOffer(offer){
+      viewDetailOffer(offer) {
         this.isShowUpdate = true;
         this.beforeUpdateOffer(offer);
         this.isViewDetail = true;

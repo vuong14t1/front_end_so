@@ -25,7 +25,8 @@
           <th>Thời gian tạo</th>
         </thead>
         <tbody>
-          <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
+          <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[ offerLive.groupOffer &&
+           offerLive.groupObject && offerLive.timeFinish >=timeServer?
                { backgroundColor: 'azure'} 
                : { backgroundColor : '#D3D3D3'}]">
             <td>{{offerLive._id}}</td>
@@ -79,11 +80,16 @@
         dataListOffersLive: Array(),
         totalRevenue: 0,
         moment: moment,
-        search: ''
+        search: '',
+        timeServer: ""
       }
     },
 
     mounted() {
+      GameData._getTimeServer(function (data) {
+        console.log("time ", data);
+        this.timeServer = data
+      }.bind(this))
       this.getDataEvaluate();
     },
 

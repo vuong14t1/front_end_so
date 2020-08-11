@@ -87,7 +87,8 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000) ? 
+              <tr v-for="offerLive in dataListOffersLive" :key="offerLive._id" :style="[offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >=
+                 timeServer? 
                  offerLive._id == idOfferLiveUpdate ?
                    {backgroundColor: '#497059'}:  { backgroundColor : '#azure'} :  { backgroundColor: '#D3D3D3'} ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
@@ -130,7 +131,7 @@
             <td @click="viewDetailLinkedGroupOffer(ofrLiveDetail.groupOffer)"><a>
                 {{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </a></td>
             <td @click="viewDetailLinkedGroupObject(ofrLiveDetail.groupObject)"><a>
-              {{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </a> </td>
+                {{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </a> </td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'Không có'}}</td>
             <td>
               <p v-if="!ofrLiveDetail.groupOffer"> {{'Không có'}} </p>
@@ -182,6 +183,10 @@
     },
 
     mounted() {
+      GameData._getTimeServer(function (data) {
+        console.log("time ", data);
+        this.timeServer = data
+      }.bind(this))
       this.getDataObject();
       this.getDataOffer();
       this.getDataOfferLive();
@@ -228,6 +233,7 @@
         isShowDetail: false,
         idOfferLiveUpdate: '',
         listItemTypeToChoose: this.getListItemTypeToChoose(),
+        timeServer: ""
       }
     },
 
@@ -539,24 +545,23 @@
             }
           }
 
-          if (o1.timeFinish >= Math.round(+new Date() / 1000)) {
-            if (o2.timeFinish < Math.round(+new Date() / 1000)) {
+          if (o1.timeFinish >= this.timeServer) {
+            if (o2.timeFinish < this.timeServer) {
               return -1;
             } else {
               // return 1;
             }
           }
 
-          if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
-            if (o1.timeFinish < Math.round(+new Date() / 1000)) {
+          if (o2.timeFinish >= this.timeServer) {
+            if (o1.timeFinish < this.timeServer) {
               return 1;
             } else {
               // return -1;
             }
           }
           return o2.createAt - o1.createAt;
-        });
-        console.log("sortOffer ", offer);
+        }.bind(this));
         return offer;
       },
 

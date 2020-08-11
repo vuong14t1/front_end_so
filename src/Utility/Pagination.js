@@ -20,7 +20,7 @@ class Pagination {
 
     page = page - 1; // page start from 0
     this.curPage = page;
-    return this.totalData.slice(page * this.numberPerPage, (page + 1) * this.numberPerPage - 1);
+    return this.totalData.slice(page * this.numberPerPage, (page + 1) * this.numberPerPage);
   }
 }
 

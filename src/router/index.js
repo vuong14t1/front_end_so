@@ -21,17 +21,20 @@ export default new Router({
     {
       path: '/',
       name: 'ObjectGroup',
-      component: ObjectGroup
+      component: ObjectGroup,
+      props: true,
     },
     {
       path: '/ObjectGroup',
       name: 'ObjectGroup',
-      component: ObjectGroup
+      component: ObjectGroup,
+      props: true,
     },
     {
       path: '/OfferGroup',
       name: 'OfferGroup',
-      component: OfferGroup
+      component: OfferGroup,
+      props: true,
     },
     {
       path: '/RunOffer',
@@ -41,7 +44,7 @@ export default new Router({
     {
       path: '/Evaluate',
       name: 'Evaluate',
-      component: Evaluate
+      component: Evaluate,
     },
     {
       path: '/ManageAccount',

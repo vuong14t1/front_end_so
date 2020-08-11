@@ -24,8 +24,9 @@
           <input v-if="!option.listItems" v-model="option.value" class="column mr-0">
           <p class="column " style="border-left:1px solid Grey;" v-if="option.isShow && option.listItems">
             {{ option.title}}</p>
-          <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
-            :title="option.listItem[option.value].title" :items="option.listItems">{{option.listItem[option.value].title}}</Dropdown> 
+          <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
+            :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE" :title="option.listItem[option.value].title"
+            :items="option.listItems">{{option.listItem[option.value].title}}</Dropdown>
         </form>
         <div class="has-text-centered ">
           <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
@@ -39,8 +40,8 @@
         <div class="row list-offers is-full">
           <div class="has-text-centered">
             <span><strong> Danh sách các OFFERS </strong></span>
-            <button class="button is-small is-primary mr-0 mb-2" @click="filterOffer()"
-              style="float: right">Tìm kiếm</button>
+            <button class="button is-small is-primary mr-0 mb-2" @click="filterOffer()" style="float: right">Tìm
+              kiếm</button>
             <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterOffer"
               style="float: right;width: 10%; height: 30px" />
           </div>
@@ -94,21 +95,25 @@
           <div class="row is-full" style="height=10%">
             <div class="mt-4">Tên Offer: <br> <strong> {{options.nameOffer.value}}</strong> </div>
             <div class="rotated">Giá trị Khuyến mãi
-              <strong> {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title)
+              <strong>
+                {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title)
                    - options.promotionCost.value)/parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title) * 100)}}
-              % </strong> </div>
+                % </strong> </div>
           </div>
           <div class="row columns is-full has-text-centered" style="text-align: center">
             <div class="column is-4" style="text-align: center">
               <p class="mt-2" style="border:1px solid Grey;height: 100px;
-               background-color: powderblue; text-align: center" >Loại: <br> <br> <strong>{{jsonConfig.OfferGroup.type.listItem[options.type.value].title}} </strong>
+               background-color: powderblue; text-align: center">Loại: <br> <br>
+                <strong>{{jsonConfig.OfferGroup.type.listItem[options.type.value].title}} </strong>
               </p>
               <p class="mt-4" style="word-break: break-all;">Số lượng: <strong>{{options.value.value}}</strong></p>
             </div>
             <div class="column is-5">
-              <p style="height: 180px; text-align: center"> Mô tả: <br> <strong> {{options.description.value}} </strong></p>
+              <p style="height: 180px; text-align: center"> Mô tả: <br> <strong> {{options.description.value}} </strong>
+              </p>
               <div>Giá bán: <strong> {{options.promotionCost.value}} </strong> </div>
-              <p>Giá gốc: <strong><del>  {{jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title}} </del> </strong>
+              <p>Giá gốc: <strong><del>
+                    {{jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title}} </del> </strong>
               </p>
             </div>
             <div class="column is-3">
@@ -150,6 +155,16 @@
       Modal,
 
     },
+
+    created(){
+      console.log("created ", this.propOfferDetail)
+      if(this.propOfferDetail){
+        this.isShowUpdate = true;
+        this.beforeUpdateOffer(this.propOfferDetail);
+      }
+    },
+
+    props: ['propOfferDetail'],
 
     mounted() {
       this.getDataListOffer();
@@ -220,11 +235,14 @@
           "group_offers/list",
           header,
           function (res) {
+            console.log('ré ', res)
             this.totalData = res.data.data.sort(function (o1, o2) {
               return o2.createAt - o1.createAt;
             });
             this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
             this.dataListOffer = this.paginationOffer.getDataByPage(1)
+            console.log('ré1 ', this.dataListOffer, this.paginationOffer)
+
           }.bind(this),
 
           function (error) {
@@ -315,10 +333,10 @@
         let body = new Object();
         console.log("data raw ", data);
         for (var i in data) {
-          if(i == 'originalCost'){
-          body[i] = data[i].listItem[data[i].value].title;
-          }else{
-          body[i] = data[i].value;
+          if (i == 'originalCost') {
+            body[i] = data[i].listItem[data[i].value].title;
+          } else {
+            body[i] = data[i].value;
           }
           // console.log("========", data[i]);
         }
@@ -341,14 +359,16 @@
       },
 
       beforeUpdateOffer(offer) {
+        console.log("")
         // this.idOfferUpdate = offer._id;
         this.offerUpdate = offer;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
-          if(i == 'originalCost'){
-            this.optionsUpdate[i].value = this.jsonConfig.OfferGroup.originalCost.listItems.findIndex(v => parseInt(v.title) == parseInt(offer[i]));
-          }else{
-          this.optionsUpdate[i].value = offer[i];
+          if (i == 'originalCost') {
+            this.optionsUpdate[i].value = this.jsonConfig.OfferGroup.originalCost.listItems.findIndex(v => parseInt(v
+              .title) == parseInt(offer[i]));
+          } else {
+            this.optionsUpdate[i].value = offer[i];
           }
           this.optionsUpdate[i].isShow = true;
         }
@@ -596,7 +616,7 @@
     height: 100%;
   }
 
-  p{
+  p {
     word-break: break-all;
   }
 

@@ -80,7 +80,7 @@
             <tbody>
               <tr v-for="offer in dataListOffer" :key="offer._id"
                 :style="[offer._id == idOfferUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
-                <td @click="viewDetailOffer(offer)"> <a> {{offer._id}} </a></td>
+                <td @click="viewDetailOffer(offer)"> <a> OFFER_{{offer.seq}} </a></td>
                 <td>{{offer.nameOffer}}</td>
                 <td v-for="type in offer.items" :key="type.type">{{type.value}} </td>
                 <td>{{offer.originalCost}}</td>

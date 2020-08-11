@@ -5,15 +5,15 @@
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> Tạo lịch chạy OfferLive </strong></p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Tên Object</p>
+          <p class="column">ID Object</p>
           <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" class="column"
-            :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
-            {{objectChoosen.nameObject}} </Dropdown>
+            :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq" :items="dataListObject">
+            OBJECT_{{objectChoosen.seq}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Tên Offer</p>
+          <p class="column">ID Offer</p>
           <Dropdown @clicked="onClickChooseOffer" v-if="offerChoosen" class="column" :id="offerChoosen._id"
-            :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
+            :title="'OFFER_' + offerChoosen.seq" :items="dataListOffers"> OFFER_{{offerChoosen.seq}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Thời gian bắt đầu</p>
@@ -37,13 +37,13 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Tên Object</p>
           <Dropdown v-if="objectChoosen" class="column" :object='objectChoosen' @clicked="onClickChooseObject"
-            :id="objectChoosen._id" :title="objectChoosen.nameObject" :items="dataListObject">
-            {{objectChoosen.nameObject}}</Dropdown>
+            :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq" :items="dataListObject">
+            OBJECT_{{objectChoosen.seq}}</Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
-          <p class="column">Tên Offer</p>
+          <p class="column">ID Offer</p>
           <Dropdown v-if="offerChoosen" class="column" @clicked="onClickChooseOffer" :id="offerChoosen._id"
-            :title="offerChoosen.nameOffer" :items="dataListOffers"> {{offerChoosen.nameOffer}} </Dropdown>
+            :title="'OFFER_' + offerChoosen.seq" :items="dataListOffers"> OFFER_{{offerChoosen.seq}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Thời gian tạo</p>
@@ -77,8 +77,8 @@
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
             <thead style="backgroundColor: #3298dc">
               <th>ID OfferLive</th>
-              <th>Group Offer</th>
-              <th>Group Object</th>
+              <th>ID Offer</th>
+              <th>ID Object</th>
               <th>Thời gian bắt đầu</th>
               <th>Thời gian kết thúc</th>
               <th>Thời gian tạo</th>
@@ -92,8 +92,8 @@
                  offerLive._id == idOfferLiveUpdate ?
                    {backgroundColor: '#497059'}:  { backgroundColor : '#azure'} :  { backgroundColor: '#D3D3D3'} ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
-                <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
-                <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}}</td>
+                <td>{{offerLive.groupOffer? 'OFFER_' + offerLive.groupOffer.seq : 'Không có'}}</td>
+                <td>{{offerLive.groupObject? 'OBJECT_' + offerLive.groupObject.seq : 'Không có'}}</td>
                 <td>{{ moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td>{{ moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td>{{ moment.unix(offerLive.createAt).format("MM/DD/YYYY H:mm:ss")}}</td>
@@ -129,9 +129,9 @@
           <tr>
             <td>{{ofrLiveDetail._id}}</td>
             <td @click="viewDetailLinkedGroupOffer(ofrLiveDetail.groupOffer)"><a>
-                {{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </a></td>
+                {{ofrLiveDetail.groupOffer? "OFFER_" + ofrLiveDetail.groupOffer.seq : 'Không có'}} </a></td>
             <td @click="viewDetailLinkedGroupObject(ofrLiveDetail.groupObject)"><a>
-                {{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </a> </td>
+                {{ofrLiveDetail.groupObject? "OBJECT_" + ofrLiveDetail.groupObject.seq : 'Không có'}} </a> </td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'Không có'}}</td>
             <td>
               <p v-if="!ofrLiveDetail.groupOffer"> {{'Không có'}} </p>
@@ -257,7 +257,7 @@
               console.log("=== objectChoosen ", this.objectChoosen);
             }
             for (let i in this.dataListObject) {
-              this.dataListObject[i].title = this.dataListObject[i].nameObject;
+              this.dataListObject[i].title = "OBJECT" + this.dataListObject[i].seq;
             }
           }.bind(this),
 
@@ -290,8 +290,9 @@
               this.offerChoosen = this.dataListOffers[0];
             }
             for (let i in this.dataListOffers) {
-              this.dataListOffers[i].title = this.dataListOffers[i].nameOffer;
+              this.dataListOffers[i].title = "OFFER_" + this.dataListOffers[i].seq;
             }
+            console.log("list group object " + JSON.stringify(this.dataListOffers));
           }.bind(this),
 
           function (error) {
@@ -318,6 +319,7 @@
           "offer_lives/list",
           header,
           function (res) {
+            console.log("list offer live " + JSON.stringify(res.data.data));
             this.dataListOffersLive = this.sortOffer(res.data.data);
           }.bind(this),
 

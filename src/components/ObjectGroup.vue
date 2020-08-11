@@ -78,7 +78,7 @@
             <tbody>
               <tr v-for="object in dataListObject" :key="object._id"
                 :style="[object._id == idObjectUpdate ? {backgroundColor: '#48c774'} : {backgroundColor: 'none'}]">
-                <td @click="showDetailObject(object)"><a>{{object._id}}</a></td>
+                <td @click="showDetailObject(object)"><a>OBJECT_{{object.seq}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
                 <td>{{object.totalCurrentUser}}</td>

@@ -12,8 +12,8 @@
       <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
         <thead style="backgroundColor: #3298dc">
           <th>Id</th>
-          <th>Group Offer</th>
-          <th>Group Object</th>
+          <th>ID Offer</th>
+          <th>ID Object</th>
           <th>Thời gian bắt đầu</th>
           <th>Thời gian kết thúc</th>
           <th>Số người nhận</th>
@@ -31,9 +31,9 @@
                : { backgroundColor : '#D3D3D3'}]">
             <td>{{offerLive._id}}</td>
             <td @click="viewDetailGroupOffer(offerLive.groupOffer)">
-              <a> {{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}} </a> </td>
+              <a> {{offerLive.groupOffer? "OFFER_" + offerLive.groupOffer.seq : 'Không có'}} </a> </td>
             <td @click="viewDetailGroupObject(offerLive.groupObject)">
-              <a> {{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}} </a> </td>
+              <a> {{offerLive.groupObject? "OBJECT_" + offerLive.groupObject.seq : 'Không có'}} </a> </td>
             <td>{{moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}} </td>
             <td>{{offerLive.totalReceived}} </td>

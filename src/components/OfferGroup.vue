@@ -57,7 +57,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="offer in dataListOffer" :key="offer._id">
+              <tr v-for="offer in dataListOffer" :key="offer._id" :style="[offer._id == idOfferUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
                 <td>{{offer._id}}</td>
                 <td>{{offer.nameOffer}}</td>
                 <td>{{jsonConfig.OfferGroup.type.listItem[offer.type].title}}
@@ -354,7 +354,7 @@
         }
         this.dataOfferCreating = [];
         this.isShowUpdate = false;
-        this.idOfferUpdate = "";
+        // this.idOfferUpdate = "";
         this.offerUpdate = null;
       },
 
@@ -417,6 +417,7 @@
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Cập nhật thành công!";
                 this.notiState = "success";
+                this.idOfferUpdate = res.data.data._id;
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Cập nhật thất bại! errorCode: " + res.data.errorCode;

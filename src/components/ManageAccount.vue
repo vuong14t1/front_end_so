@@ -19,7 +19,7 @@
           <th><button class="button is-primary" @click="createAccount()">Tạo tài khoản </button></th>
         </thead>
         <tbody>
-          <tr v-for="account in listAccount" :key="account._id">
+          <tr v-for="account in listAccount" :key="account._id" :style="[account._id == accountUpdate._id ? {backgroundColor : '#497059'} : {backgroundColor: 'none'}]">
             <td>{{account._id}}</td>
             <td> {{account.email}}</td>
             <td> {{AccountRole[account.role].title}}
@@ -157,7 +157,8 @@
         isVisibleNoti: false,
         staticListAccount: Array(),
         role: 2,
-        search: ''
+        search: '',
+        accountUpdate: Object()
       }
     },
 

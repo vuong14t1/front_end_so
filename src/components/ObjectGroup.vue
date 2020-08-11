@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+  <div class="is-fullwidth">
+    <Navigation class="is-fullwidth" :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Tạo Object </strong> </p>
@@ -45,7 +45,7 @@
             <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterObject"
               style="float: right;width: 10%; height: 30px" />
           </div>
-          <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 13px">
+          <table class="table is-bordered  has-text-centered mt-3" style="font-size: 13px">
             <thead style="backgroundColor: #3298dc">
               <th>ID Object</th>
               <th>Tên</th>
@@ -58,7 +58,7 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="object in dataListObject" :key="object._id">
+              <tr v-for="object in dataListObject" :key="object._id" :style="[object._id == idObjectUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]" >
                 <td @click="showDetailObject(object)"><a>{{object._id}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
@@ -479,6 +479,7 @@
       beforUpdateObject(object) {
         this.cancleUpdate();
         this.objectUpdate = object;
+        // this.idObjectUpdate = object._id;
         this.nameObject = object.nameObject;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
@@ -543,6 +544,7 @@
                 this.dataListObject.splice(this.dataListObject.findIndex(v => v._id == this.objectUpdate._id), 1,
                   res
                   .data.data);
+                  this.idObjectUpdate = res.data.data._id;
                 this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -674,8 +676,7 @@
         this.isShowUpdate = false;
         this.dataUsersByCreatingObject = [];
         this.dataObjectCreating = [];
-        this.idObjectUpdate = '';
-        this.objectUpdate = null;
+        // this.idObjectUpdate = '';
         for (var i in this.options) {
           this.options[i].isShow = false;
         }

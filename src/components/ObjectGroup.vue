@@ -414,6 +414,12 @@
               this.notiState = "danger";
               return;
             }
+            if(res.data.errorCode == ERROR_CODE.EXIST) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Tên Nhóm Object đã tồn tại!";
+              this.notiState = "danger";
+              return;
+            }
 
             header.params = Object.assign(header.params, {
               idGroupObject: this.dataObjectCreating._id
@@ -727,6 +733,13 @@
 
           nameObject: this.nameObject
         };
+        if(body.nameObject.trim() == "") {
+            console.log("====  getDataBodyObject");
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Vui lòng đặt tên hợp lệ!";
+          this.notiState = "danger";
+          return null;
+        }
         return body;
       },
 
@@ -751,7 +764,8 @@
               console.log("validateParamObject ", data[i]);
               return false;
             }
-          } else if (data[i].from.length == 0 || data[i].from == null || data[i] == null || data[i] == "" || data[i].to
+          } 
+          else if (data[i].from.length == 0 || data[i].from == null || data[i] == null || data[i] == "" || data[i].to
             .length == 0 || data[i].to == null) {
             console.log("validateParamObject ", data[i]);
 

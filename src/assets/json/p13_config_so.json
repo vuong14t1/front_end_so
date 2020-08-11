@@ -254,12 +254,6 @@
           "title": "5000"
         }
       }
-    },
-
-    "durationCountDown": {
-      "isRequired": true,
-      "title": "Thời gian đếm ngược(giây)",
-      "idOption": 6
     }
   }
 }

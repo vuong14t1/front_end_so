@@ -79,9 +79,8 @@
                 <td @click="viewDetailOffer(offer)" > <a> {{offer._id}} </a></td>
                 <td>{{offer.nameOffer}}</td>
                 <td v-for="type in offer.items" :key="type.type">{{type.value}} </td>
-                <td>{{offer.promotionCost}}</td>
                 <td>{{offer.originalCost}}</td>
-                <td>{{offer.durationCountDown}} </td>
+                <td>{{offer.promotionCost}}</td>
                 <td>
                   {{Math.round((parseInt(offer.originalCost)
                    - offer.promotionCost)/parseInt(offer.originalCost) * 100)}}
@@ -129,10 +128,6 @@
               <p>Giá gốc: <strong><del>
                     {{options.originalCost.value }} </del> </strong>
               </p>
-            </div>
-            <div class="column is-3">
-              <p style="height: 180px"></p>
-              <p>Thời gian đếm ngược: <br><strong> {{options.durationCountDown.value}} </strong></p>
             </div>
           </div>
         </div>

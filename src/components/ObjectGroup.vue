@@ -5,12 +5,14 @@
       <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Tạo Object </strong> </p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
-          v-for="option in options" :key="option.title" >
+          v-for="option in options" :key="option.title">
           <p class="column ">{{option.title}}</p>
-          <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :id="option.idOption" :title="option.value"
-            :items="option.listItems" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}</Dropdown>
-            <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0" v-model="option.from">
-            <input  style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
+          <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :id="option.idOption"
+            :title="option.value" :items="option.listItems" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}
+          </Dropdown>
+          <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
+            v-model="option.from">
+          <input style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -24,10 +26,12 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <p class="column ">{{option.title}}</p>
-          <Dropdown  v-if="option.idOption == 0"  class="column" @clicked="onClickChild" :object="option" :id="option.idOption" :title="option.value"
-            :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE" :items="option.listItems">{{option.value}}</Dropdown>
-            <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0" v-model="option.from">
-            <input  style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
+          <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :object="option"
+            :id="option.idOption" :title="option.value" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
+            :items="option.listItems">{{option.value}}</Dropdown>
+          <input style="width: 100px; height: 50px; text-align: center" v-if="option.idOption != 0"
+            v-model="option.from">
+          <input style="width: 100px; height: 50px;text-align: center" v-if="option.idOption != 0" v-model="option.to">
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -62,7 +66,8 @@
                 Hành động</th>
             </thead>
             <tbody>
-              <tr v-for="object in dataListObject" :key="object._id" :style="[object._id == idObjectUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]" >
+              <tr v-for="object in dataListObject" :key="object._id"
+                :style="[object._id == idObjectUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'}]">
                 <td @click="showDetailObject(object)"><a>{{object._id}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
@@ -288,13 +293,13 @@
             }
             options[i].listItems.push(object);
           }
-          if(i == 'channelPayment'){
-            options[i].value =  options[i].listItems[0].title
-          }else{
+          if (i == 'channelPayment') {
+            options[i].value = options[i].listItems[0].title
+          } else {
             options[i].from = options[i].listItems[0].title.split('-')[0];
-          options[i].to = options[i].listItems[0].title.split('-')[1];
+            options[i].to = options[i].listItems[0].title.split('-')[1];
           }
-          
+
           options[i].isModify = false;
         }
 
@@ -498,7 +503,7 @@
           if (object[i].from != null) {
             if (this.optionsUpdate[i].idOption == 6 || this.optionsUpdate[i].idOption == 5) {
               this.optionsUpdate[i].from = this.timeUtil.convertDuration(object[i].from);
-                 this.optionsUpdate[i].to = this.timeUtil
+              this.optionsUpdate[i].to = this.timeUtil
                 .convertDuration(object[i].to);
             } else {
 
@@ -522,8 +527,8 @@
           idGroupObject: this.objectUpdate._id,
           dataModify: this.getDataBodyObject(false)
         }
-        
-        if(body.dataModify == null) return;
+
+        if (body.dataModify == null) return;
 
         console.log("sendUpdateObject ", body.dataModify)
         if (!Utils.checkDuplicateData(body.dataModify, this.objectUpdate)) {
@@ -558,10 +563,15 @@
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Update thành công";
                 this.notiState = "success";
-                this.dataListObject.splice(this.dataListObject.findIndex(v => v._id == this.objectUpdate._id), 1,
-                  res
-                  .data.data);
-                  this.idObjectUpdate = res.data.data._id;
+                this.totalData.splice(this.totalData.findIndex(v => v._id == this.objectUpdate._id), 1);
+                this.totalData.unshift(res.data.data);
+                this.totalData.sort(
+                  function (o1, o2) {
+                    return o2.createAt - o1.createAt;
+                  });
+                this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
+                this.dataListObject = this.paginationObject.getDataByPage(1);
+                this.idObjectUpdate = res.data.data._id;
                 this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -707,18 +717,18 @@
 
       validateParamObject(data) {
         for (var i in data) {
-          if(data[i].value){
-            if (data[i].value == ""){
+          if (data[i].value) {
+            if (data[i].value == "") {
               console.log("validateParamObject ", data[i]);
-            return false;
+              return false;
             }
-          }
-          else if (data[i].from.length == 0 || data[i].from == null || data[i] == null || data[i] == "" ||data[i].to.length == 0 || data[i].to == null) {
-              console.log("validateParamObject ", data[i]);
+          } else if (data[i].from.length == 0 || data[i].from == null || data[i] == null || data[i] == "" || data[i].to
+            .length == 0 || data[i].to == null) {
+            console.log("validateParamObject ", data[i]);
 
             return false;
-          }else if(parseInt(data[i].from) >= parseInt(data[i].to)){
-              console.log("validateParamObject ", data[i]);
+          } else if (parseInt(data[i].from) >= parseInt(data[i].to)) {
+            console.log("validateParamObject ", data[i]);
 
             return false;
           }

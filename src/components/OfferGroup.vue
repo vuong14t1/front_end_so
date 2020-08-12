@@ -410,9 +410,10 @@
             body,
             function (res) {
               if (res.data.errorCode == ERROR_CODE.SUCCESS) {
-                this.dataListOffer.splice(this.dataListOffer.findIndex(v => v._id == this.offerUpdate._id), 1, res
-                  .data
-                  .data);
+                this.totalData.splice(this.totalData.findIndex(v => v._id == this.offerUpdate._id), 1);
+                this.totalData.unshift(res.data.data);
+                this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
+                this.dataListOffer = this.paginationOffer.getDataByPage(1);
                 this.clearDataOfferCreating();
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Cập nhật thành công!";

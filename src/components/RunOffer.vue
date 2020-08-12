@@ -68,8 +68,8 @@
         <div class="row is-full" v-if="!dataUsersByCreatingObject.length > 0">
           <div class="has-text-centered">
             <span> <strong>Danh sách các OFFERS Đang chạy </strong></span>
-            <button @click="filterObject()" class="button is-primary is-small mr-0 mb-2"
-              style="float: right">Tìm kiếm</button>
+            <button @click="filterObject()" class="button is-primary is-small mr-0 mb-2" style="float: right">Tìm
+              kiếm</button>
             <input class="input is-primary is-medium" v-model="search" @keydown.enter="filterObject"
               style="float: right;width: 10%; height: 30px" />
 
@@ -135,8 +135,10 @@
             <td>{{ofrLiveDetail.groupOffer? ofrLiveDetail.groupOffer.nameOffer : 'Không có'}} </td>
             <td>{{ofrLiveDetail.groupObject? ofrLiveDetail.groupObject.nameObject : 'Không có'}} </td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.durationCountDown : 'Không có'}}</td>
-            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'Không có'}}</td>            
-            <td>{{ofrLiveDetail.groupOffer ? jsonConfig.OfferGroup.type.listItem[ofrLiveDetail.groupOffer.type].title  : 'Không có'}}</td>
+            <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.description : 'Không có'}}</td>
+            <td>
+              {{ofrLiveDetail.groupOffer ? jsonConfig.OfferGroup.type.listItem[ofrLiveDetail.groupOffer.type].title  : 'Không có'}}
+            </td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.value : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.originalCost : 'Không có'}}</td>
             <td>{{ofrLiveDetail.groupOffer ? ofrLiveDetail.groupOffer.promotionCost : 'Không có'}}</td>
@@ -489,7 +491,10 @@
                 this.dataListOffersLive.splice(this.dataListOffersLive.findIndex(v => v._id == this.offerLiveChoosen
                     ._id),
                   1, res.data.data);
-                  this.idOfferLiveUpdate = res.data.data._id;
+                this.dataListOffersLive.sort(function (o1, o2) {
+                  return o2.createAt - o1.createAt;
+                });
+                this.idOfferLiveUpdate = res.data.data._id;
                 this.cancleUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);

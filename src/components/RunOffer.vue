@@ -43,7 +43,7 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Offer</p>
           <Dropdown v-if="offerChoosen" class="column" @clicked="onClickChooseOffer" :id="offerChoosen._id"
-            :title="'OFFER_' + offerChoosen.seq" :items="dataListOffers"> OFFER_{{offerChoosen.seq}} </Dropdown>
+            :title="'OFFER_' + offerChoosen.seq " :items="dataListOffers"> OFFER_{{offerChoosen.seq}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Thời gian tạo</p>

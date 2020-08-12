@@ -16,9 +16,9 @@
           <input type="number"
             style="width: 100px; height: 50px;text-align: center; border: none;border-left:1px solid Grey;"
             v-if="option.idOption != 0" v-model="option.to">
-          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"></p>
         </div>
-        <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
+        <div class="ml-50" style="text-align: center; width: 100%; height: 50px">Tên Object:
           <input style="text-align: center; width: 70%; height: 40px;" placeholder="name object" v-model="nameObject" />
           <p style="width: 20px; float: right;text-align: center;color: red"> * </p>
         </div>
@@ -40,7 +40,7 @@
           <input type="number"
             style="width: 100px; height: 70px;text-align: center;border: none;border-left:1px solid Grey;"
             v-if="option.idOption != 0" v-model="option.to">
-          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"></p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
           <input style="text-align: center; width: 70%; height: 40px" placeholder="name object" v-model="nameObject" />
@@ -68,7 +68,6 @@
               <th>ID Object</th>
               <th>Tên</th>
               <th>Số lượng user</th>
-              <th>Số lượng user hiện tại</th>
               <th v-for="option in options" :key="option.title">{{option.title}} </th>
               <th>Thời gian tạo</th>
               <th
@@ -81,7 +80,6 @@
                 <td @click="showDetailObject(object)"><a>OBJECT_{{object.seq}}</a></td>
                 <td>{{object.nameObject}}</td>
                 <td>{{object.totalUser}}</td>
-                <td>{{object.totalCurrentUser}}</td>
                 <td>{{object.channelPayment}}</td>
                 <td>{{object.totalCost.from}} - {{object.totalCost.to}}</td>
                 <td>{{object.numberPay.from}} - {{object.numberPay.to}}</td>

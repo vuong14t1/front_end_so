@@ -373,10 +373,23 @@
         } else {
           var data = this.optionsUpdate;
         }
+        console.log("data create " + JSON.stringify(data));
         if (!this.validateParamObject(data)) {
           // alert("not enough");
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Vui lòng điền hết thông tin!";
+          this.notiState = "danger";
+          return null;
+        }
+        if(data['GOLD']['value'] < 100000) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Giá trị GOLD yêu cầu phải lớn hơn 100K";
+          this.notiState = "danger";
+          return null;
+        }
+        if(data['nameOffer']['value'].length > 13) {
+          this.isVisibleNoti = Math.round(+new Date() / 1000);
+          this.notiText = "Tên của offer tối đa chỉ 13 kí tự";
           this.notiState = "danger";
           return null;
         }

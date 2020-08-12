@@ -200,7 +200,7 @@
   "OfferGroup":{
     "nameOffer": {
       "isRequired": true,
-      "title": "Tên offer",
+      "title": "Tên offer(Tối đa 13 kí tự)",
       "idOption": 0
     },
 
@@ -211,10 +211,10 @@
       "idOption": 1
     },
 
-    "VIP": {
+    "V_POINT": {
       "isRequired": false,
       "type": "items",
-      "title": "VIP",
+      "title": "V_POINT",
       "idOption": 2
     },
 
@@ -227,7 +227,7 @@
     "promotionCost": {
       "isRequired": true,
       "idOption": 4,
-      "title": "Giá(MMK)",
+      "title": "Giá bán(MMK)",
       "listItem": {
         "0": {
           "id": 100,

@@ -91,7 +91,7 @@
               offerLive._id == idOfferLiveUpdate ? {backgroundColor: '#497059'} : {backgroundColor: 'none'},
               offerLive.groupOffer && offerLive.groupObject && offerLive.timeFinish >= Math.round(+new Date() / 1000)?
                { backgroundColor: 'azure'} 
-               : { backgroundColor : 'pink'}
+               : { backgroundColor : '#7d7a72'}
                ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
                 <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
@@ -311,6 +311,12 @@
           header,
           function (res) {
             this.dataListOffersLive = res.data.data.sort(function (o1, o2) {
+              if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
+                if (o1.timeFinish >= Math.round(+new Date() / 1000)) {
+                  return o2.timeFinish - o1.timeFinish;
+                }
+                return true;
+              }
               return o2.createAt - o1.createAt;
             });
           }.bind(this),
@@ -353,6 +359,7 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Đã tạo thành công!";
               this.notiState = "success";
+              console.log('====adata ', res.data.data);
               this.dataListOffersLive.unshift(res.data.data);
               this.cancleUpdate();
             } else {
@@ -406,6 +413,7 @@
       },
 
       beforUpdateObject(offerLive) {
+        this.idOfferLiveUpdate = '';
         this.cancleUpdate();
         if (this.dataListObject[0] == null && offerLive.groupObject == null) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -492,6 +500,12 @@
                     ._id),
                   1, res.data.data);
                 this.dataListOffersLive.sort(function (o1, o2) {
+                  if (o2.timeFinish >= Math.round(+new Date() / 1000)) {
+                    if (o1.timeFinish >= Math.round(+new Date() / 1000)) {
+                      return o2.timeFinish - o1.timeFinish;
+                    }
+                    return true;
+                  }
                   return o2.createAt - o1.createAt;
                 });
                 this.idOfferLiveUpdate = res.data.data._id;

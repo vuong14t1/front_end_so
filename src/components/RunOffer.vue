@@ -6,13 +6,13 @@
         <p class="has-text-centered	"><strong> Tạo lịch chạy OfferLive </strong></p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Object</p>
-          <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" class="column"
+          <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" :type="1" class="column"
             :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq + '_' + objectChoosen.nameObject" :items="dataListObject">
             OBJECT_{{objectChoosen.seq}}_{{objectChoosen.nameObject}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Offer</p>
-          <Dropdown @clicked="onClickChooseOffer" v-if="offerChoosen" class="column" :id="offerChoosen._id"
+          <Dropdown @clicked="onClickChooseOffer" v-if="offerChoosen" class="column" :type="2" :id="offerChoosen._id"
             :title="'OFFER_' + offerChoosen.seq + '_' + offerChoosen.nameOffer" :items="dataListOffers"> OFFER_{{offerChoosen.seq}}_{{offerChoosen.nameOffer}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">

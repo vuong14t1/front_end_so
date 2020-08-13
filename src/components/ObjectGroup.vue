@@ -25,6 +25,7 @@
         <div class="has-text-centered mt-5 ">
           <button class="button is-primary mt-100" @click="createObject()">Tạo</button>
         </div>
+        
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> {{isShowDetail ? 'Xem Object ': 'Cập nhật Object'}} </strong> </p>

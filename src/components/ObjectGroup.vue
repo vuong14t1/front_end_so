@@ -153,10 +153,11 @@
           <nav class="column is-full pagination is-small" role="navigation" aria-label="pagination">
             <ul class="pagination-list">
               <!-- <li v-for="i in totalPageUser" v-bind:key=i> -->
-                <button class="button is-small " :class="curPageUser == 1? 'is-disable' : 'is-primary'"  @click=" getDataUserByPage(curPageUser - 1)"> pre </button>
-                <a class="pagination-link is-current "
-                  >{{curPageUser}}</a>
-                <button class="button is-small"  :class="curPageUser == totalPageUser ? 'is-disable' : 'is-primary'" @click="getDataUserByPage(curPageUser + 1)"> next </button>
+              <button class="button is-small is-primary" v-if="curPageUser > 1"
+                @click=" getDataUserByPage(curPageUser - 1)"> pre </button>
+              <a class="pagination-link is-current ">{{curPageUser}}</a>
+              <button class="button is-small is-primary" v-if="curPageUser < totalPageUser"
+                @click="getDataUserByPage(curPageUser + 1)"> next </button>
               <!-- </li> -->
               <li> Tổng trang: {{totalPageUser}} </li>
             </ul>
@@ -209,6 +210,9 @@
         this.isShowUpdate = true;
         this.beforUpdateObject(this.propObjectDetail);
         this.isShowDetail = true;
+        this.totalData.push(this.propObjectDetail);
+        this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
+        this.dataListObject = this.paginationObject.getDataByPage(1);
       }
     },
     props: ['propObjectDetail'],
@@ -226,7 +230,9 @@
       }
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id
-      this.getDataListObject();
+      if (!this.propObjectDetail) {
+        this.getDataListObject();
+      }
     },
 
     data() {
@@ -326,8 +332,8 @@
           if (i == 'channelPayment') {
             options[i].value = options[i].listItems[0].title
           } else {
-            options[i].from = 0;//options[i].listItems[0].title.split('-')[0];
-            options[i].to = 0;//options[i].listItems[0].title.split('-')[1];
+            options[i].from = 0; //options[i].listItems[0].title.split('-')[0];
+            options[i].to = 0; //options[i].listItems[0].title.split('-')[1];
           }
 
           options[i].isModify = false;
@@ -416,7 +422,7 @@
               this.notiState = "danger";
               return;
             }
-            if(res.data.errorCode == ERROR_CODE.EXIST) {
+            if (res.data.errorCode == ERROR_CODE.EXIST) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Tên Nhóm Object đã tồn tại!";
               this.notiState = "danger";
@@ -735,8 +741,8 @@
 
           nameObject: this.nameObject
         };
-        if(body.nameObject.trim() == "") {
-            console.log("====  getDataBodyObject");
+        if (body.nameObject.trim() == "") {
+          console.log("====  getDataBodyObject");
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Vui lòng đặt tên hợp lệ!";
           this.notiState = "danger";
@@ -766,8 +772,7 @@
               console.log("validateParamObject ", data[i]);
               return false;
             }
-          } 
-          else if (data[i].from.length == 0 || data[i].from == null || data[i] == null || data[i] == "" || data[i].to
+          } else if (data[i].from.length == 0 || data[i].from == null || data[i] == null || data[i] == "" || data[i].to
             .length == 0 || data[i].to == null) {
             console.log("validateParamObject ", data[i]);
 
@@ -782,7 +787,7 @@
       },
 
       getDataUserByPage(page) {
-        if(page <= 0 || page > this.totalPageUser) return;
+        if (page <= 0 || page > this.totalPageUser) return;
         this.curPageUser = page;
         page = page === undefined ? 0 : page - 1;
         let header = {
@@ -927,8 +932,7 @@
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Thêm User lỗi!.";
               this.notiState = "danger";
-            }
-            else if (res.data.data.ok) {
+            } else if (res.data.data.ok) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Thêm user thành công.";
               this.notiState = "success";

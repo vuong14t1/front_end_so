@@ -48,7 +48,7 @@
               :title="option.listItems[option.value].title" :items="option.listItems">
               {{option.value}}</Dropdown>
           </p>
-          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red" class="icon-asterisk"> * </p>
 
         </form>
         <div class="has-text-centered " v-if="!isViewDetail">
@@ -177,13 +177,18 @@
         this.isShowUpdate = true;
         this.beforeUpdateOffer(this.propOfferDetail);
         this.isViewDetail = true;
+        this.totalData.push(this.propOfferDetail);
+        this.paginationOffer.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE_OFFER);
+        this.dataListOffer = this.paginationOffer.getDataByPage(1)
       }
     },
 
     props: ['propOfferDetail'],
 
     mounted() {
-      this.getDataListOffer();
+      if (!this.propOfferDetail) {
+        this.getDataListOffer();
+      }
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id
     },
@@ -381,13 +386,13 @@
           this.notiState = "danger";
           return null;
         }
-        if(data['GOLD']['value'] < 100000) {
+        if (data['GOLD']['value'] < 100000) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Giá trị GOLD yêu cầu phải lớn hơn 100K";
           this.notiState = "danger";
           return null;
         }
-        if(data['nameOffer']['value'].length > 13) {
+        if (data['nameOffer']['value'].length > 13) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Tên của offer tối đa chỉ 13 kí tự";
           this.notiState = "danger";

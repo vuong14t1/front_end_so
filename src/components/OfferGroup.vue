@@ -1,6 +1,8 @@
 <template>
   <div class="offfer">
     <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <p class="pt-5" style="text-align: center" @click="handleClickShowHistory()"> <strong> <a>
+       {{dataHistory[0] ? 'Cập nhật lúc: ' + moment.unix(dataHistory[0].createAt ).format("MM/DD/YYYY H:mm:ss") : 'Chưa có cập nhật nào'}} </a> </strong></p>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered"><strong> Tạo Offer </strong>   <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
@@ -161,6 +163,26 @@
           <!-- </div> -->
         </div>
       </div>
+      <div v-if="isShowHistory" style="background-color: #42b983;  border-radius:10px;
+            position:absolute; top: 100px; right: 0px !important; float: right; width: 15%; height: 85%; overflow: auto; border: 1px grey radius
+            z-index: 2; text-align: center">
+          <p class="mt-5 title" style="font-size: 20px; color: white; ">Lịch sử chỉnh sửa</p>
+          <div v-for="item in dataHistory" :key="item.time">
+            <section class="accordions ml-4 mt-3 pl-3 pt-2 pb-3" style="backgroundColor: white; width: 90%; text-align: left;  border-radius:10px;">
+            <article class="accordion is-active">
+              <div class="accordion-header toggle">
+              <p> {{ moment.unix(item.createAt).format("MM/DD/YYYY H:mm:ss")}} </p>
+              </div>
+              <div class="accordion-body">
+                <div class="accordion-content">
+                  <p> Account: <strong> {{item.author}} </strong> </p>
+              <p>{{item.msg}} </p>
+                </div>
+              </div>
+            </article>
+          </section>
+          </div>
+        </div>
     </div>
     <Modal :isVisible.sync="modalAlert_isVisible" :title="modalAlert_title" :cbApprove="modalAlert_cbApprove"
       :cbCancle="modalAlert_cbCancle"></Modal>
@@ -183,7 +205,7 @@
   import Utils from '../Utility/Utils';
   import moment from 'moment';
   import GAME from '../const/game_const';
-
+  import HISTORY_TAB from '../const/history_action_const';
 
 
   export default {
@@ -215,6 +237,8 @@
       }
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id
+        
+      this.getDataHistory();
     },
 
     data() {
@@ -252,6 +276,8 @@
         OBJECT_CONST: OBJECT_CONST,
         listItemTypeToChoose: this.getListItemTypeToChoose(),
         isViewDetail: false,
+        dataHistory: Array(),
+        isShowHistory: false
       }
     },
     methods: {
@@ -691,6 +717,48 @@
         this.isShowUpdate = true;
         this.beforeUpdateOffer(offer);
         this.isViewDetail = true;
+      },
+
+      getDataHistory() {
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId(),
+            tab: HISTORY_TAB.OFFER
+          }
+        };
+        APICaller.get(
+          "history_action_route/list",
+          header,
+          function (res) {
+            console.log( "history_action_route/list", res);
+            if (!res.data.errorCode == ERROR_CODE.SUCCESS) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Lấy lịch sử bị lỗi!.";
+              this.notiState = "danger";
+            } else  {
+              this.dataHistory = res.data.data.sort(function(o1, o2){
+                return o2.createAt - o1.createAt;
+              });
+            }
+          }.bind(this),
+          function (error) {
+            console.log('group_objects/list_user ==== error', error);
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
+        )
+      },
+
+      handleClickShowHistory(){
+        this.isShowHistory = ! this.isShowHistory;
+        this.getDataHistory();
       }
     }
 

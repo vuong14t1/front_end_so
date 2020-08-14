@@ -1,6 +1,8 @@
 <template>
   <div>
     <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <p class="pt-5" style="text-align: center" @click="handleClickShowHistory()"> <strong> <a>
+       {{dataHistory[0] ? 'Cập nhật lúc: ' + moment.unix(dataHistory[0].createAt ).format("MM/DD/YYYY H:mm:ss") : 'Chưa có cập nhật nào'}} </a> </strong></p>
     <div style="width: 98%;float: left">
       <!-- <p class="title has-text-centered mt-100" style="width: 100%;  height: 0px;float: left"></p> -->
       <button @click="filterAccount()" class="button is-primary mb-2" style="float: right">Tìm kiếm</button>
@@ -25,7 +27,7 @@
             <td> {{AccountRole[account.role].title}}
             </td>
             <td><button class="button is-primary" @click="update(account)">Cập nhật </button></td>
-            <td><button class="button is-danger" @click="deleteAccount(account._id)"> Xóa </button></td>
+            <td><button class="button is-danger" @click="deleteAccount(account)"> Xóa </button></td>
           </tr>
         </tbody>
       </table>
@@ -111,6 +113,26 @@
         </footer>
       </div>
     </div>
+     <div v-if="isShowHistory" style="background-color: #42b983;  border-radius:10px;
+            position:absolute; top: 130px; right: 0px !important; float: right; width: 15%; height: 85%; overflow: auto; border: 1px grey radius
+            z-index: 2; text-align: center">
+          <p class="mt-5 title" style="font-size: 20px; color: white; ">Lịch sử chỉnh sửa</p>
+          <div v-for="item in dataHistory" :key="item.time">
+            <section class="accordions ml-4 mt-3 pl-3 pt-2 pb-3" style="backgroundColor: white; width: 90%; text-align: left;  border-radius:10px;">
+            <article class="accordion is-active">
+              <div class="accordion-header toggle">
+              <p> {{ moment.unix(item.createAt).format("MM/DD/YYYY H:mm:ss")}} </p>
+              </div>
+              <div class="accordion-body">
+                <div class="accordion-content">
+                  <p> Account: <strong> {{item.author}} </strong> </p>
+              <p>{{item.msg}} </p>
+                </div>
+              </div>
+            </article>
+          </section>
+          </div>
+        </div>
     <Modal :isVisible.sync="modalAlert_isVisible" :title="modalAlert_title" :cbApprove="modalAlert_cbApprove"
       :cbCancle="modalAlert_cbCancle"></Modal>
   </div>
@@ -129,7 +151,11 @@
   import Modal from './Modal';
   import Notification from './Notification';
   import ERROR_CODE from '../const/error_code';
+  import HISTORY_TAB, {
+    ACCOUNT
+  } from '../const/history_action_const';
   var md5 = require('md5');
+  import moment from 'moment';
 
   export default {
     name: 'ManageAccount',
@@ -158,7 +184,10 @@
         staticListAccount: Array(),
         role: 2,
         search: '',
-        accountUpdate: Object()
+        accountUpdate: Object(),
+        dataHistory: Array(),
+        isShowHistory: false,
+        moment: moment
       }
     },
 
@@ -170,6 +199,7 @@
       this.handleFinishCreateOrUpdate();
       this.getListAccounts();
       this.accountCreated.role = 2;
+      this.getDataHistory();
     },
 
     methods: {
@@ -288,9 +318,9 @@
         this.updateDataModalAlert("Bạn có muốn cập nhật?", updateAccountCB.bind(this));
       },
 
-      deleteAccount(idAccount) {
+      deleteAccount(account) {
         this.modalAlert_isVisible = true;
-        console.log("deleteAccount ", idAccount);
+        console.log("deleteAccount ", account);
         var deleteAccountCallBack = function () {
           this.modalAlert_isVisible = false;
           let header = {
@@ -303,7 +333,8 @@
           };
 
           let body = {
-            idAccount: idAccount
+            idAccount: account._id,
+            email: account.email
           }
 
           APICaller.post(
@@ -315,7 +346,7 @@
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Xóa thành công!";
                 this.notiState = "success";
-                this.listAccount.splice(this.listAccount.findIndex(v => v._id == idAccount), 1);
+                this.listAccount.splice(this.listAccount.findIndex(v => v._id == account._id), 1);
                 this.handleFinishCreateOrUpdate();
               } else {
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
@@ -444,6 +475,48 @@
             return item.email.toLowerCase().indexOf(this.search.toLowerCase()) > -1
           }
         })
+      },
+
+       getDataHistory() {
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId(),
+            tab: HISTORY_TAB.ACCOUNT
+          }
+        };
+        APICaller.get(
+          "history_action_route/list",
+          header,
+          function (res) {
+            console.log( "history_action_route/list", res);
+            if (!res.data.errorCode == ERROR_CODE.SUCCESS) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Lấy lịch sử bị lỗi!.";
+              this.notiState = "danger";
+            } else  {
+              this.dataHistory = res.data.data.sort(function(o1, o2){
+                return o2.createAt - o1.createAt;
+              });
+            }
+          }.bind(this),
+          function (error) {
+            console.log('group_objects/list_user ==== error', error);
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
+        )
+      },
+
+       handleClickShowHistory(){
+        this.isShowHistory = ! this.isShowHistory;
+        this.getDataHistory();
       }
     },
 

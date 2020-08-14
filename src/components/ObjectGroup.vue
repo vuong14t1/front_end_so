@@ -1,21 +1,24 @@
 <template>
   <div class="is-fullwidth">
-    <Navigation class="is-fullwidth" :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
+    <Navigation class="is-fullwidth" :isVisible="isVisibleNoti" :text="notiText" :state="notiState" ></Navigation>
+    <p class="pt-5" style="text-align: center" @click="handleClickShowHistory()"> <strong> <a>
+       {{dataHistory[0] ? 'Cập nhật lúc: ' + moment.unix(dataHistory[0].createAt ).format("MM/DD/YYYY H:mm:ss") : 'Chưa có cập nhật nào'}} </a> </strong></p>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3 " v-if="!isShowUpdate && isCanCreate" style=" border:1px solid Grey;">
-        <p class="has-text-centered	"> <strong> Tạo Object </strong>    <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
+        <p class="has-text-centered	"> <strong> Tạo Object </strong> <span class="f"
+            style="float: right; text-align: center;color: red"> * required</span> </p>
         <div class="columns mt-5 ml-0 has-text-centered" style="width: 100%; border:1px solid Grey;font-size: 15px"
           v-for="option in options" :key="option.title">
           <p class="column ">{{option.title}}</p>
           <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :id="option.idOption"
-            :title="option.value" :items="option.listItems" :type="option.idOption" :object="option" >{{option.value}}
+            :title="option.value" :items="option.listItems" :type="option.idOption" :object="option">{{option.value}}
           </Dropdown>
           <input type="number"
             style="width: 100px; height: 50px; text-align: center; border: none;border-left:1px solid Grey;"
-           v-if="!option.isMultiChoice" v-model="option.from">
+            v-if="!option.isMultiChoice" v-model="option.from">
           <input type="number"
             style="width: 100px; height: 50px;text-align: center; border: none;border-left:1px solid Grey;"
-          v-if="!option.isMultiChoice" v-model="option.to">
+            v-if="!option.isMultiChoice" v-model="option.to">
           <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"></p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">Tên Object:
@@ -25,19 +28,20 @@
         <div class="has-text-centered mt-5 ">
           <button class="button is-primary mt-100" @click="createObject()">Tạo</button>
         </div>
-        
+
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered	"><strong> {{isShowDetail ? 'Xem Object ': 'Cập nhật Object'}} </strong>   <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
+        <p class="has-text-centered	"><strong> {{isShowDetail ? 'Xem Object ': 'Cập nhật Object'}} </strong> <span
+            class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <p class="column ">{{option.title}}</p>
           <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :object="option"
-            :id="option.idOption" :title="option.value"  :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
+            :id="option.idOption" :title="option.value" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
             :items="option.listItems">{{option.value}}</Dropdown>
           <input type="number"
             style="width: 100px; height: 70px; text-align: center;border: none;border-left:1px solid Grey;"
-           v-if="!option.isMultiChoice" v-model="option.from">
+            v-if="!option.isMultiChoice" v-model="option.from">
           <input type="number"
             style="width: 100px; height: 70px;text-align: center;border: none;border-left:1px solid Grey;"
             v-if="!option.isMultiChoice" v-model="option.to">
@@ -55,7 +59,7 @@
         </div>
       </div>
       <div class="column ml-2 rows" :class="isCanCreate ? 'is-9' : 'is-12'" style="border:1px solid Grey;">
-        <div class="row is-full" v-if="!isShowUser">
+        <div class="row is-full" v-if="!isShowUser" style="float: left">
           <div class="has-text-centered">
             <span><strong> Danh sách các OBJECTS </strong> </span>
             <button @click="filterObject()" class="button is-primary is-small mr-0 mb-2" style="float: right">Tìm
@@ -170,7 +174,29 @@
             </form>
           </div> -->
         </div>
+        <div v-if="isShowHistory" style="background-color: #42b983;  border-radius:10px;
+            position:absolute; top: 100px; right: 0px !important; float: right; width: 15%; height: 85%; overflow: auto; border: 1px grey radius
+            z-index: 2; text-align: center">
+          <p class="mt-5 title" style="font-size: 20px; color: white; ">Lịch sử chỉnh sửa</p>
+          <div v-for="item in dataHistory" :key="item.time">
+            <section class="accordions ml-4 mt-3 pl-3 pt-2 pb-3" style="backgroundColor: white; width: 90%; text-align: left;  border-radius:10px;">
+            <article class="accordion is-active">
+              <div class="accordion-header toggle">
+              <p> {{ moment.unix(item.createAt).format("MM/DD/YYYY H:mm:ss")}} </p>
+              </div>
+              <div class="accordion-body">
+                <div class="accordion-content">
+                  <p> Account: <strong> {{item.author}} </strong> </p>
+              <p>{{item.msg}} </p>
+                </div>
+              </div>
+            </article>
+          </section>
+          </div>
+        </div>
+
       </div>
+
     </div>
     <Modal :isVisible.sync="modalAlert_isVisible" :title="modalAlert_title" :cbApprove="modalAlert_cbApprove"
       :cbCancle="modalAlert_cbCancle"></Modal>
@@ -194,6 +220,8 @@
   import Modal from './Modal';
   import Utils from '../Utility/Utils';
   import GAME from '../const/game_const';
+  import HISTORY_TAB from '../const/history_action_const';
+
 
   export default {
     name: 'ObjectGroup',
@@ -201,9 +229,7 @@
       Dropdown,
       Navigation,
       Modal,
-
     },
-
 
     created() {
       if (this.propObjectDetail) {
@@ -233,6 +259,17 @@
       if (!this.propObjectDetail) {
         this.getDataListObject();
       }
+      
+      // for (let i = 0; i < 10; i++) {
+      //   let o = {
+      //     createAt: Math.round(+new Date() / 1000 - Math.random(100, 5000)),
+      //     author: 'fdsfds',
+      //     msg: "asdsadhdsfds"
+      //   };
+      //   this.dataHistory.push(o);
+      // }
+      // console.log("dataHistory ", this.dataHistory);
+      this.getDataHistory();
     },
 
     data() {
@@ -277,7 +314,9 @@
         objectUpdate: Object(),
         objectDetail: Object(),
         isShowDetail: false,
-        idUserAdded: ''
+        idUserAdded: '',
+        dataHistory: Array(),
+        isShowHistory: false
       }
     },
 
@@ -438,8 +477,6 @@
               "group_objects/list_user",
               header,
               function (res) {
-                console.log('==== lisst user ', this.dataObjectCreating);
-                // this.dataObjectCreating.totalCurrentUser = this.dataObjectCreating.totalUser;
                 this.totalData.unshift(this.dataObjectCreating);
                 this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
                 this.dataListObject = this.paginationObject.getDataByPage(1);
@@ -451,7 +488,6 @@
                   return;
                 }
                 this.dataUsersByCreatingObject = res.data.data;
-                console.log('dataUsersByCreatingObject ', this.dataObjectCreating.totalUser);
                 var channel = CHANNEL_PAYMENT[GameData.getGameId()][body.channelPayment + ''];
                 for (let u in this.dataUsersByCreatingObject) {
                   this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
@@ -462,7 +498,6 @@
                     channel].cost;
                 }
                 this.totalPageUser = Math.ceil(this.dataObjectCreating.totalUser / OBJECT_CONST.PAGE.NUM_PER_PAGE);
-                console.log("totalPageUser ", this.totalPageUser);
                 this.isShowUser = true;
                 this.isVisibleNoti = Math.round(+new Date() / 1000);
                 this.notiText = "Tạo thành công!";
@@ -528,20 +563,21 @@
 
       clearDataObjectCreating() {
         this.dataUsersByCreatingObject = [],
-        this.dataObjectCreating = null;
+          this.dataObjectCreating = null;
         this.nameObject = '';
         this.totalPageUser = 0;
         this.isShowUser = false;
         this.isShowDetail = false;
-        console.log("=clearDataObjectCreating ", this.optionsUpdate);
+        console.log("=clearDataObjectCreating ", this.options);
       },
 
       beforUpdateObject(object) {
+        console.log("beforUpdateObject1 ", this.optionsUpdate)
         this.idObjectUpdate = -9999;
         this.isShowDetail = false;
         this.cancleUpdate();
         this.objectUpdate = JSON.parse(JSON.stringify(object));
-        console.log("beforUpdateObject ", this.objectUpdate)
+        // console.log("beforUpdateObject ", this.objectUpdate)
         this.nameObject = object.nameObject;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
@@ -560,6 +596,7 @@
             this.optionsUpdate[i].value = object[i];
           }
         }
+        console.log("beforUpdateObject2 ", this.options)
       },
 
       beforDeleteObject(object) {
@@ -954,6 +991,48 @@
             this.notiState = c;
           }.bind(this)
         )
+      },
+
+      getDataHistory() {
+        let header = {
+          headers: {
+            "content-type": "application/json",
+            "access-control-allow-origin": "*"
+          },
+          params: {
+            gameId: GameData.getGameId(),
+            tab: HISTORY_TAB.OBJECT
+          }
+        };
+        APICaller.get(
+          "history_action_route/list",
+          header,
+          function (res) {
+            console.log( "history_action_route/list", res);
+            if (!res.data.errorCode == ERROR_CODE.SUCCESS) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Lấy lịch sử bị lỗi!.";
+              this.notiState = "danger";
+            } else  {
+              this.dataHistory = res.data.data.sort(function(o1, o2){
+                return o2.createAt - o1.createAt;
+              });
+            }
+          }.bind(this),
+          function (error) {
+            console.log('group_objects/list_user ==== error', error);
+          },
+          function (a, b, c) {
+            this.isVisibleNoti = a;
+            this.notiText = b;
+            this.notiState = c;
+          }.bind(this)
+        )
+      },
+
+       handleClickShowHistory(){
+        this.isShowHistory = ! this.isShowHistory;
+        this.getDataHistory();
       }
 
     }

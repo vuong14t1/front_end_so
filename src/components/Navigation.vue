@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class=" buttons" style="width: 80%; float: left">
+    <div class=" buttons" style="width: 70%; float: left">
       <router-link class="button mt-5 ml-5" v-for="routes in links" v-bind:key="routes.id" :to="`${routes.page}`"
         :class="[!routes.isVisible ?'is-hidden':'', '/' + $route.name == routes.page?'is-info' :' is-focused']">
         <p>{{routes.text}} </p>

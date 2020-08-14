@@ -1,6 +1,6 @@
 <template>
-  <div class="menu-item" style="border:1px solid Grey;" @click="clickDropDown">
-    <a class=" mt-0 " style="font-size: 15px; text-decoration: none; ">
+  <div class="menu-item" style="border:1px solid Grey;" >
+    <a class=" mt-0 " style="font-size: 15px; text-decoration: none; " @click="clickDropDown">
       {{ titleName}}
       <i class="fa icon-arrow fa-arrow-circle-down fa-lg mybutton" :class="nameClassIcon" style="float: right"
         aria-hidden="true"></i>
@@ -9,7 +9,7 @@
       class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
       <div style="z-index: 100; width: 100%;  float: left; text-lign: center;" v-for="(item, i) in items" :key="i"
         class="menu-item  has-text-centered mr-6" :class="type == OBJECT_CONST.DROP_DOWN.LOGIN? '' : ' mt-1 pt-1'">
-        <a style="z-index: 100;height:40px; text-decoration: none; backgroundColor: azure" :class="'item_' + id + '_' +  item.id" class="input item-input item-chosen ml-0 mt-0"
+        <a style="z-index: 100;height:40px; text-decoration: none;" :class="'item_' + id + '_' +  item.id" class="input item-input item-chosen ml-0 mt-0"
           @click="onClickButton(item)">{{ item.title}}</a>
       </div>
     </div>
@@ -82,7 +82,17 @@
            })
       },
 
+      updateUI(){
+        for(let i in this.items){
+          console.log("updateUI ", $('.item_' + this.id + "_" + this.items[i].id))
+          $('.item_' + this.id + "_" + this.items[i].id).css({
+             backgroundColor: this.items[i].chosen == true ? '#3366cc' : 'azure'
+           })
+        }
+      },
+
       clickDropDown() {
+        console.log("=clickDropDown ", this.items)
         if (this.isOpen) {
           $('.' + this.type).css({
             '-webkit-transform': 'rotate(0deg)',
@@ -92,6 +102,8 @@
             'transform': 'rotate(0deg)',
           });
         } else {
+                  this.updateUI();
+
           $('.' + this.type).css({
             '-webkit-transform': 'rotate(180deg)',
             '-moz-transform': 'rotate(180deg)',
@@ -100,11 +112,11 @@
             'transform': 'rotate(180deg)',
           });
         }
-        if (this.object && this.object.isMultiChoice) {
+        // if (this.object && this.object.isMultiChoice) {
 
-        } else {
+        // } else {
           this.isOpen = !this.isOpen;
-        }
+        // }
         if (this.items == null || this.items.length <= 0) {
           console.log("khong co lua chon");
           alert("Không có lựa chọn nào!");

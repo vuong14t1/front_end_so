@@ -8,7 +8,7 @@
           v-for="option in options" :key="option.title">
           <p class="column ">{{option.title}}</p>
           <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :id="option.idOption"
-            :title="option.value" :items="option.listItems" :object="option" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}
+            :title="option.value" :items="option.listItems" :type="option.idOption" :object="option" >{{option.value}}
           </Dropdown>
           <input type="number"
             style="width: 100px; height: 50px; text-align: center; border: none;border-left:1px solid Grey;"
@@ -85,7 +85,7 @@
                 <td>{{object.totalCost.from}} - {{object.totalCost.to}}</td>
                 <td>{{object.numberPay.from}} - {{object.numberPay.to}}</td>
                 <td>{{object.totalGame.from}} - {{object.totalGame.to}}</td>
-                <td>{{object.lastPaidPack.from}} - {{object.lastPaidPack.to}}</td>
+                <td>{{object.lastPaidPack}}</td>
                 <td>{{timeUtil.convertDuration(object.age.from)}} - {{timeUtil.convertDuration(object.age.to)}}</td>
                 <td>{{timeUtil.convertDuration(object.timeLastOnline.from)}} -
                   {{timeUtil.convertDuration(object.timeLastOnline.to)}}</td>
@@ -372,6 +372,7 @@
             });
             this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
             this.dataListObject = this.paginationObject.getDataByPage(1);
+            console.log("voday ", this.dataListObject);
           }.bind(this),
           function (error) {
             console.log("aaaa", error);
@@ -527,20 +528,20 @@
 
       clearDataObjectCreating() {
         this.dataUsersByCreatingObject = [],
-          this.dataObjectCreating = null;
+        this.dataObjectCreating = null;
         this.nameObject = '';
         this.totalPageUser = 0;
         this.isShowUser = false;
         this.isShowDetail = false;
+        console.log("=clearDataObjectCreating ", this.optionsUpdate);
       },
 
       beforUpdateObject(object) {
         this.idObjectUpdate = -9999;
         this.isShowDetail = false;
-        console.log("beforUpdateObject ", this.idObjectUpdate)
         this.cancleUpdate();
-        this.objectUpdate = object;
-        // this.idObjectUpdate = object._id;
+        this.objectUpdate = JSON.parse(JSON.stringify(object));
+        console.log("beforUpdateObject ", this.objectUpdate)
         this.nameObject = object.nameObject;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
@@ -574,7 +575,8 @@
         }
 
         if (body.dataModify == null) return;
-
+        console.log("sendUpdateObject1 ", body.dataModify);
+        console.log("sendUpdateObject2 ", this.objectUpdate);
         if (!Utils.checkDuplicateData(body.dataModify, this.objectUpdate)) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Dữ liệu cập nhật không đổi";

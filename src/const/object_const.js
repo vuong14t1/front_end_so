@@ -11,7 +11,7 @@ var OBJECT_CONST = {
   },
 
   DROP_DOWN: {
-    LOGIN: 0,
+    LOGIN: 9999,
     OBJECT: 1,
     OFFER: 2,
     OFFER_LIVE: 3,

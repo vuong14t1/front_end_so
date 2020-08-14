@@ -129,9 +129,7 @@
           <table class="table is-bordered is-fullwidth has-text-centered mt-3" style="font-size: 15px">
             <thead style="backgroundColor: #3298dc">
               <th>UID</th>
-              <th>Kênh nạp</th>
-              <th>Số tiền đã nạp</th>
-              <th>Số lần nạp</th>
+              <th v-for="item in dataObjectCreating.channelPayment" :key="item">Kênh {{item}}</th>
               <th>Số ván chơi</th>
               <th>Gói mua gần nhất(MMK)</th>
               <th>Thời gian tạo</th>
@@ -143,9 +141,9 @@
             <tbody>
               <tr v-for="object in dataUsersByCreatingObject" :key="object._id">
                 <td>{{object.userId}}</td>
-                <td>{{object.channel}}</td>
-                <td>{{object.totalCost}}</td>
-                <td>{{object.numberPay}}</td>
+                <td v-for="item in object.detailPayment.split('|')" :key="item">
+              <p v-for="line in item.split('-')" :key="line">{{line}}</p>
+                 </td>
                 <td>{{object.totalGame}}</td>
                 <td>{{object.lastPaidPack}}</td>
                 <td>{{moment.unix(object.timeCreateAccount).format("MM/DD/YYYY H:mm:ss")}}</td>
@@ -855,15 +853,15 @@
               return;
             }
             this.dataUsersByCreatingObject = res.data.data;
-            console.log('dataUsersByCreatingObject ', this.dataUsersByCreatingObject);
             var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
             for (let u in this.dataUsersByCreatingObject) {
-              this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
-                channel].channel;
-              this.dataUsersByCreatingObject[u].numberPay = this.dataUsersByCreatingObject[u].channelPayment[
-                channel].number;
-              this.dataUsersByCreatingObject[u].totalCost = this.dataUsersByCreatingObject[u].channelPayment[
-                channel].cost;
+              this.dataUsersByCreatingObject[u].detailPayment = "";
+              for(let c in this.dataObjectCreating.channelPayment){
+                var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment[c] + ''];
+                  this.dataUsersByCreatingObject[u].detailPayment += 
+                  ' Số lần mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel + ''].number + '- Số tiền mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel].cost + '|'
+              }
+               this.dataUsersByCreatingObject[u].detailPayment =  this.dataUsersByCreatingObject[u].detailPayment.substring(0,  this.dataUsersByCreatingObject[u].detailPayment.length - 1);
             }
             this.isShowUser = true;
           }.bind(this),

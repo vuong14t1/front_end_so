@@ -7,13 +7,13 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Object</p>
           <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" :type="1" class="column"
-            :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq + '_' + objectChoosen.nameObject" :items="dataListObject">
+            :id="objectChoosen._id" :title="objectChoosen.nameObject ? ('OBJECT_' + objectChoosen.seq + '_' + objectChoosen.nameObject) : 'Không có'" :items="dataListObject">
             OBJECT_{{objectChoosen.seq}}_{{objectChoosen.nameObject}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Offer</p>
           <Dropdown @clicked="onClickChooseOffer" v-if="offerChoosen" class="column" :type="2" :id="offerChoosen._id"
-            :title="'OFFER_' + offerChoosen.seq + '_' + offerChoosen.nameOffer" :items="dataListOffers"> OFFER_{{offerChoosen.seq}}_{{offerChoosen.nameOffer}} </Dropdown>
+            :title="offerChoosen.nameOffer ? ('OFFER_' + offerChoosen.seq + '_' + offerChoosen.nameOffer) : 'Không có'" :items="dataListOffers"> OFFER_{{offerChoosen.seq}}_{{offerChoosen.nameOffer}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Thời gian bắt đầu</p>

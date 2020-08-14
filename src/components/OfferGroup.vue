@@ -96,8 +96,8 @@
             <div class="mt-4">Tên Offer: <br> <strong> {{options.nameOffer.value}}</strong> </div>
             <div class="rotated">Giá trị Khuyến mãi
               <strong>
-                {{Math.round((parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title)
-                   - options.promotionCost.value)/parseInt(jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title) * 100)}}
+                {{options.originalCost.value == 0 ? " " :  Math.round((parseInt(options.originalCost.value - jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title)
+                   )/parseInt(options.originalCost.value) * 100)}}
                 % </strong> </div>
           </div>
           <div class="row columns is-full has-text-centered" style="text-align: center">
@@ -111,9 +111,9 @@
             <div class="column is-5">
               <p style="height: 180px; text-align: center"> Mô tả: <br> <strong> {{options.description.value}} </strong>
               </p>
-              <div>Giá bán: <strong> {{options.promotionCost.value}} </strong> </div>
+              <div>Giá bán: <strong> {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} </strong> </div>
               <p>Giá gốc: <strong><del>
-                    {{jsonConfig.OfferGroup.originalCost.listItem[options.originalCost.value].title}} </del> </strong>
+                    {{options.originalCost.value }} </del> </strong>
               </p>
             </div>
             <div class="column is-3">
@@ -333,7 +333,7 @@
         let body = new Object();
         console.log("data raw ", data);
         for (var i in data) {
-          if (i == 'originalCost') {
+          if (i == 'promotionCost') {
             body[i] = data[i].listItem[data[i].value].title;
           } else {
             body[i] = data[i].value;
@@ -364,8 +364,8 @@
         this.offerUpdate = offer;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
-          if (i == 'originalCost') {
-            this.optionsUpdate[i].value = this.jsonConfig.OfferGroup.originalCost.listItems.findIndex(v => parseInt(v
+          if (i == 'promotionCost') {
+            this.optionsUpdate[i].value = this.jsonConfig.OfferGroup.promotionCost.listItems.findIndex(v => parseInt(v
               .title) == parseInt(offer[i]));
           } else {
             this.optionsUpdate[i].value = offer[i];

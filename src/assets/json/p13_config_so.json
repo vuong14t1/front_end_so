@@ -215,14 +215,14 @@
       "idOption": 2
     },
 
-    "promotionCost": {
-      "title": "Giá",
+    "originalCost": {
+      "title": "Giá gốc",
       "idOption": 3
     },
 
-    "originalCost": {
+    "promotionCost": {
       "idOption": 4,
-      "title": "Giá gốc",
+      "title": "Giá",
       "listItem": {
         "0": {
           "id": 100,

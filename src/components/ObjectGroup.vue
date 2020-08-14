@@ -153,10 +153,13 @@
           </table>
           <nav class="column is-full pagination is-small" role="navigation" aria-label="pagination">
             <ul class="pagination-list">
-              <li v-for="i in totalPageUser" v-bind:key=i>
-                <a class="pagination-link" :class="[i == curPageUser ?'is-current':'']"
-                  @click="getDataUserByPage(i)">{{i}}</a>
-              </li>
+              <!-- <li v-for="i in totalPageUser" v-bind:key=i> -->
+                <button class="button is-small " :class="curPageUser == 1? 'is-disable' : 'is-primary'"  @click=" getDataUserByPage(curPageUser - 1)"> pre </button>
+                <a class="pagination-link is-current "
+                  >{{curPageUser}}</a>
+                <button class="button is-small"  :class="curPageUser == totalPageUser ? 'is-disable' : 'is-primary'" @click="getDataUserByPage(curPageUser + 1)"> next </button>
+              <!-- </li> -->
+              <li> Tổng trang: {{totalPageUser}} </li>
             </ul>
           </nav>
           <div class="button is-primary" style="float: right" @click="clearDataObjectCreating()"> OK </div>
@@ -324,8 +327,8 @@
           if (i == 'channelPayment') {
             options[i].value = options[i].listItems[0].title
           } else {
-            options[i].from = options[i].listItems[0].title.split('-')[0];
-            options[i].to = options[i].listItems[0].title.split('-')[1];
+            options[i].from = 0;//options[i].listItems[0].title.split('-')[0];
+            options[i].to = 0;//options[i].listItems[0].title.split('-')[1];
           }
 
           options[i].isModify = false;
@@ -770,7 +773,7 @@
             console.log("validateParamObject ", data[i]);
 
             return false;
-          } else if (parseInt(data[i].from) >= parseInt(data[i].to)) {
+          } else if (parseInt(data[i].from) > parseInt(data[i].to)) {
             console.log("validateParamObject ", data[i]);
 
             return false;
@@ -780,6 +783,7 @@
       },
 
       getDataUserByPage(page) {
+        if(page <= 0 || page > this.totalPageUser) return;
         this.curPageUser = page;
         page = page === undefined ? 0 : page - 1;
         let header = {

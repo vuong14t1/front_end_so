@@ -3,8 +3,8 @@
     <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered"><strong> Tạo Offer </strong></p>
-        <form class="columns list-item ml-1" style="border:1px solid Grey;font-size: 15px" v-for="option in options"
+        <p class="has-text-centered"><strong> Tạo Offer </strong>   <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
+        <form class="columns list-item ml-1" style=" width: 100%; border:1px solid Grey;font-size: 15px" v-for="option in options"
           :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
@@ -22,14 +22,15 @@
               :title="option.listItems[option.value].title" :items="option.listItems">
               {{option.value}}</Dropdown>
           </p>
-          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> * </p>
+          <p class="astisrik" v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> *</p>
+          
         </form>
         <div class="has-text-centered ">
           <button class="button is-primary" @click="createOffer()">Tạo</button>
         </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong></p>
+        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong>   <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
         <form class="columns list-item ml-1" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <!-- //normal -->
@@ -109,7 +110,7 @@
             </ul>
           </nav>
         </div>
-        <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="isCanCreate"
+        <!-- <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="false"
           style="border:1px solid Grey;">
           <div class="row is-full" style="height=10%"><strong> Demo UI Offer </strong>
             <div class="mt-4">Tên Offer: <br> <strong> {{options.nameOffer.value}}</strong> </div>
@@ -135,6 +136,29 @@
             </div>
 
           </div>
+        </div> -->
+        <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="isCanCreate"
+        >
+          <div class="columns mt-0">
+            <div class="column is-8" style="color: white; text-align: center; font-size: 30px">  {{  options.nameOffer.value.length > 0 ? options.nameOffer.value : 'Tên Offer'}}</div>
+            <div class="column is-4" style="color: white; text-align: center; font-size: 30px"> Time remain</div>
+          </div>
+          <div class="columns mt-0">
+            <div class="column is-1" style="width: 100px; float: left; color: white; text-align: center; font-size: 20px"> 
+                {{options.originalCost.value == 0 ? " SALE" :  Math.round((parseInt(options.originalCost.value - jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title)
+                   )/parseInt(options.originalCost.value) * 100)}}
+                % OFF </div>
+          </div>
+          <!-- <div class="columns mt-0"> -->
+            <div style="color: white; text-align: center; font-size: 30px"> <span><img src="../assets/image/img_so_icon_gold.png" width="30px"/> {{options.GOLD.value.length > 0 ? options.GOLD.value : "Số Vàng"}} 
+             + <img src="../assets/image/img_so_icon_vip.png" width="30px"/> {{options.V_POINT.value.length > 0 ? options.V_POINT.value : "0"}} </span> </div>
+            <div class="ml-5" style="color: white; text-align: center; font-size: 30px">
+              <p style="color: green; text-align: center; font-size: 40px">
+              {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} <span style="color: white; text-align: center; font-size: 30px">  <del>
+                    {{options.originalCost.value.length > 0 ? options.originalCost.value : "Giá gốc"}} </del> </span> </p>
+             </div>
+             <div class="mt-5" style="text-align: center">  <img src="../assets/image/img_so_btn_buy.png" width="120px" height="50px" /> </div>
+          <!-- </div> -->
         </div>
       </div>
     </div>
@@ -714,7 +738,7 @@
   }
 
   .list-offers {
-    height: 100%;
+    height: 50%;
   }
 
   .rotated {
@@ -733,5 +757,25 @@
   p {
     word-break: break-all;
   }
+
+  .tooltiptext {
+    visibility: hidden;
+     width: 150%;
+  }
+
+  .astisrik:hover  .tooltiptext{
+    visibility: visible;
+  }
+
+  .layout-demo {
+   background-image: url("../assets/image/img_so_bg.png");
+   height: 620px;
+   width: 626px;
+   background-repeat: no-repeat
+  }
+  del {
+   text-decoration: line-through;}
+  
+
 
 </style>

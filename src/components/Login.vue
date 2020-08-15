@@ -1,5 +1,5 @@
 <template class="component">
-  <div class="hero component-login">
+  <div class="hero component-login" >
     <Notification :isVisible="isVisibleNoti" :text="notiText" :state="notiState" style="width: 30%; float: left">
     </Notification>
     <div class="hero-body" style="width: 100%;">
@@ -18,7 +18,7 @@
             <div class="field is-centered " style="width:100%;">
               <label class="label">Email</label>
               <p class="control has-icons-left has-icons-right">
-                <input v-model="email" name="email" class="input" type="text" placeholder="Email">
+                <input v-model="email" name="email" class="input" type="text" placeholder="Email"  @keydown.enter="doLogin()">
                 <span class="icon is-small is-left">
                   <i class="fas fa-envelope"></i>
                 </span>
@@ -27,7 +27,7 @@
             <div class="field" style="width:100%;">
               <label class="label">Password:</label>
               <p class="control has-icons-left">
-                <input v-model="password" name="password" class="input" type="password" placeholder="Password">
+                <input v-model="password" name="password" class="input" type="password" placeholder="Password"  @keydown.enter="doLogin()">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>
@@ -109,6 +109,8 @@
 
     methods: {
       doLogin() {
+        console.log("===doLogin")
+        if(this.email.length == 0 || this.password.length == 0) return;
         let header = {
           headers: {
             "content-type": "application/json",

@@ -1,8 +1,9 @@
 <template>
   <div class="is-fullwidth">
-    <Navigation class="is-fullwidth" :isVisible="isVisibleNoti" :text="notiText" :state="notiState" ></Navigation>
+    <Navigation class="is-fullwidth" :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <p class="pt-5" style="text-align: center" @click="handleClickShowHistory()"> <strong> <a>
-       {{dataHistory[0] ? 'Cập nhật lúc: ' + moment.unix(dataHistory[0].createAt ).format("MM/DD/YYYY H:mm:ss") : 'Chưa có cập nhật nào'}} </a> </strong></p>
+          {{dataHistory[0] ? 'Cập nhật lúc: ' + moment.unix(dataHistory[0].createAt ).format("MM/DD/YYYY H:mm:ss") : 'Chưa có cập nhật nào'}}
+        </a> </strong></p>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3 " v-if="!isShowUpdate && isCanCreate" style=" border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Tạo Object </strong> <span class="f"
@@ -141,9 +142,9 @@
             <tbody>
               <tr v-for="object in dataUsersByCreatingObject" :key="object._id">
                 <td>{{object.userId}}</td>
-                <td v-for="item in object.detailPayment.split('|')" :key="item">
-              <p v-for="line in item.split('-')" :key="line">{{line}}</p>
-                 </td>
+                <td v-for="(item, index) in object.detailPayment.split('|')" :key="index">
+                  <p v-for="(value, index) in item.split('-')" :key="index">{{value}}</p>
+                </td>
                 <td>{{object.totalGame}}</td>
                 <td>{{object.lastPaidPack}}</td>
                 <td>{{moment.unix(object.timeCreateAccount).format("MM/DD/YYYY H:mm:ss")}}</td>
@@ -177,19 +178,20 @@
             z-index: 2; text-align: center">
           <p class="mt-5 title" style="font-size: 20px; color: white; ">Lịch sử chỉnh sửa</p>
           <div v-for="item in dataHistory" :key="item.time">
-            <section class="accordions ml-4 mt-3 pl-3 pt-2 pb-3" style="backgroundColor: white; width: 90%; text-align: left;  border-radius:10px;">
-            <article class="accordion is-active">
-              <div class="accordion-header toggle">
-              <p> {{ moment.unix(item.createAt).format("MM/DD/YYYY H:mm:ss")}} </p>
-              </div>
-              <div class="accordion-body">
-                <div class="accordion-content">
-                  <p> Account: <strong> {{item.author}} </strong> </p>
-              <p>{{item.msg}} </p>
+            <section class="accordions ml-4 mt-3 pl-3 pt-2 pb-3"
+              style="backgroundColor: white; width: 90%; text-align: left;  border-radius:10px;">
+              <article class="accordion is-active">
+                <div class="accordion-header toggle">
+                  <p> {{ moment.unix(item.createAt).format("MM/DD/YYYY H:mm:ss")}} </p>
                 </div>
-              </div>
-            </article>
-          </section>
+                <div class="accordion-body">
+                  <div class="accordion-content">
+                    <p> Account: <strong> {{item.author}} </strong> </p>
+                    <p>{{item.msg}} </p>
+                  </div>
+                </div>
+              </article>
+            </section>
           </div>
         </div>
 
@@ -257,7 +259,7 @@
       if (!this.propObjectDetail) {
         this.getDataListObject();
       }
-      
+
       // for (let i = 0; i < 10; i++) {
       //   let o = {
       //     createAt: Math.round(+new Date() / 1000 - Math.random(100, 5000)),
@@ -468,44 +470,51 @@
               return;
             }
 
-            header.params = Object.assign(header.params, {
-              idGroupObject: this.dataObjectCreating._id
-            });
-            APICaller.get(
-              "group_objects/list_user",
-              header,
-              function (res) {
-                this.totalData.unshift(this.dataObjectCreating);
-                this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
-                this.dataListObject = this.paginationObject.getDataByPage(1);
-                if (res.data.errorCode == ERROR_CODE.EMPTY) {
-                  this.isVisibleNoti = Math.round(+new Date() / 1000);
-                  this.notiText = "Không có user nào!";
-                  this.notiState = "danger";
-                  this.clearDataObjectCreating();
-                  return;
-                }
-                this.dataUsersByCreatingObject = res.data.data;
-                var channel = CHANNEL_PAYMENT[GameData.getGameId()][body.channelPayment + ''];
-                for (let u in this.dataUsersByCreatingObject) {
-                  this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
-                    channel].channel;
-                  this.dataUsersByCreatingObject[u].numberPay = this.dataUsersByCreatingObject[u].channelPayment[
-                    channel].number;
-                  this.dataUsersByCreatingObject[u].totalCost = this.dataUsersByCreatingObject[u].channelPayment[
-                    channel].cost;
-                }
-                this.totalPageUser = Math.ceil(this.dataObjectCreating.totalUser / OBJECT_CONST.PAGE.NUM_PER_PAGE);
-                this.isShowUser = true;
-                this.isVisibleNoti = Math.round(+new Date() / 1000);
-                this.notiText = "Tạo thành công!";
-                this.notiState = "success";
-                // this.clearDataObjectCreating();
-              }.bind(this),
-              function (error) {
-                console.log('group_objects/list_user ==== error', error);
-              }
-            )
+            this.totalData.unshift(this.dataObjectCreating);
+            this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
+            this.dataListObject = this.paginationObject.getDataByPage(1);
+            this.isVisibleNoti = Math.round(+new Date() / 1000);
+            this.notiText = "Tạo thành công!";
+            this.notiState = "success";
+
+            // header.params = Object.assign(header.params, {
+            //   idGroupObject: this.dataObjectCreating._id
+            // });
+            // APICaller.get(
+            //   "group_objects/list_user",
+            //   header,
+            //   function (res) {
+            //     this.totalData.unshift(this.dataObjectCreating);
+            //     this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
+            //     this.dataListObject = this.paginationObject.getDataByPage(1);
+            //     if (res.data.errorCode == ERROR_CODE.EMPTY) {
+            //       this.isVisibleNoti = Math.round(+new Date() / 1000);
+            //       this.notiText = "Không có user nào!";
+            //       this.notiState = "danger";
+            //       this.clearDataObjectCreating();
+            //       return;
+            //     }
+            //     this.dataUsersByCreatingObject = res.data.data;
+            //     var channel = CHANNEL_PAYMENT[GameData.getGameId()][body.channelPayment + ''];
+            //     for (let u in this.dataUsersByCreatingObject) {
+            //       this.dataUsersByCreatingObject[u].channel = this.dataUsersByCreatingObject[u].channelPayment[
+            //         channel].channel;
+            //       this.dataUsersByCreatingObject[u].numberPay = this.dataUsersByCreatingObject[u].channelPayment[
+            //         channel].number;
+            //       this.dataUsersByCreatingObject[u].totalCost = this.dataUsersByCreatingObject[u].channelPayment[
+            //         channel].cost;
+            //     }
+            //     this.totalPageUser = Math.ceil(this.dataObjectCreating.totalUser / OBJECT_CONST.PAGE.NUM_PER_PAGE);
+            //     this.isShowUser = false;
+            //     this.isVisibleNoti = Math.round(+new Date() / 1000);
+            //     this.notiText = "Tạo thành công!";
+            //     this.notiState = "success";
+            //     // this.clearDataObjectCreating();
+            //   }.bind(this),
+            //   function (error) {
+            //     console.log('group_objects/list_user ==== error', error);
+            //   }
+            // )
 
 
           }.bind(this),
@@ -856,13 +865,19 @@
             var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
             for (let u in this.dataUsersByCreatingObject) {
               this.dataUsersByCreatingObject[u].detailPayment = "";
-              for(let c in this.dataObjectCreating.channelPayment){
+              for (let c in this.dataObjectCreating.channelPayment) {
                 var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment[c] + ''];
-                  this.dataUsersByCreatingObject[u].detailPayment += 
-                  ' Số lần mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel + ''].number + '- Số tiền mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel].cost + '|'
+                this.dataUsersByCreatingObject[u].detailPayment +=
+                  ' Số lần mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel + ''].number +
+                  '- Số tiền mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel].cost + '|'
               }
-               this.dataUsersByCreatingObject[u].detailPayment =  this.dataUsersByCreatingObject[u].detailPayment.substring(0,  this.dataUsersByCreatingObject[u].detailPayment.length - 1);
+              this.dataUsersByCreatingObject[u].detailPayment = this.dataUsersByCreatingObject[u].detailPayment
+                .substring(0, this.dataUsersByCreatingObject[u].detailPayment.length - 1);
             }
+
+
+
+
             this.isShowUser = true;
           }.bind(this),
           function (error) {
@@ -909,15 +924,20 @@
               return;
             }
             let dataUserByCreatingObject = res.data.data;
-            var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment + ''];
-            dataUserByCreatingObject.channel = dataUserByCreatingObject.channelPayment[
-              channel].channel;
-            dataUserByCreatingObject.numberPay = dataUserByCreatingObject.channelPayment[
-              channel].number;
-            dataUserByCreatingObject.totalCost = dataUserByCreatingObject.channelPayment[
-              channel].cost;
             this.dataUsersByCreatingObject = [];
             this.dataUsersByCreatingObject.push(dataUserByCreatingObject);
+            for (let u in this.dataUsersByCreatingObject) {
+              console.log("voday ", u);
+              this.dataUsersByCreatingObject[u].detailPayment = "";
+              for (let c in this.dataObjectCreating.channelPayment) {
+                var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment[c] + ''];
+                this.dataUsersByCreatingObject[u].detailPayment +=
+                  ' Số lần mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel + ''].number +
+                  '- Số tiền mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel].cost + '|'
+              }
+              this.dataUsersByCreatingObject[u].detailPayment = this.dataUsersByCreatingObject[u].detailPayment
+                .substring(0, this.dataUsersByCreatingObject[u].detailPayment.length - 1);
+            }
             this.isShowUser = true;
           }.bind(this),
           function (error) {
@@ -1006,13 +1026,13 @@
           "history_action_route/list",
           header,
           function (res) {
-            console.log( "history_action_route/list", res);
+            console.log("history_action_route/list", res);
             if (!res.data.errorCode == ERROR_CODE.SUCCESS) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Lấy lịch sử bị lỗi!.";
               this.notiState = "danger";
-            } else  {
-              this.dataHistory = res.data.data.sort(function(o1, o2){
+            } else {
+              this.dataHistory = res.data.data.sort(function (o1, o2) {
                 return o2.createAt - o1.createAt;
               });
             }
@@ -1028,8 +1048,8 @@
         )
       },
 
-       handleClickShowHistory(){
-        this.isShowHistory = ! this.isShowHistory;
+      handleClickShowHistory() {
+        this.isShowHistory = !this.isShowHistory;
         this.getDataHistory();
       }
 

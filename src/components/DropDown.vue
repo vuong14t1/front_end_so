@@ -1,15 +1,19 @@
 <template>
   <div class="menu-item" style="border:1px solid Grey;" >
-    <a class=" mt-0 " style="font-size: 15px; text-decoration: none; " @click="clickDropDown">
+    <div  @click="clickDropDown">
+      <a class=" mt-0 " style="font-size: 15px; text-decoration: none; ">
       {{ titleName}}
       <i class="fa icon-arrow fa-arrow-circle-down fa-lg mybutton" :class="nameClassIcon" style="float: right"
         aria-hidden="true"></i>
     </a>
-    <div style="z-index: 100; width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;"
+    </div>
+    
+    <div style="width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;"
       class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
       <div style="z-index: 100; width: 100%;  float: left; text-lign: center;" v-for="(item, i) in items" :key="i"
         class="menu-item  has-text-centered mr-6" :class="type == OBJECT_CONST.DROP_DOWN.LOGIN? '' : ' mt-1 pt-1'">
-        <a style="z-index: 100;height:40px; text-decoration: none;" :class="'item_' + id + '_' +  item.id" class="input item-input item-chosen ml-0 mt-0"
+        <a style="height:40px; text-decoration: none;" :class="'item_' + id + '_' +  item.id" class="input item-input item-chosen ml-0 mt-0"
+         :style="[type == OBJECT_CONST.DROP_DOWN.LOGIN ? {zIndex: 100} : {zIndex: 0}]"
           @click="onClickButton(item)">{{ item.title}}</a>
       </div>
     </div>
@@ -65,6 +69,7 @@
         }
         item.idOption = this.id;
         this.titleName = item.title;
+        this.isOpen = ! this.isOpen
         this.$emit('clicked', item)
       },
 
@@ -84,7 +89,6 @@
 
       updateUI(){
         for(let i in this.items){
-          console.log("updateUI ", $('.item_' + this.id + "_" + this.items[i].id))
           $('.item_' + this.id + "_" + this.items[i].id).css({
              backgroundColor: this.items[i].chosen == true ? '#3366cc' : 'azure'
            })

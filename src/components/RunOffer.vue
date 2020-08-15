@@ -78,7 +78,9 @@
             <thead style="backgroundColor: #3298dc">
               <th>ID OfferLive</th>
               <th>ID Offer</th>
+              <th>Tên Offer</th>
               <th>ID Object</th>
+              <th>Tên Object</th>
               <th>Thời gian bắt đầu</th>
               <th>Thời gian kết thúc</th>
               <th>Thời gian tạo</th>
@@ -92,8 +94,10 @@
                  offerLive._id == idOfferLiveUpdate ?
                    {backgroundColor: '#497059'}:  { backgroundColor : '#azure'} :  { backgroundColor: '#D3D3D3'} ]">
                 <td @click="viewDetail(offerLive._id)"> <a> {{offerLive._id}} </a></td>
-                <td>{{offerLive.groupOffer? 'OFFER_' + offerLive.groupOffer.seq : 'Không có'}}</td>
-                <td>{{offerLive.groupObject? 'OBJECT_' + offerLive.groupObject.seq : 'Không có'}}</td>
+                <td @click="viewDetailLinkedGroupOffer(offerLive.groupOffer)"><a> {{offerLive.groupOffer? 'OFFER_' + offerLive.groupOffer.seq : 'Không có'}} </a></td>
+                <td>{{offerLive.groupOffer? offerLive.groupOffer.nameOffer : 'Không có'}}</td>
+                <td @click="viewDetailLinkedGroupObject(offerLive.groupObject)"><a> {{offerLive.groupObject? 'OBJECT_' + offerLive.groupObject.seq : 'Không có'}} </a></td>
+                <td>{{offerLive.groupObject? offerLive.groupObject.nameObject : 'Không có'}}</td>
                 <td>{{ moment.unix(offerLive.timeStart).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td>{{ moment.unix(offerLive.timeFinish).format("MM/DD/YYYY H:mm:ss")}}</td>
                 <td>{{ moment.unix(offerLive.createAt).format("MM/DD/YYYY H:mm:ss")}}</td>

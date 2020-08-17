@@ -298,7 +298,7 @@
           function (res) {
             console.log('SUCCESS!!', res);
             this.isVisibleNoti = Math.round(+new Date() / 1000);
-            this.notiText = "Tạo thành công: " + res.data.data.checkSuccess + " | Thất  bại: " + res.data.data.checkFail;
+            this.notiText = "Tạo thành công ";
             this.notiState = "success";
           }.bind(this),
           function (error) {

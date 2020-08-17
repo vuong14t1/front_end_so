@@ -208,14 +208,14 @@
       "isRequired": true,
       "type": "items",
       "title": "GOLD",
-      "idOption": 3
+      "idOption": 1
     },
 
     "VIP": {
       "isRequired": false,
       "type": "items",
       "title": "VIP",
-      "idOption": 4
+      "idOption": 2
     },
 
     "originalCost": {

@@ -16,7 +16,9 @@ var OBJECT_CONST = {
     OFFER: 2,
     OFFER_LIVE: 3,
     ROLE: 4,
-    OBJECT_UPDATE: 5
+    OBJECT_UPDATE: 5,
+    RUN_OFFER_OBJECT: 6,
+    RUN_OFFER_OFFER: 7
   }
 };
 

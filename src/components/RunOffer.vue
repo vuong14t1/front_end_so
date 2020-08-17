@@ -7,13 +7,13 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Object</p>
           <Dropdown @clicked="onClickChooseObject" v-if="objectChoosen" :object="objectChoosen" class="column"
-            :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq" :items="dataListObject">
+            :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq" :items="dataListObject" :type='OBJECT_CONST.DROP_DOWN.RUN_OFFER_OBJECT'>
             OBJECT_{{objectChoosen.seq}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Offer</p>
           <Dropdown @clicked="onClickChooseOffer" v-if="offerChoosen" class="column" :id="offerChoosen._id"
-            :title="'OFFER_' + offerChoosen.seq" :items="dataListOffers"> OFFER_{{offerChoosen.seq}} </Dropdown>
+            :title="'OFFER_' + offerChoosen.seq" :items="dataListOffers" :type='OBJECT_CONST.DROP_DOWN.RUN_OFFER_OFFER'> OFFER_{{offerChoosen.seq}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Thời gian bắt đầu</p>
@@ -37,13 +37,13 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Tên Object</p>
           <Dropdown v-if="objectChoosen" class="column" :object='objectChoosen' @clicked="onClickChooseObject"
-            :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq" :items="dataListObject">
+            :id="objectChoosen._id" :title="'OBJECT_' + objectChoosen.seq" :items="dataListObject" :type='OBJECT_CONST.DROP_DOWN.RUN_OFFER_OBJECT'>
             OBJECT_{{objectChoosen.seq}}</Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">ID Offer</p>
           <Dropdown v-if="offerChoosen" class="column" @clicked="onClickChooseOffer" :id="offerChoosen._id"
-            :title="'OFFER_' + offerChoosen.seq " :items="dataListOffers"> OFFER_{{offerChoosen.seq}} </Dropdown>
+            :title="'OFFER_' + offerChoosen.seq " :items="dataListOffers" :type='OBJECT_CONST.DROP_DOWN.RUN_OFFER_OFFER' > OFFER_{{offerChoosen.seq}} </Dropdown>
         </div>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;">
           <p class="column">Thời gian tạo</p>
@@ -171,6 +171,7 @@
     Datetime
   } from 'vue-datetime'
   import 'vue-datetime/dist/vue-datetime.css'
+  import OBJECT_CONST from '../const/object_const';
 
 
   export default {
@@ -233,7 +234,8 @@
         isShowDetail: false,
         idOfferLiveUpdate: '',
         listItemTypeToChoose: this.getListItemTypeToChoose(),
-        timeServer: ""
+        timeServer: "",
+        OBJECT_CONST: OBJECT_CONST
       }
     },
 
@@ -292,7 +294,7 @@
             for (let i in this.dataListOffers) {
               this.dataListOffers[i].title = "OFFER_" + this.dataListOffers[i].seq;
             }
-            console.log("list group object " + JSON.stringify(this.dataListOffers));
+            // console.log("list group object " + JSON.stringify(this.dataListOffers));
           }.bind(this),
 
           function (error) {
@@ -319,7 +321,7 @@
           "offer_lives/list",
           header,
           function (res) {
-            console.log("list offer live " + JSON.stringify(res.data.data));
+            // console.log("list offer live " + JSON.stringify(res.data.data));
             this.dataListOffersLive = this.sortOffer(res.data.data);
           }.bind(this),
 

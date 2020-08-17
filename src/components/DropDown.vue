@@ -1,8 +1,8 @@
 <template>
   <div class="menu-item" style="border:1px solid Grey;" @click="clickDropDown">
     <a class=" mt-0 " style="font-size: 15px; text-decoration: none; ">
-      {{ titleName }}
-      <i class="fa icon-arrow fa-arrow-circle-down fa-lg" style="float: right" aria-hidden="true"></i>
+      {{ titleName}}
+      <i class="fa icon-arrow fa-arrow-circle-down fa-lg mybutton" :class="nameClassIcon" style="float: right" aria-hidden="true"></i>
     </a>
     <div style="z-index: 100; width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;"
       class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
@@ -19,7 +19,7 @@
   import OBJECT_CONST from '../const/object_const';
   import TimeUtil from '../Utility/TimeUtility';
   import lodash from 'lodash';
-
+  import $ from 'jquery'
   export default {
     name: 'dropdown',
     props: ['id', 'title', 'items', 'type', 'object', 'notiText', 'isVisibleNoti'],
@@ -28,6 +28,12 @@
         this.convertTimeData();
       }
       this.titleName = this.title;
+    },
+    
+    computed: {
+      nameClassIcon(){
+          return this.type + ""
+      }
     },
 
     mounted() {
@@ -39,7 +45,7 @@
       return {
         isOpen: false,
         titleName: "",
-        OBJECT_CONST: OBJECT_CONST
+        OBJECT_CONST: OBJECT_CONST,
       }
     },
     methods: {
@@ -51,9 +57,8 @@
       },
 
       clickDropDown() {
-        console.log("clickDropDown ");
         if (this.isOpen) {
-          $('.fa-arrow-circle-down').css({
+          $('.' + this.type).css({
             '-webkit-transform': 'rotate(0deg)',
             '-moz-transform': 'rotate(0deg)',
             '-ms-transform': 'rotate(0deg)',
@@ -61,7 +66,7 @@
             'transform': 'rotate(0deg)',
           });
         } else {
-          $('.fa-arrow-circle-down').css({
+          $('.' + this.type).css({
             '-webkit-transform': 'rotate(180deg)',
             '-moz-transform': 'rotate(180deg)',
             '-ms-transform': 'rotate(180deg)',

@@ -2,20 +2,20 @@
   <div class="is-fullwidth">
     <Navigation class="is-fullwidth" :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <div class="columns" style="width: 98%;float: left">
-      <div class="column is-3 ml-2" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
+      <div class="column is-3 " v-if="!isShowUpdate && isCanCreate" style=" border:1px solid Grey;">
         <p class="has-text-centered	"> <strong> Tạo Object </strong>    <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
-        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
+        <div class="columns mt-5 ml-0 has-text-centered" style="width: 100%; border:1px solid Grey;font-size: 15px"
           v-for="option in options" :key="option.title">
           <p class="column ">{{option.title}}</p>
-          <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :id="option.idOption"
-            :title="option.value" :items="option.listItems" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}
+          <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :id="option.idOption"
+            :title="option.value" :items="option.listItems" :object="option" :type="OBJECT_CONST.DROP_DOWN.OBJECT">{{option.value}}
           </Dropdown>
           <input type="number"
             style="width: 100px; height: 50px; text-align: center; border: none;border-left:1px solid Grey;"
-            v-if="option.idOption != 0" v-model="option.from">
+           v-if="!option.isMultiChoice" v-model="option.from">
           <input type="number"
             style="width: 100px; height: 50px;text-align: center; border: none;border-left:1px solid Grey;"
-            v-if="option.idOption != 0" v-model="option.to">
+          v-if="!option.isMultiChoice" v-model="option.to">
           <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"></p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">Tên Object:
@@ -32,15 +32,15 @@
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <p class="column ">{{option.title}}</p>
-          <Dropdown v-if="option.idOption == 0" class="column" @clicked="onClickChild" :object="option"
-            :id="option.idOption" :title="option.value" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
+          <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :object="option"
+            :id="option.idOption" :title="option.value"  :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
             :items="option.listItems">{{option.value}}</Dropdown>
           <input type="number"
             style="width: 100px; height: 70px; text-align: center;border: none;border-left:1px solid Grey;"
-            v-if="option.idOption != 0" v-model="option.from">
+           v-if="!option.isMultiChoice" v-model="option.from">
           <input type="number"
             style="width: 100px; height: 70px;text-align: center;border: none;border-left:1px solid Grey;"
-            v-if="option.idOption != 0" v-model="option.to">
+            v-if="!option.isMultiChoice" v-model="option.to">
           <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"></p>
         </div>
         <div class="ml-50" style="text-align: center; width: 100%; height: 50px">NameObject:
@@ -409,6 +409,7 @@
         };
 
         let body = this.getDataBodyObject(true);
+        console.log("body ", JSON.stringify(body))
         if (body == null) return;
         APICaller.post(
           "group_objects/create",
@@ -722,10 +723,11 @@
             from: parseInt(data.numberPay.from),
             to: parseInt(data.numberPay.to)
           },
-          lastPaidPack: {
-            from: parseInt(data.lastPaidPack.from),
-            to: parseInt(data.lastPaidPack.to)
-          },
+          // lastPaidPack: {
+          //   from: parseInt(data.lastPaidPack.from),
+          //   to: parseInt(data.lastPaidPack.to)
+          // },
+          lastPaidPack: data.lastPaidPack.value,
           age: {
             from: parseInt(data.age.from) * OBJECT_CONST.TIME.DAY,
             to: parseInt(data.age.to) * OBJECT_CONST.TIME.DAY,

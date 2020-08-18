@@ -653,7 +653,11 @@
               }
               options[i].listItems.push(object);
             }
-            options[i].value = options[i].listItems[1].id;
+            if(options[i].isMultiChoice){
+              options[i].value = [];
+            }else{
+              options[i].value = options[i].listItems[1].id;
+            }
           }
         }
 

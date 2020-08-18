@@ -2,13 +2,14 @@
   <div class="menu-item" style="border:1px solid Grey;" @click="clickDropDown">
     <a class=" mt-0 " style="font-size: 15px; text-decoration: none; ">
       {{ titleName}}
-      <i class="fa icon-arrow fa-arrow-circle-down fa-lg mybutton" :class="nameClassIcon" style="float: right" aria-hidden="true"></i>
+      <i class="fa icon-arrow fa-arrow-circle-down fa-lg mybutton" :class="nameClassIcon" style="float: right"
+        aria-hidden="true"></i>
     </a>
     <div style="z-index: 100; width: 100%; left:50%; right:50%;overflow: hidden; margin-right:20px;"
       class="sub-menu mr-6 mt-1 is-focus" v-if="isOpen">
-      <div style="z-index: 100; width: 100%;  float: left;" v-for="(item, i) in items" :key="i"
+      <div style="z-index: 100; width: 100%;  float: left; text-lign: center;" v-for="(item, i) in items" :key="i"
         class="menu-item  has-text-centered mr-6" :class="type == OBJECT_CONST.DROP_DOWN.LOGIN? '' : ' mt-1 pt-1'">
-        <a style="z-index: 100;height:40px; text-decoration: none; " class="input item-input ml-0 mt-0"
+        <a style="z-index: 100;height:40px; text-decoration: none; backgroundColor: azure" :class="'item_' + id + '_' +  item.id" class="input item-input item-chosen ml-0 mt-0"
           @click="onClickButton(item)">{{ item.title}}</a>
       </div>
     </div>
@@ -29,10 +30,10 @@
       }
       this.titleName = this.title;
     },
-    
+
     computed: {
-      nameClassIcon(){
-          return this.type + ""
+      nameClassIcon() {
+        return this.type + ""
       }
     },
 
@@ -41,19 +42,44 @@
       this.convertTimeData();
     },
 
+    created() {
+      if (this.object && this.object.isMultiChoice) {
+        this.isOpen = true;
+        this.object.value = new Array();
+      }
+    },
+
     data() {
       return {
         isOpen: false,
         titleName: "",
         OBJECT_CONST: OBJECT_CONST,
+        isMultiChoice: false
       }
     },
     methods: {
       onClickButton(item) {
+        if (this.object && this.object.isMultiChoice) {
+          this.onClickMultiItem(item);
+          return;
+        }
         item.idOption = this.id;
         this.titleName = item.title;
         this.$emit('clicked', item)
+      },
 
+      onClickMultiItem(item) {
+        let foundExistItem = this.object.value.findIndex(v => v == item.title);
+        if (foundExistItem == -1) {
+          this.object.value.push(item.title);
+          item.chosen = true;
+        } else {
+          this.object.value.splice(foundExistItem, 1);
+          item.chosen = false;
+        }
+         $('.item_' + this.id + "_" + item.id).css({
+             backgroundColor: item.chosen == true ? '#3366cc' : 'azure'
+           })
       },
 
       clickDropDown() {
@@ -74,7 +100,11 @@
             'transform': 'rotate(180deg)',
           });
         }
-        this.isOpen = !this.isOpen;
+        if (this.object && this.object.isMultiChoice) {
+
+        } else {
+          this.isOpen = !this.isOpen;
+        }
         if (this.items == null || this.items.length <= 0) {
           console.log("khong co lua chon");
           alert("Không có lựa chọn nào!");

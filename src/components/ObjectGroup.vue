@@ -11,7 +11,7 @@
         <div class="columns mt-5 ml-0 has-text-centered" style="width: 100%; border:1px solid Grey;font-size: 15px"
           v-for="option in options" :key="option.title">
           <p class="column ">{{option.title}}</p>
-          <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :id="option.idOption"
+          <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :id="option.idOption" 
             :title="option.value" :items="option.listItems" :type="option.idOption" :object="option">{{option.value}}
           </Dropdown>
           <input type="number"
@@ -38,7 +38,7 @@
           v-for="option in optionsUpdate " :key="option.title">
           <p class="column ">{{option.title}}</p>
           <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :object="option"
-            :id="option.idOption" :title="option.valuex" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
+            :id="option.idOption" :title="option.valuex" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE" :isWatchDetail="isShowDetail"
             :items="option.listItems">{{option.valuex}}</Dropdown>
           <!-- <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :id="option.idOption"
             :title="option.value" :items="option.listItems" :type="option.idOption" :object="option">{{option.value}}

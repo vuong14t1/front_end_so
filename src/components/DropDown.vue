@@ -27,7 +27,7 @@
   import $ from 'jquery'
   export default {
     name: 'dropdown',
-    props: ['id', 'title', 'items', 'type', 'object', 'notiText', 'isVisibleNoti'],
+    props: ['id', 'title', 'items', 'type', 'object', 'notiText', 'isVisibleNoti', 'isWatchDetail'],
     updated() {
       if (this.type == OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE) {
         this.convertTimeData();
@@ -64,6 +64,7 @@
     methods: {
       onClickButton(item) {
         if (this.object && this.object.isMultiChoice) {
+          if(this.isWatchDetail) return;
           this.onClickMultiItem(item);
           return;
         }

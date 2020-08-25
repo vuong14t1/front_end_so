@@ -68,9 +68,10 @@
     watch: {
       isVisible: function () {
         this.isActive = true;
+        $('html,body').animate({scrollTop:0},800);
         setTimeout(function () {
           this.isActive = false
-        }.bind(this), 2000);
+        }.bind(this), 2500);
       }
     },
 

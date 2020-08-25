@@ -74,14 +74,26 @@
       },
 
       onClickMultiItem(item) {
-        let foundExistItem = this.object.value.findIndex(v => v == item.title);
-        if (foundExistItem == -1) {
-          this.object.value.push(item.title);
-          item.chosen = true;
-        } else {
-          this.object.value.splice(foundExistItem, 1);
-          item.chosen = false;
+        if(this.type == OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE){
+          let foundExistItem = this.object.valuex.findIndex(v => v == item.title);
+          if (foundExistItem == -1) {
+            this.object.valuex.push(item.title);
+            item.chosen = true;
+          } else {
+            this.object.valuex.splice(foundExistItem, 1);
+            item.chosen = false;
+          }
+        }else{
+          let foundExistItem = this.object.value.findIndex(v => v == item.title);
+          if (foundExistItem == -1) {
+            this.object.value.push(item.title);
+            item.chosen = true;
+          } else {
+            this.object.value.splice(foundExistItem, 1);
+            item.chosen = false;
+          }
         }
+        
          $('.item_' + this.id + "_" + item.id).css({
              backgroundColor: item.chosen == true ? '#3366cc' : 'azure'
            })

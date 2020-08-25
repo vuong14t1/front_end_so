@@ -35,11 +35,14 @@
         <p class="has-text-centered	"><strong> {{isShowDetail ? 'Xem Object ': 'Cập nhật Object'}} </strong> <span
             class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
         <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
-          v-for="option in optionsUpdate" :key="option.title">
+          v-for="option in optionsUpdate " :key="option.title">
           <p class="column ">{{option.title}}</p>
           <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :object="option"
-            :id="option.idOption" :title="option.value" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
-            :items="option.listItems">{{option.value}}</Dropdown>
+            :id="option.idOption" :title="option.valuex" :type="OBJECT_CONST.DROP_DOWN.OBJECT_UPDATE"
+            :items="option.listItems">{{option.valuex}}</Dropdown>
+          <!-- <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :id="option.idOption"
+            :title="option.value" :items="option.listItems" :type="option.idOption" :object="option">{{option.value}}
+          </Dropdown> -->
           <input type="number"
             style="width: 100px; height: 70px; text-align: center;border: none;border-left:1px solid Grey;"
             v-if="!option.isMultiChoice" v-model="option.from">
@@ -237,6 +240,7 @@
 
     created() {
       if (this.propObjectDetail) {
+        console.log("created ", this.optionsUpdate)
         this.isShowUpdate = true;
         this.beforUpdateObject(this.propObjectDetail);
         this.isShowDetail = true;
@@ -372,8 +376,8 @@
             }
             options[i].listItems.push(object);
           }
-          if (i == 'channelPayment') {
-            options[i].value = options[i].listItems[0].title
+          if (i == 'channelPayment' || i == 'lastPaidPack') {
+            options[i].value = []
           } else {
             options[i].from = 0; //options[i].listItems[0].title.split('-')[0];
             options[i].to = 0; //options[i].listItems[0].title.split('-')[1];
@@ -381,7 +385,6 @@
 
           options[i].isModify = false;
         }
-
         return options;
       },
 
@@ -581,7 +584,7 @@
       },
 
       beforUpdateObject(object) {
-        console.log("beforUpdateObject1 ",this.optionsUpdate.channelPayment.value);
+        console.log("beforUpdateObject1 ",JSON.parse(JSON.stringify(this.optionsUpdate)));
         this.idObjectUpdate = -9999;
         this.isShowDetail = false;
         this.cancleUpdate();
@@ -595,7 +598,6 @@
           }
           this.optionsUpdate[i].isShow = true;
           if (object[i].from != null) {
-            console.log("i ", i);
             if (this.optionsUpdate[i].idOption == 6 || this.optionsUpdate[i].idOption == 5) {
               this.optionsUpdate[i].from = this.timeUtil.convertDuration(object[i].from);
               this.optionsUpdate[i].to = this.timeUtil
@@ -605,15 +607,16 @@
               this.optionsUpdate[i].to = object[i].to;
             }
           } else {
-            console.log("i ",  i);
-            console.log(" this.optionsUpdate[i] ",  typeof(this.optionsUpdate[i].value));
-            this.optionsUpdate[i].value = [];
-             this.optionsUpdate[i].value= ["MOL", "CARD"];
-            // this.optionsUpdate[i].value = object[i].concat();//  JSON.parse(JSON.stringify(object[i]));
-            console.log(" this.optionsUpdate[i]1 ",  this.optionsUpdate[i]);
+            // Object.assign(this.optionsUpdate[i], {value: object[i]});
+            console.log(" this.optionsUpdate[i]3 ", this.optionsUpdate[i].value);
+            this.optionsUpdate[i].value = object[i];
+            this.optionsUpdate[i].valuex = object[i];
+
+            console.log(" this.optionsUpdate[i]4 ", this.optionsUpdate[i].value);
           }
         }
-        console.log("done ", this.optionsUpdate);
+        this.optionsUpdate = JSON.parse(JSON.stringify(this.optionsUpdate))
+        // console.log("done ", JSON.parse(JSON.stringify(this.optionsUpdate)) );
       },
 
       beforDeleteObject(object) {
@@ -621,6 +624,18 @@
         this.objectUpdate = object;
         this.sendDeleteObject();
       },
+
+       _checkDuplicateDataOffer(o1, o2){
+          return JSON.stringify(o1.totalGame) == JSON.stringify(o2.totalGame) &&
+          JSON.stringify(o1.channelPayment) == JSON.stringify(o2.channelPayment) &&
+          JSON.stringify(o1.totalCost) == JSON.stringify(o2.totalCost) &&
+          JSON.stringify(o1.numberPay) == JSON.stringify(o2.numberPay) &&
+          JSON.stringify(o1.lastPaidPack) == JSON.stringify(o2.lastPaidPack) &&
+          JSON.stringify(o1.age) == JSON.stringify(o2.age) &&
+          JSON.stringify(o1.timeLastOnline) == JSON.stringify(o2.timeLastOnline) &&
+          JSON.stringify(o1.channelGame) == JSON.stringify(o2.channelGame) &&
+          JSON.stringify(o1.nameObject) == JSON.stringify(o2.nameObject) ;
+      }, 
 
       sendUpdateObject() {
         let body = {
@@ -631,7 +646,8 @@
         if (body.dataModify == null) return;
         console.log("sendUpdateObject1 ", body.dataModify);
         console.log("sendUpdateObject2 ", this.objectUpdate);
-        if (!Utils.checkDuplicateData(body.dataModify, this.objectUpdate)) {
+        
+        if (this._checkDuplicateDataOffer(body.dataModify, this.objectUpdate)) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Dữ liệu cập nhật không đổi";
           this.notiState = "danger";
@@ -765,12 +781,14 @@
         //   return null;
         // }
 
+        console.log("getDataBodyObject ", this.optionsUpdate)
+
         let body = {
           totalGame: {
             from: parseInt(data.totalGame.from),
             to: parseInt(data.totalGame.to)
           },
-          channelPayment: data.channelPayment.value,
+          channelPayment: isCreate ? data.channelPayment.value : data.channelPayment.valuex,
           totalCost: {
             from: parseInt(data.totalCost.from),
             to: parseInt(data.totalCost.to)
@@ -783,7 +801,7 @@
           //   from: parseInt(data.lastPaidPack.from),
           //   to: parseInt(data.lastPaidPack.to)
           // },
-          lastPaidPack: data.lastPaidPack.value,
+          lastPaidPack: isCreate ? data.lastPaidPack.value : data.lastPaidPack.valuex,
           age: {
             from: parseInt(data.age.from) * OBJECT_CONST.TIME.DAY,
             to: parseInt(data.age.to) * OBJECT_CONST.TIME.DAY,
@@ -804,8 +822,11 @@
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Vui lòng đặt tên hợp lệ!";
           this.notiState = "danger";
+     
           return null;
         }
+                console.log("bodey ", body)
+
         return body;
       },
 

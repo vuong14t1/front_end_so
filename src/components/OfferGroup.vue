@@ -540,6 +540,10 @@
         this.sendDeleteOffer();
       },
 
+      _checkDuplicateDataOffer(o1, o2){
+          return JSON.stringify(o1.items) == JSON.stringify(o2.items) && o1.nameOffer == o2.nameOffer && o1.originalCost == o2.originalCost && o1.promotionCost == o2.promotionCost; 
+      },  
+
       sendUpdateOffer() {
         let body = {
           idOffer: this.offerUpdate._id,
@@ -548,7 +552,7 @@
         console.log("dataModify ", body.dataModify);
         console.log("offerUpdate ", this.offerUpdate);
 
-        if (!Utils.checkDuplicateData(body.dataModify, this.offerUpdate)) {
+        if (this._checkDuplicateDataOffer(this.offerUpdate, body.dataModify)) {
           this.isVisibleNoti = Math.round(+new Date() / 1000);
           this.notiText = "Dữ liệu cập nhật không đổi";
           this.notiState = "danger";
@@ -572,6 +576,7 @@
             header,
             body,
             function (res) {
+              console.log("group_offers/edit", res)
               if (res.data.errorCode == ERROR_CODE.SUCCESS) {
                 this.insertEmptyDataForOffer(res.data.data);
                 this.totalData.splice(this.totalData.findIndex(v => v._id == this.offerUpdate._id), 1);

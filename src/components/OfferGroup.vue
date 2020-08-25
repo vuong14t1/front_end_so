@@ -6,9 +6,9 @@
         </a> </strong></p>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered"><strong> Tạo Offer </strong> <span class="f"
-            style="float: right; text-align: center;color: red"> * bắt buộc</span> </p>
-        <form class="columns list-item ml-1" style=" width: 100%; border:1px solid Grey;font-size: 15px"
+        <p class="has-text-centered"><strong> Tạo Offer </strong>  <span
+            class="f" style="float: right; text-align: center;color: red"> * bắt buộc</span> <p  style="float: right; text-align: center;color: red">để trống = vô cùng</p>
+        <form class="columns list-item ml-1 mr-0" style=" width: 100%; border:1px solid Grey;font-size: 15px"
           v-for="option in options" :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
@@ -36,9 +36,9 @@
         </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong> <span
-            class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
-        <form class="columns list-item ml-1" style="border:1px solid Grey;font-size: 15px"
+        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong>  <span
+            class="f" style="float: right; text-align: center;color: red"> * bắt buộc</span> <p style="float: right; text-align: center;color: red;  height: 0">để trống = vô cùng</p>
+        <form class="columns list-item ml-0 mr-0" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>

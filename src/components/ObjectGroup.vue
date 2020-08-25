@@ -6,8 +6,9 @@
         </a> </strong></p>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3 " v-if="!isShowUpdate && isCanCreate" style=" border:1px solid Grey;">
-        <p class="has-text-centered	"> <strong> Tạo Object </strong> <span class="f"
-            style="float: right; text-align: center;color: red"> * required</span> </p>
+        <p class="has-text-centered	"> <strong> Tạo Object </strong> <span class="f "
+            style="float: right; text-align: center;color: red"> * = bắt buộc</span></p> <p>  <span class="f ml-2 mb-1"
+            style="float: right; text-align: center;color: red"> để trống = vô cùng</span> </p>
         <div class="columns mt-5 ml-0 has-text-centered" style="width: 100%; border:1px solid Grey;font-size: 15px"
           v-for="option in options" :key="option.title">
           <p class="column ">{{option.title}}</p>
@@ -33,8 +34,8 @@
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
         <p class="has-text-centered	"><strong> {{isShowDetail ? 'Xem Object ': 'Cập nhật Object'}} </strong> <span
-            class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
-        <div class="columns mt-5 has-text-centered" style="border:1px solid Grey;font-size: 15px"
+            class="f" style="float: right; text-align: center;color: red"> * bắt buộc</span> <p  style="float: right; text-align: center;color: red">để trống = vô cùng</p>
+        <div class="columns mt-5 has-text-centered ml-0 mr-0" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate " :key="option.title">
           <p class="column ">{{option.title}}</p>
           <Dropdown v-if="option.isMultiChoice" class="column" @clicked="onClickChild" :object="option"

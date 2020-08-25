@@ -1,7 +1,8 @@
 var OBJECT_CONST = {
   PAGE: {
     NUM_PER_PAGE: 10,
-    NUM_PER_PAGE_OFFER: 5
+    NUM_PER_PAGE_OFFER: 5,
+    NUM_PER_PAGE_UID: 20
   },
 
   TIME: {

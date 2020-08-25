@@ -2,16 +2,19 @@
   <div class="offfer">
     <Navigation :isVisible="isVisibleNoti" :text="notiText" :state="notiState"></Navigation>
     <p class="pt-5" style="text-align: center" @click="handleClickShowHistory()"> <strong> <a>
-       {{dataHistory[0] ? 'Cập nhật lúc: ' + moment.unix(dataHistory[0].createAt ).format("MM/DD/YYYY H:mm:ss") : 'Chưa có cập nhật nào'}} </a> </strong></p>
+          {{dataHistory[0] ? 'Cập nhật lúc: ' + moment.unix(dataHistory[0].createAt ).format("MM/DD/YYYY H:mm:ss") : 'Chưa có cập nhật nào'}}
+        </a> </strong></p>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered"><strong> Tạo Offer </strong>   <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
-        <form class="columns list-item ml-1" style=" width: 100%; border:1px solid Grey;font-size: 15px" v-for="option in options"
-          :key="option.title">
+        <p class="has-text-centered"><strong> Tạo Offer </strong> <span class="f"
+            style="float: right; text-align: center;color: red"> * bắt buộc</span> </p>
+        <form class="columns list-item ml-1" style=" width: 100%; border:1px solid Grey;font-size: 15px"
+          v-for="option in options" :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
           <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
-            style=" border: none;border-left:1px solid Grey;">
+            :class="option.maxlength ?'input_offer_' + option.idOption : ''"
+            style=" border: none;border-left:1px solid Grey;" @input="assertMaxChars(option)">
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
@@ -24,21 +27,23 @@
               :title="option.listItems[option.value].title" :items="option.listItems">
               {{option.value}}</Dropdown>
           </p>
-          <p class="astisrik" v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"> *</p>
-          
+          <p class="astisrik" v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red">
+            *</p>
+
         </form>
         <div class="has-text-centered ">
           <button class="button is-primary" @click="createOffer()">Tạo</button>
         </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong>   <span class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
+        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong> <span
+            class="f" style="float: right; text-align: center;color: red"> * required</span> </p>
         <form class="columns list-item ml-1" style="border:1px solid Grey;font-size: 15px"
           v-for="option in optionsUpdate" :key="option.title">
           <!-- //normal -->
           <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
           <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
-            style=" border: none;border-left:1px solid Grey;">
+            style=" border: none;border-left:1px solid Grey;" @input="assertMaxChars(option)">
 
           <div v-if="!option.listItems && option.type" class="column">Loại</div>
           <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
@@ -51,7 +56,8 @@
               :title="option.listItems[option.value].title" :items="option.listItems">
               {{option.value}}</Dropdown>
           </p>
-          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red" class="icon-asterisk"> * </p>
+          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"
+            class="icon-asterisk"> * </p>
 
         </form>
         <div class="has-text-centered " v-if="!isViewDetail">
@@ -139,50 +145,55 @@
 
           </div>
         </div> -->
-        <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="isCanCreate"
-        >
+        <div class="layout-demo rows is-centered is-vcentered has-text-centered" v-if="isCanCreate">
           <div class="columns mt-0">
-            <div class="column is-8" style="color: white; text-align: center; font-size: 30px">  {{  options.nameOffer.value.length > 0 ? options.nameOffer.value : 'Tên Offer'}}</div>
+            <div class="column is-8 offer_demo_name" style="color: white; text-align: center; font-size: 30px">
+              {{  options.nameOffer.value.length > 0 ? options.nameOffer.value : 'Tên Offer'}}</div>
             <div class="column is-4" style="color: white; text-align: center; font-size: 30px"> Time remain</div>
           </div>
           <div class="columns mt-0">
-            <div class="column is-1" style="width: 100px; float: left; color: white; text-align: center; font-size: 20px"> 
-                {{options.originalCost.value == 0 ? " SALE" :  Math.round((parseInt(options.originalCost.value - jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title)
+            <div class="column is-1"
+              style="width: 100px; float: left; color: white; text-align: center; font-size: 20px">
+              {{options.originalCost.value == 0 ? " SALE" :  Math.round((parseInt(options.originalCost.value - jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title)
                    )/parseInt(options.originalCost.value) * 100)}}
-                % OFF </div>
+              % OFF </div>
           </div>
           <!-- <div class="columns mt-0"> -->
-            <div style="color: white; text-align: center; font-size: 30px"> <span><img src="../assets/image/img_so_icon_gold.png" width="30px"/> {{options.GOLD.value.length > 0 ? options.GOLD.value : "Số Vàng"}} 
-             + <img src="../assets/image/img_so_icon_vip.png" width="30px"/> {{options.V_POINT.value.length > 0 ? options.V_POINT.value : "0"}} </span> </div>
-            <div class="ml-5" style="color: white; text-align: center; font-size: 30px">
-              <p style="color: green; text-align: center; font-size: 40px">
-              {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} <span style="color: white; text-align: center; font-size: 30px">  <del>
-                    {{options.originalCost.value.length > 0 ? options.originalCost.value : "Giá gốc"}} </del> </span> </p>
-             </div>
-             <div class="mt-5" style="text-align: center">  <img src="../assets/image/img_so_btn_buy.png" width="120px" height="50px" /> </div>
+          <div style="color: white; text-align: center; font-size: 30px"> <span><img
+                src="../assets/image/img_so_icon_gold.png" width="30px" /> {{options.GOLD.value}}
+              + <img src="../assets/image/img_so_icon_vip.png" width="30px" /> {{ options.V_POINT.value}} </span> </div>
+          <div class="ml-5" style="color: white; text-align: center; font-size: 30px">
+            <p style="color: green; text-align: center; font-size: 40px">
+              {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} <span
+                style="color: white; text-align: center; font-size: 30px"> <del>
+                  {{options.originalCost.value.length > 0 ? options.originalCost.value : "Giá gốc"}} </del> </span> </p>
+          </div>
+          <div class="mt-5" style="text-align: center"> <img src="../assets/image/img_so_btn_buy.png" width="120px"
+              height="50px" /> </div>
           <!-- </div> -->
         </div>
       </div>
       <div v-if="isShowHistory" style="background-color: #42b983;  border-radius:10px;
             position:absolute; top: 100px; right: 0px !important; float: right; width: 15%; height: 85%; overflow: auto; border: 1px grey radius
             z-index: 2; text-align: center">
-          <p class="mt-5 title" style="font-size: 20px; color: white; ">Lịch sử chỉnh sửa</p>
-          <div v-for="item in dataHistory" :key="item.time">
-            <section class="accordions ml-4 mt-3 pl-3 pt-2 pb-3" style="backgroundColor: white; width: 90%; text-align: left;  border-radius:10px;">
+        <p class="mt-5 title" style="font-size: 20px; color: white; ">Lịch sử chỉnh sửa</p>
+        <div v-for="item in dataHistory" :key="item.time">
+          <section class="accordions ml-4 mt-3 pl-3 pt-2 pb-3"
+            style="backgroundColor: white; width: 90%; text-align: left;  border-radius:10px;">
             <article class="accordion is-active">
               <div class="accordion-header toggle">
-              <p> {{ moment.unix(item.createAt).format("MM/DD/YYYY H:mm:ss")}} </p>
+                <p> {{ moment.unix(item.createAt).format("MM/DD/YYYY H:mm:ss")}} </p>
               </div>
               <div class="accordion-body">
                 <div class="accordion-content">
                   <p> Account: <strong> {{item.author}} </strong> </p>
-              <p>{{item.msg}} </p>
+                  <p>{{item.msg}} </p>
                 </div>
               </div>
             </article>
           </section>
-          </div>
         </div>
+      </div>
     </div>
     <Modal :isVisible.sync="modalAlert_isVisible" :title="modalAlert_title" :cbApprove="modalAlert_cbApprove"
       :cbCancle="modalAlert_cbCancle"></Modal>
@@ -237,7 +248,7 @@
       }
       this.isCanCreate = GameData.getRoleAccount() == ACCOUNT_ROLE[0].id || GameData.getRoleAccount() == ACCOUNT_ROLE[1]
         .id
-        
+
       this.getDataHistory();
     },
 
@@ -442,12 +453,12 @@
           this.notiState = "danger";
           return null;
         }
-        if (data['nameOffer']['value'].length > 13) {
-          this.isVisibleNoti = Math.round(+new Date() / 1000);
-          this.notiText = "Tên của offer tối đa chỉ 13 kí tự";
-          this.notiState = "danger";
-          return null;
-        }
+        // if (data['nameOffer']['value'].length > 13) {
+        //   this.isVisibleNoti = Math.round(+new Date() / 1000);
+        //   this.notiText = "Tên của offer tối đa chỉ 13 kí tự";
+        //   this.notiState = "danger";
+        //   return null;
+        // }
         let body = new Object();
         console.log("data raw ", data);
         let items = [];
@@ -503,12 +514,24 @@
               .title) == parseInt(offer[i]));
           } else {
             this.optionsUpdate[i].value = offer[i];
+            if (this.optionsUpdate[i].maxlength) {
+              if (this.optionsUpdate[i].value.length >= this.optionsUpdate[i].maxlength / 2) {
+                console.log("doday");
+                $('.input_offer_' + this.optionsUpdate[i].idOption).css({
+                  'font-size': '11px'
+                })
+              }
+            }
           }
           this.optionsUpdate[i].isShow = true;
         }
         for (let i in offer.items) {
           this.optionsUpdate[this.listItemTypeToChoose[offer.items[i].type]].value = offer.items[i].value;
         }
+
+        $('.offer_demo_name').css({
+          'font-size': '20px'
+        })
       },
 
       beforDeleteOffer(offer) {
@@ -679,9 +702,9 @@
               }
               options[i].listItems.push(object);
             }
-            if(options[i].isMultiChoice){
+            if (options[i].isMultiChoice) {
               options[i].value = [];
-            }else{
+            } else {
               options[i].value = options[i].listItems[1].id;
             }
           }
@@ -734,13 +757,13 @@
           "history_action_route/list",
           header,
           function (res) {
-            console.log( "history_action_route/list", res);
+            console.log("history_action_route/list", res);
             if (!res.data.errorCode == ERROR_CODE.SUCCESS) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Lấy lịch sử bị lỗi!.";
               this.notiState = "danger";
-            } else  {
-              this.dataHistory = res.data.data.sort(function(o1, o2){
+            } else {
+              this.dataHistory = res.data.data.sort(function (o1, o2) {
                 return o2.createAt - o1.createAt;
               });
             }
@@ -756,9 +779,24 @@
         )
       },
 
-      handleClickShowHistory(){
-        this.isShowHistory = ! this.isShowHistory;
+      handleClickShowHistory() {
+        this.isShowHistory = !this.isShowHistory;
         this.getDataHistory();
+      },
+
+      assertMaxChars(object) {
+        if (object.maxlength == null || object.maxlength == undefined) return;
+        if (object.value.length >= object.maxlength / 2) {
+          $('.input_offer_' + object.idOption).css({
+            'font-size': '11px'
+          })
+          $('.offer_demo_name').css({
+            'font-size': '20px'
+          })
+        }
+        if (object.value.length >= object.maxlength) {
+          object.value = object.value.substring(0, object.maxlength);
+        }
       }
     }
 
@@ -832,22 +870,22 @@
 
   .tooltiptext {
     visibility: hidden;
-     width: 150%;
+    width: 150%;
   }
 
-  .astisrik:hover  .tooltiptext{
+  .astisrik:hover .tooltiptext {
     visibility: visible;
   }
 
   .layout-demo {
-   background-image: url("../assets/image/img_so_bg.png");
-   height: 620px;
-   width: 626px;
-   background-repeat: no-repeat
+    background-image: url("../assets/image/img_so_bg.png");
+    height: 620px;
+    width: 626px;
+    background-repeat: no-repeat
   }
-  del {
-   text-decoration: line-through;}
-  
 
+  del {
+    text-decoration: line-through;
+  }
 
 </style>

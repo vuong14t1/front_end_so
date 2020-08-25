@@ -212,7 +212,6 @@
 
     mounted() {
       GameData._getTimeServer(function (data) {
-        console.log("time ", data);
         this.timeServer = data
       }.bind(this))
       this.getDataObject();
@@ -286,7 +285,6 @@
             this.dataListObject = res.data.data;
             if (this.dataListObject.length > 0) {
               this.objectChoosen = this.dataListObject[0];
-              console.log("=== objectChoosen ", this.objectChoosen);
             }
             for (let i in this.dataListObject) {
               this.dataListObject[i].title = "OBJECT" + this.dataListObject[i].seq + "_" + this.dataListObject[i].nameObject;
@@ -324,7 +322,6 @@
             for (let i in this.dataListOffers) {
               this.dataListOffers[i].title = "OFFER_" + this.dataListOffers[i].seq + "_" + this.dataListOffers[i].nameOffer;
             }
-            console.log("list group object " + JSON.stringify(this.dataListOffers));
           }.bind(this),
 
           function (error) {
@@ -351,7 +348,6 @@
           "offer_lives/list",
           header,
           function (res) {
-            console.log("list offer live " + JSON.stringify(res.data.data));
             this.dataListOffersLive = this.sortOffer(res.data.data);
           }.bind(this),
 
@@ -567,7 +563,6 @@
       },
 
       sortOffer(offer) {
-        console.log("sortOfferbefore ", offer);
         offer.sort(function (o1, o2) {
           if (o2.groupObject == null || o2.groupOffer == null) {
             if (o1.groupObject != null && o1.groupOffer != null) {
@@ -733,7 +728,6 @@
             listItemTypeToChoose.push(options[i].title);
           }
         }
-        console.log("getListItemTypeToChoose ", listItemTypeToChoose);
         return listItemTypeToChoose;
       },
 
@@ -778,7 +772,6 @@
           "history_action_route/list",
           header,
           function (res) {
-            console.log( "history_action_route/list", res);
             if (!res.data.errorCode == ERROR_CODE.SUCCESS) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Lấy lịch sử bị lỗi!.";

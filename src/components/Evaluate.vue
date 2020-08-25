@@ -94,7 +94,7 @@
   import HISTORY_TAB, {
     DANGER
   } from '../const/history_action_const';
-
+  import ERROR_CODE from '../const/error_code';
   export default {
     name: 'Evaluate',
     components: {

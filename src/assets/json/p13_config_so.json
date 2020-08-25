@@ -190,7 +190,8 @@
     "nameOffer": {
       "isRequired": true,
       "title": "Tên offer(Tối đa 13 kí tự)",
-      "idOption": 0
+      "idOption": 0,
+      "maxlength": "30"
     },
 
     "GOLD": {

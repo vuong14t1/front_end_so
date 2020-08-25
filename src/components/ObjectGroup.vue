@@ -142,8 +142,8 @@
             <tbody>
               <tr v-for="object in dataUsersByCreatingObject" :key="object._id">
                 <td>{{object.userId}}</td>
-                <td v-for="(item, index) in object.detailPayment.split('|')" :key="index">
-                  <p v-for="(value, index) in item.split('-')" :key="index">{{value}}</p>
+                <td v-for="(item, index) in object.detailPayment.split('|')" :key="index" style="font-size: 13px" class="pl-0 pr-0">
+                  {{item}}
                 </td>
                 <td>{{object.totalGame}}</td>
                 <td>{{object.lastPaidPack}}</td>
@@ -156,11 +156,15 @@
           <nav class="column is-full pagination is-small" role="navigation" aria-label="pagination">
             <ul class="pagination-list">
               <!-- <li v-for="i in totalPageUser" v-bind:key=i> -->
+                <button class="button is-small is-primary mr-3" v-if="curPageUser != 1"
+                @click=" getDataUserByPage(1)"> đầu </button>
               <button class="button is-small is-primary" v-if="curPageUser > 1"
-                @click=" getDataUserByPage(curPageUser - 1)"> pre </button>
+                @click=" getDataUserByPage(curPageUser - 1)"> << </button>
               <a class="pagination-link is-current ">{{curPageUser}}</a>
               <button class="button is-small is-primary" v-if="curPageUser < totalPageUser"
-                @click="getDataUserByPage(curPageUser + 1)"> next </button>
+                @click="getDataUserByPage(curPageUser + 1)"> >> </button>
+                <button class="button is-small is-primary ml-3" v-if="curPageUser != totalPageUser"
+                @click=" getDataUserByPage(totalPageUser)"> cuối </button>
               <!-- </li> -->
               <li> Tổng trang: {{totalPageUser}} </li>
             </ul>
@@ -411,7 +415,6 @@
             });
             this.paginationObject.handlePagination(this.totalData, OBJECT_CONST.PAGE.NUM_PER_PAGE);
             this.dataListObject = this.paginationObject.getDataByPage(1);
-            console.log("voday ", this.dataListObject);
           }.bind(this),
           function (error) {
             console.log("aaaa", error);
@@ -575,11 +578,10 @@
         this.totalPageUser = 0;
         this.isShowUser = false;
         this.isShowDetail = false;
-        console.log("=clearDataObjectCreating ", this.options);
       },
 
       beforUpdateObject(object) {
-        console.log("beforUpdateObject1 ", this.optionsUpdate)
+        console.log("beforUpdateObject1 ",this.optionsUpdate.channelPayment.value);
         this.idObjectUpdate = -9999;
         this.isShowDetail = false;
         this.cancleUpdate();
@@ -588,22 +590,30 @@
         this.nameObject = object.nameObject;
         this.isShowUpdate = true;
         for (var i in this.optionsUpdate) {
+          if(i == 'channelPayment'){
+          console.log("test ", this.optionsUpdate[i].value)
+          }
           this.optionsUpdate[i].isShow = true;
           if (object[i].from != null) {
+            console.log("i ", i);
             if (this.optionsUpdate[i].idOption == 6 || this.optionsUpdate[i].idOption == 5) {
               this.optionsUpdate[i].from = this.timeUtil.convertDuration(object[i].from);
               this.optionsUpdate[i].to = this.timeUtil
                 .convertDuration(object[i].to);
             } else {
-
               this.optionsUpdate[i].from = object[i].from;
               this.optionsUpdate[i].to = object[i].to;
             }
           } else {
-            this.optionsUpdate[i].value = object[i];
+            console.log("i ",  i);
+            console.log(" this.optionsUpdate[i] ",  typeof(this.optionsUpdate[i].value));
+            this.optionsUpdate[i].value = [];
+             this.optionsUpdate[i].value= ["MOL", "CARD"];
+            // this.optionsUpdate[i].value = object[i].concat();//  JSON.parse(JSON.stringify(object[i]));
+            console.log(" this.optionsUpdate[i]1 ",  this.optionsUpdate[i]);
           }
         }
-        console.log("beforUpdateObject2 ", this.options)
+        console.log("done ", this.optionsUpdate);
       },
 
       beforDeleteObject(object) {
@@ -868,8 +878,8 @@
               for (let c in this.dataObjectCreating.channelPayment) {
                 var channel = CHANNEL_PAYMENT[GameData.getGameId()][this.dataObjectCreating.channelPayment[c] + ''];
                 this.dataUsersByCreatingObject[u].detailPayment +=
-                  ' Số lần mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel + ''].number +
-                  '- Số tiền mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel].cost + '|'
+                  ' Mua: ' + this.dataUsersByCreatingObject[u].channelPayment[channel + ''].number + " lần" +
+                  '- Số tiền: ' + this.dataUsersByCreatingObject[u].channelPayment[channel].cost + '|'
               }
               this.dataUsersByCreatingObject[u].detailPayment = this.dataUsersByCreatingObject[u].detailPayment
                 .substring(0, this.dataUsersByCreatingObject[u].detailPayment.length - 1);
@@ -897,7 +907,7 @@
         this.isShowUpdate = true;
         this.isShowDetail = true;
         this.dataObjectCreating = obj;
-        this.totalPageUser = Math.ceil(obj.totalUser / OBJECT_CONST.PAGE.NUM_PER_PAGE);
+        this.totalPageUser = Math.ceil(obj.totalUser / OBJECT_CONST.PAGE.NUM_PER_PAGE_UID);
         this.getDataUserByPage(1);
       },
 
@@ -1026,7 +1036,6 @@
           "history_action_route/list",
           header,
           function (res) {
-            console.log("history_action_route/list", res);
             if (!res.data.errorCode == ERROR_CODE.SUCCESS) {
               this.isVisibleNoti = Math.round(+new Date() / 1000);
               this.notiText = "Lấy lịch sử bị lỗi!.";

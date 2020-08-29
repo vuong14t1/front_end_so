@@ -6,64 +6,67 @@
         </a> </strong></p>
     <div class="columns" style="width: 98%;float: left">
       <div class="column is-3" v-if="!isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered"><strong> Tạo Offer </strong>  <span
-            class="f" style="float: right; text-align: center;color: red"> * bắt buộc</span> <p  style="float: right; text-align: center;color: red">để trống = vô cùng</p>
-        <form class="columns list-item ml-1 mr-0" style=" width: 100%; border:1px solid Grey;font-size: 15px"
-          v-for="option in options" :key="option.title">
-          <!-- //normal -->
-          <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
-            :class="option.maxlength ?'input_offer_' + option.idOption : ''"
-            style=" border: none;border-left:1px solid Grey;" @input="assertMaxChars(option)">
+        <p class="has-text-centered"><strong> Tạo Offer </strong> <span class="f"
+            style="float: right; text-align: center;color: red"> * bắt buộc</span>
+          <p style="float: right; text-align: center;color: red">để trống = vô cùng</p>
+          <form class="columns list-item ml-1 mr-0" style=" width: 100%; border:1px solid Grey;font-size: 15px"
+            v-for="option in options" :key="option.title">
+            <!-- //normal -->
+            <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
+            <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
+              :class="option.maxlength ?'input_offer_' + option.idOption : ''"
+              style=" border: none;border-left:1px solid Grey;" @input="assertMaxChars(option)">
 
-          <div v-if="!option.listItems && option.type" class="column">Loại</div>
-          <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
-          <input type="number" v-if="option.type == 'items'" placeholder="number" v-model="option.value"
-            @change="onChangeValueChooseItem(option.value)"
-            style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
-          <div v-if="option.listItems" class="column">{{option.title}}</div>
-          <p class="column" v-if="option.listItems">
-            <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
-              :title="option.listItems[option.value].title" :items="option.listItems">
-              {{option.value}}</Dropdown>
-          </p>
-          <p class="astisrik" v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red">
-            *</p>
+            <div v-if="!option.listItems && option.type" class="column">Loại</div>
+            <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
+            <input type="number" v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+              @change="onChangeValueChooseItem(option.value)"
+              style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
+            <div v-if="option.listItems" class="column">{{option.title}}</div>
+            <p class="column" v-if="option.listItems">
+              <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
+                :title="option.listItems[option.value].title" :items="option.listItems">
+                {{option.value}}</Dropdown>
+            </p>
+            <p class="astisrik" v-if="option.isRequired"
+              style="width: 20px; float: right;text-align: center;color: red">
+              *</p>
 
-        </form>
-        <div class="has-text-centered ">
-          <button class="button is-primary" @click="createOffer()">Tạo</button>
-        </div>
+          </form>
+          <div class="has-text-centered ">
+            <button class="button is-primary" @click="createOffer()">Tạo</button>
+          </div>
       </div>
       <div class="column is-3 ml-2" v-if="isShowUpdate && isCanCreate" style="border:1px solid Grey;">
-        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong>  <span
-            class="f" style="float: right; text-align: center;color: red"> * bắt buộc</span> <p style="float: right; text-align: center;color: red;  height: 0">để trống = vô cùng</p>
-        <form class="columns list-item ml-0 mr-0" style="border:1px solid Grey;font-size: 15px"
-          v-for="option in optionsUpdate" :key="option.title">
-          <!-- //normal -->
-          <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
-          <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
-            style=" border: none;border-left:1px solid Grey;" @input="assertMaxChars(option)">
+        <p class="has-text-centered	"><strong> {{isViewDetail ? ' Xem Offer' : ' Cập nhật Offer'}} </strong> <span
+            class="f" style="float: right; text-align: center;color: red"> * bắt buộc</span>
+          <p style="float: right; text-align: center;color: red;  height: 0">để trống = vô cùng</p>
+          <form class="columns list-item ml-0 mr-0" style="border:1px solid Grey;font-size: 15px"
+            v-for="option in optionsUpdate" :key="option.title">
+            <!-- //normal -->
+            <div v-if="!option.listItems && !option.type" class="column">{{option.title}}</div>
+            <input v-if="!option.listItems && !option.type" v-model="option.value" class="column mr-0"
+              style=" border: none;border-left:1px solid Grey;" @input="assertMaxChars(option)">
 
-          <div v-if="!option.listItems && option.type" class="column">Loại</div>
-          <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
-          <input type="number" v-if="option.type == 'items'" placeholder="number" v-model="option.value"
-            @change="onChangeValueChooseItem(option.value)"
-            style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
-          <div v-if="option.listItems" class="column">{{option.title}}</div>
-          <p class="column" v-if="option.listItems">
-            <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
-              :title="option.listItems[option.value].title" :items="option.listItems">
-              {{option.value}}</Dropdown>
-          </p>
-          <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"
-            class="icon-asterisk"> * </p>
+            <div v-if="!option.listItems && option.type" class="column">Loại</div>
+            <div v-if="!option.listItems && option.type" class="column"><strong> {{option.title}} </strong></div>
+            <input type="number" v-if="option.type == 'items'" placeholder="number" v-model="option.value"
+              @change="onChangeValueChooseItem(option.value)"
+              style="width: 100px; height: 55px; text-align: center; border: none;border-left:1px solid Grey;">
+            <div v-if="option.listItems" class="column">{{option.title}}</div>
+            <p class="column" v-if="option.listItems">
+              <Dropdown v-if="option.listItems" class="column" @clicked="onClickChild" :id="option.idOption"
+                :title="option.listItems[option.value].title" :items="option.listItems">
+                {{option.value}}</Dropdown>
+            </p>
+            <p v-if="option.isRequired" style="width: 20px; float: right;text-align: center;color: red"
+              class="icon-asterisk"> * </p>
 
-        </form>
-        <div class="has-text-centered " v-if="!isViewDetail">
-          <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
-          <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Hủy</button>
-        </div>
+          </form>
+          <div class="has-text-centered " v-if="!isViewDetail">
+            <button class="button is-small is-primary" @click="sendUpdateOffer()">Cập nhật</button>
+            <button class="button is-info is-small mr-3 ml-3 " @click="cancleUpdate()">Hủy</button>
+          </div>
       </div>
       <div class="column mt-0 ml-2 rows columns is-centered is-vcentered" :class="isCanCreate ? 'is-9' : 'is-12'"
         style="border:1px solid Grey;  border-bottom-style: none;">
@@ -166,7 +169,7 @@
             <p style="color: green; text-align: center; font-size: 40px">
               {{jsonConfig.OfferGroup.promotionCost.listItem[options.promotionCost.value].title }} <span
                 style="color: white; text-align: center; font-size: 30px"> <del>
-                  {{options.originalCost.value.length > 0 ? options.originalCost.value : "Giá gốc"}} </del> </span> </p>
+                  {{options.originalCost.value}} </del> </span> </p>
           </div>
           <div class="mt-5" style="text-align: center"> <img src="../assets/image/img_so_btn_buy.png" width="120px"
               height="50px" /> </div>
@@ -453,6 +456,7 @@
           this.notiState = "danger";
           return null;
         }
+
         // if (data['nameOffer']['value'].length > 13) {
         //   this.isVisibleNoti = Math.round(+new Date() / 1000);
         //   this.notiText = "Tên của offer tối đa chỉ 13 kí tự";
@@ -477,6 +481,12 @@
         for (var i in data) {
           if (i == 'promotionCost') {
             body[i] = data[i].listItem[data[i].value].title;
+            if (parseInt(body[i]) > parseInt(data['originalCost']['value'])) {
+              this.isVisibleNoti = Math.round(+new Date() / 1000);
+              this.notiText = "Giá gốc đang bé hơn giá bán!";
+              this.notiState = "danger";
+              return null;
+            }
           } else {
             body[i] = data[i].value;
           }
@@ -540,9 +550,10 @@
         this.sendDeleteOffer();
       },
 
-      _checkDuplicateDataOffer(o1, o2){
-          return JSON.stringify(o1.items) == JSON.stringify(o2.items) && o1.nameOffer == o2.nameOffer && o1.originalCost == o2.originalCost && o1.promotionCost == o2.promotionCost; 
-      },  
+      _checkDuplicateDataOffer(o1, o2) {
+        return JSON.stringify(o1.items) == JSON.stringify(o2.items) && o1.nameOffer == o2.nameOffer && o1
+          .originalCost == o2.originalCost && o1.promotionCost == o2.promotionCost;
+      },
 
       sendUpdateOffer() {
         let body = {
@@ -797,6 +808,13 @@
           })
           $('.offer_demo_name').css({
             'font-size': '20px'
+          })
+        }else{
+          $('.input_offer_' + object.idOption).css({
+            'font-size': '15px'
+          })
+          $('.offer_demo_name').css({
+            'font-size': '25px'
           })
         }
         if (object.value.length >= object.maxlength) {
